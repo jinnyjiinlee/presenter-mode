@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"/>
+<title>발표자 모드 데모 — DAYFOCUS LAB</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  .deck{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;background:#E9EDF3;overflow:hidden;}
+  .deck-inner{width:1600px;height:900px;position:relative;transform-origin:center center;box-shadow:0 30px 80px rgba(0,0,0,.35);}
+  .slide{position:absolute;top:0;left:0;width:1600px;height:900px;display:none;overflow:hidden;font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;}
+  .slide.active{display:block;animation:slideFade .18s ease;}
+  @keyframes slideFade{from{opacity:0;}to{opacity:1;}}
+  @media (prefers-reduced-motion: reduce){.slide.active{animation:none;}}
+  .nav{position:fixed;bottom:14px;left:20px;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:11px;color:rgba(0,0,0,.3);z-index:99;}
+  .hL{position:absolute;top:64px;left:96px;right:96px;display:flex;align-items:center;justify-content:space-between;z-index:8;}
+  .orgD{font-size:16px;font-weight:600;letter-spacing:0.08em;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:10px;}
+  .orgL{font-size:16px;font-weight:800;color:#0A1334;display:flex;align-items:center;gap:10px;}
+  .rlab{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.16em;}
+  .dT{position:absolute;top:118px;left:96px;right:96px;height:1px;z-index:8;}
+  .fL{position:absolute;bottom:60px;left:96px;right:96px;height:1px;z-index:8;}
+  .fT{position:absolute;bottom:28px;left:96px;right:96px;display:flex;justify-content:space-between;z-index:8;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.16em;}
+  .eyb{display:flex;align-items:center;gap:12px;}
+  .eyb .bar{width:36px;height:4px;background:#3551B5;display:inline-block;}
+  .eyb .lab{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.18em;color:#5A6885;}
+  .body{position:absolute;top:118px;bottom:96px;left:96px;right:96px;padding-top:36px;display:flex;flex-direction:column;box-sizing:border-box;z-index:2;}
+  .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:80px 80px;}
+  .rowline{display:flex;align-items:center;gap:28px;padding:20px 4px;border-top:1px solid #E8ECF3;}
+  .term{background:#0A1334;border-radius:14px;box-shadow:0 26px 64px -28px rgba(10,19,52,.5),0 4px 14px -6px rgba(10,19,52,.2);overflow:hidden;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;}
+  .term .bar2{display:flex;align-items:center;gap:7px;padding:12px 16px;background:#141F45;}
+  .term .dot{width:11px;height:11px;border-radius:50%;}
+  /* ── TUI 타이핑 애니메이션(부가 레이어) ── 기본 상태는 항상 전문 표시, JS가 있을 때만 잠깐 숨겼다 재생 */
+  .tuiT{transition:opacity .3s ease;}
+  .tuiThink{display:none;align-items:center;gap:3px;color:#93C5FD;margin:8px 0;}
+  .tuiThink.tuiThinkOn{display:flex;}
+  .tuiThink .tuiDot{display:inline-block;opacity:.25;animation:tuiDotPulse 1s ease-in-out infinite;}
+  .tuiThink .tuiDot:nth-child(3){animation-delay:.15s;}
+  .tuiThink .tuiDot:nth-child(4){animation-delay:.3s;}
+  @keyframes tuiDotPulse{0%,100%{opacity:.25;}50%{opacity:1;}}
+  @media (prefers-reduced-motion: reduce){
+    .tuiThink .tuiDot{animation:none !important;opacity:1 !important;}
+  }
+  /* ── 등장 애니메이션(부가 레이어, 2026-07-04 추가) ── 기본 상태는 항상 전문 표시.
+     JS가 정상 동작할 때만 슬라이드 진입 순간 잠깐 숨겼다 순차/카운트업으로 재생.
+     render()를 한 번 더 감싸서 훅을 걸며, TUI 엔진·발표자 모드 코드는 전혀 건드리지 않는다. */
+  .rvItem{transition:opacity .45s ease, transform .45s ease;}
+  .rvCount{font-variant-numeric:tabular-nums;}
+  @media (prefers-reduced-motion: reduce){
+    .rvItem{transition:none !important;}
+  }
+  @media print{
+    .rvItem{opacity:1 !important;transform:none !important;}
+  }
+  @media print{
+    .slide.active{animation:none !important;}
+    .tuiThink{display:none !important;}
+    .tuiT{opacity:1 !important;}
+    @page{size:1600px 900px;margin:0;}
+    html,body{background:#E9EDF3;}
+    .deck{display:block;width:auto;height:auto;background:#E9EDF3;}
+    .deck-inner{position:static;transform:none !important;width:1600px;height:auto;box-shadow:none;}
+    .slide{position:relative !important;display:block !important;width:1600px;height:900px;page-break-after:always;break-after:page;box-shadow:none;}
+    .slide:last-of-type{page-break-after:auto;break-after:auto;}
+    .nav{display:none !important;}
+    #presenterRoot,#popupWarn,#blackoutOverlay,#helpOverlay,.pMiniToast{display:none !important;}
+  }
+  /* ── 발표자 모드 (Presenter View) ── */
+  body.presenter-mode .deck{display:none;}
+  body.presenter-mode{background:#0A1334;}
+  #presenterRoot{position:fixed;inset:0;background:#0A1334;color:#fff;display:flex;flex-direction:column;font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;padding:22px;box-sizing:border-box;gap:10px;z-index:10;--thumbW:224px;--nextW:240px;overflow-y:auto;}
+  .pTop{display:flex;gap:20px;flex:0 1 220px;min-height:100px;}
+  .pCurrentWrap{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .pNextWrap{flex:0 0 var(--nextW);display:flex;flex-direction:column;min-width:0;}
+  /* ── 좌우 드래그 리사이저: 현재↔다음 슬라이드 폭 비율 조정 ── */
+  .pHSplitter{flex:0 0 8px;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:col-resize;border-radius:6px;}
+  .pHSplitter:hover,body.pHSplitterDragging .pHSplitter{background:rgba(139,157,239,.14);}
+  .pHSplitter span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.32);pointer-events:none;}
+  .pHSplitter:hover span,body.pHSplitterDragging .pHSplitter span{background:#8B9DEF;}
+  body.pHSplitterDragging{cursor:col-resize;user-select:none;}
+  .pTag{font-size:13px;font-weight:700;letter-spacing:.14em;color:#8B9DEF;margin-bottom:8px;text-transform:uppercase;flex:0 0 auto;}
+  .pTagKo{letter-spacing:.02em;text-transform:none;}
+  /* 현재/다음 슬라이드 박스: 레터박스 제거 — 실제 16:9 크기로 JS가 맞춰줌(updateStage) */
+  .pStageOuter{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;min-width:0;}
+  .pStage{flex:0 0 auto;background:#000;border-radius:10px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.14);}
+  .pStageSmall{opacity:.88;}
+  .pDeckInnerClone{width:1600px;height:900px;position:absolute;top:0;left:0;transform-origin:top left;}
+  .pBottom{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;}
+  /* ── 상하 드래그 리사이저: 위/아래로 끌어 현재슬라이드↔필름스트립 비율 조정 ── */
+  .pSplitter{flex:0 0 10px;display:flex;align-items:center;justify-content:center;gap:5px;cursor:row-resize;border-radius:6px;}
+  .pSplitter:hover,body.pSplitterDragging .pSplitter{background:rgba(139,157,239,.14);}
+  .pSplitter span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.32);pointer-events:none;}
+  .pSplitter:hover span,body.pSplitterDragging .pSplitter span{background:#8B9DEF;}
+  body.pSplitterDragging{cursor:row-resize;user-select:none;}
+  /* ── 필름스트립(전체 흐름): 기본값 = 크게 표시. 상단 영역은 드래그/토글로 조정 ── */
+  .pFilmstripWrap{flex:1;display:flex;flex-direction:column;min-height:80px;overflow:hidden;}
+  .pFilmstripHeader{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex:0 0 auto;gap:14px;flex-wrap:wrap;}
+  .pFilmstripHeaderLeft{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .pSizeCtrl{display:flex;align-items:center;gap:8px;}
+  .pSizeLabel{font-size:12px;font-weight:700;letter-spacing:.1em;color:#7A88B8;text-transform:uppercase;white-space:nowrap;}
+  .pSizeIcon{font-size:15px;font-weight:700;color:#8B9DEF;line-height:1;user-select:none;}
+  #pThumbSize{width:130px;accent-color:#8B9DEF;cursor:pointer;}
+  .pToggleBtn{background:#1B2A5E;color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;cursor:pointer;}
+  .pToggleBtn:hover{background:#243875;}
+  .pFilmstrip{flex:1;display:flex;flex-wrap:wrap;gap:10px;overflow-y:auto;overflow-x:hidden;align-content:flex-start;padding:6px;border-radius:10px;background:rgba(255,255,255,.03);min-height:0;}
+  .pThumb{position:relative;flex:0 0 auto;width:var(--thumbW);height:calc(var(--thumbW) * 9 / 16);border-radius:8px;overflow:hidden;border:3px solid rgba(255,255,255,.14);background:#000;cursor:pointer;padding:0;}
+  .pThumb:hover{border-color:rgba(139,157,239,.6);}
+  .pThumb.pThumbCurrent{border-color:#8B9DEF;border-width:4px;box-shadow:0 0 0 4px rgba(139,157,239,.35);}
+  .pThumbStage{width:var(--thumbW);height:calc(var(--thumbW) * 9 / 16);position:relative;overflow:hidden;}
+  .pThumbNum{position:absolute;left:6px;bottom:5px;font-size:14px;font-weight:700;color:#fff;background:rgba(0,0,0,.65);border-radius:5px;padding:3px 8px;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;pointer-events:none;}
+  .pNotesWrap{position:relative;}
+  .pNotes{background:#141F45;border-radius:12px;padding:22px 26px;font-size:22px;line-height:1.6;color:#EAF0FF;min-height:70px;max-height:180px;overflow-y:auto;white-space:pre-wrap;word-break:keep-all;font-weight:400;}
+  .pNotes.pEmpty{color:#8FA3C8;font-style:italic;font-size:18px;}
+  /* [개선 18] 노트 글씨 크기 조절 버튼 — hover 시 선명 */
+  .pNoteSize{position:absolute;right:14px;top:10px;display:flex;gap:6px;opacity:.5;transition:opacity .15s ease;}
+  .pNotesWrap:hover .pNoteSize{opacity:1;}
+  .pNoteSize button{background:#1B2A5E;color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;cursor:pointer;}
+  .pNoteSize button:hover{background:#243875;}
+  /* [개선 19] 노트 큐 자동 하이라이트: ⏰ 컷라인=주황 · ⚠️ 주의=빨강 · 백업=파랑 */
+  .pCueTime{color:#FFC46B;font-weight:600;}
+  .pCueWarn{color:#FF9B9B;font-weight:600;}
+  .pCueBackup{color:#8FC6FF;}
+  .pControls{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+  .pCounter{font-size:20px;font-weight:700;color:#fff;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;}
+  .pTimer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  /* [개선 12] 현재 시각 시계 */
+  .pClock{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:20px;font-weight:600;color:#B9C6EF;padding-right:12px;border-right:1px solid rgba(255,255,255,.14);}
+  .pTimerDisplay{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:28px;font-weight:700;color:#8B9DEF;min-width:96px;display:inline-block;}
+  /* [개선 13] 타이머 작동 중 초록색으로 상태 표시 */
+  .pTimerDisplay.running{color:#7FE0A8;}
+  /* [개선 17] 목표 시간 대비 남은 시간 칩 — 5분 전 주황, 초과 빨강 */
+  .pTimerRemain{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;font-weight:700;color:#B9C6EF;background:rgba(255,255,255,.06);border-radius:8px;padding:6px 11px;}
+  .pTimerRemain.soon{color:#FFC46B;}
+  .pTimerRemain.over{color:#fff;background:#C2402A;}
+  .pTimer button,.pNav button,.pCtlBtn{background:#1B2A5E;color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:10px 16px;font-size:15px;font-weight:600;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;cursor:pointer;}
+  .pTimer button:hover,.pNav button:hover,.pCtlBtn:hover{background:#243875;}
+  #pTimerToggle.on{background:#1E5A3C;border-color:rgba(127,224,168,.4);}
+  /* [개선 16] 리셋 오조작 방지 — 두 번째 확인 상태는 빨강 */
+  #pTimerReset.armed{background:#C2402A;border-color:#C2402A;}
+  #pTargetInput{width:64px;background:#0F1A40;color:#fff;border:1px solid rgba(139,157,239,.5);border-radius:8px;padding:9px 10px;font-size:15px;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;}
+  .pNav{display:flex;gap:10px;}
+  .pNav button:disabled{opacity:.35;cursor:default;}
+  /* [개선 27] 키보드 포커스 링 — 접근성 */
+  .pTimer button:focus-visible,.pNav button:focus-visible,.pCtlBtn:focus-visible,.pToggleBtn:focus-visible,.pNoteSize button:focus-visible,.pThumb:focus-visible{outline:2px solid #8B9DEF;outline-offset:2px;}
+  /* [개선 21] 진행률 바 */
+  #pProgress{position:fixed;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,.08);z-index:40;}
+  #pProgressFill{height:100%;width:0;background:linear-gradient(90deg,#3551B5,#8B9DEF);transition:width .25s ease;}
+  /* [개선 8] 첫 실행 온보딩 배너 */
+  #pOnboard{background:#1B2A5E;border:1px solid rgba(139,157,239,.4);border-radius:10px;padding:12px 18px;font-size:15px;line-height:1.5;color:#EAF0FF;display:flex;align-items:center;gap:14px;flex:0 0 auto;}
+  #pOnboard strong{color:#B9C6EF;}
+  #pOnboard button{margin-left:auto;background:#3551B5;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
+  /* [개선 9] 강의장 화면 연결 상태 칩 */
+  .pConnChip{font-size:13px;font-weight:600;color:#8A96BD;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:6px 13px;white-space:nowrap;}
+  .pConnChip.ok{color:#7FE0A8;border-color:rgba(127,224,168,.35);}
+  /* [개선 5] 블랙아웃 상태 칩 — 켜져 있는 동안 깜빡여서 잊지 않게 */
+  .pBlackChip{font-size:13px;font-weight:700;color:#0A1334;background:#FFC46B;border-radius:999px;padding:6px 13px;white-space:nowrap;animation:pBlink 1.6s ease-in-out infinite;}
+  @keyframes pBlink{0%,100%{opacity:1;}50%{opacity:.55;}}
+  /* [개선 23] 현재 슬라이드 클릭 네비게이션 */
+  .pClickNav{cursor:pointer;}
+  .pTagHint{font-weight:500;letter-spacing:0;text-transform:none;color:#8FA3C8;font-size:12px;}
+  /* [개선 20] 마지막 슬라이드 카드 — 빈 검정 박스 대신 */
+  .pEndCard{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:15px;font-weight:700;color:#8B9DEF;background:#101B3F;text-align:center;line-height:1.6;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;}
+  /* [개선 22] 노트 있는 슬라이드 ✎ 배지 (필름스트립) */
+  .pThumbNoteDot{position:absolute;right:6px;top:5px;font-size:11px;font-weight:700;color:#0A1334;background:#FFC46B;border-radius:5px;padding:2px 6px;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;pointer-events:none;}
+  /* [개선 5] 블랙아웃 오버레이 (청중 창) */
+  #blackoutOverlay{position:fixed;inset:0;z-index:9998;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+  #blackoutOverlay.on{opacity:1;pointer-events:auto;cursor:pointer;}
+  /* [개선 3·4] 미니 토스트 — 숫자 점프·경계 안내 */
+  .pMiniToast{position:fixed;left:50%;top:24px;transform:translateX(-50%) translateY(-8px);background:rgba(10,19,52,.92);color:#fff;border:1px solid rgba(139,157,239,.4);padding:10px 20px;border-radius:999px;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:15px;font-weight:600;z-index:9999;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;}
+  .pMiniToast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+  /* [개선 7] 단축키 도움말 오버레이 */
+  #helpOverlay{position:fixed;inset:0;z-index:9999;background:rgba(4,8,24,.72);display:none;align-items:center;justify-content:center;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;cursor:pointer;backdrop-filter:blur(3px);}
+  #helpOverlay.on{display:flex;}
+  .pHelpCard{background:#0F1A40;border:1px solid rgba(139,157,239,.35);border-radius:16px;padding:28px 34px;color:#fff;max-width:600px;box-shadow:0 24px 60px rgba(0,0,0,.5);}
+  .pHelpTitle{font-size:19px;font-weight:800;margin-bottom:14px;letter-spacing:.02em;}
+  .pHelpCard table{border-collapse:collapse;width:100%;}
+  .pHelpCard td{padding:7px 0;font-size:15px;color:#DCE4FA;line-height:1.45;vertical-align:top;}
+  .pHelpCard td.pKey{color:#8B9DEF;font-weight:700;padding-right:22px;white-space:nowrap;font-family:ui-monospace,Menlo,monospace;font-size:13.5px;}
+  .pHelpHint{margin-top:14px;font-size:12.5px;color:#8FA3C8;}
+  /* [개선 10] 팝업 차단 안내 + 원클릭 재시도 */
+  #popupWarn{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0A1334;color:#fff;padding:14px 22px;border-radius:10px;font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:15px;z-index:9999;box-shadow:0 12px 30px rgba(0,0,0,.35);display:none;max-width:560px;text-align:center;line-height:1.5;}
+  #popupWarn button{margin-top:10px;background:#3551B5;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+  /* [개선 26] 발표자 모드 버튼 — 기본 선명, 아이들 시에만 숨김 */
+  #presenterBtn{position:fixed;right:20px;bottom:16px;z-index:60;background:rgba(10,19,52,.72);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 16px;font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:12px;font-weight:600;letter-spacing:.03em;cursor:pointer;opacity:.85;transition:opacity .5s ease;}
+  #presenterBtn:hover{opacity:1;}
+  body.presenter-mode #presenterBtn{display:none;}
+  @media print{#presenterBtn{display:none !important;}}
+  /* [개선 24·25] 청중 창: 4초 아이들 시 하단 힌트·버튼 페이드 + 커서 숨김 */
+  .nav{transition:opacity .5s ease;}
+  body.uiIdle .nav,body.uiIdle #presenterBtn{opacity:0;pointer-events:none;}
+  body.uiIdle:not(.presenter-mode){cursor:none;}
+  /* ── 발표자 창 라이트 테마 (☀️ 토글, localStorage 기억) — 밝은 강의장용 ── */
+  body.presenter-mode.pLight{background:#F5F8FF;}
+  body.pLight #presenterRoot{background:#F5F8FF;color:#0A1334;}
+  body.pLight #pProgress{background:rgba(10,19,52,.08);}
+  body.pLight #pOnboard{background:#fff;border-color:#C9D4EA;color:#1A2547;}
+  body.pLight #pOnboard strong{color:#3551B5;}
+  body.pLight .pTag{color:#3551B5;}
+  body.pLight .pTagHint{color:#6A7796;}
+  body.pLight .pHSplitter:hover,body.pLight.pHSplitterDragging .pHSplitter,body.pLight .pSplitter:hover,body.pLight.pSplitterDragging .pSplitter{background:rgba(53,81,181,.12);}
+  body.pLight .pHSplitter span,body.pLight .pSplitter span{background:rgba(10,19,52,.3);}
+  body.pLight .pHSplitter:hover span,body.pLight .pSplitter:hover span{background:#3551B5;}
+  body.pLight .pStage{border-color:rgba(10,19,52,.18);}
+  body.pLight .pFilmstrip{background:rgba(10,19,52,.05);}
+  body.pLight .pThumb{border-color:rgba(10,19,52,.15);}
+  body.pLight .pThumb:hover{border-color:rgba(53,81,181,.55);}
+  body.pLight .pThumb.pThumbCurrent{border-color:#3551B5;box-shadow:0 0 0 4px rgba(53,81,181,.25);}
+  body.pLight .pSizeLabel{color:#5A6885;}
+  body.pLight .pSizeIcon{color:#3551B5;}
+  body.pLight #pThumbSize{accent-color:#3551B5;}
+  body.pLight .pToggleBtn,body.pLight .pTimer button,body.pLight .pNav button,body.pLight .pNoteSize button,body.pLight .pCtlBtn{background:#fff;border-color:#C9D4EA;color:#0A1334;}
+  body.pLight .pToggleBtn:hover,body.pLight .pTimer button:hover,body.pLight .pNav button:hover,body.pLight .pNoteSize button:hover,body.pLight .pCtlBtn:hover{background:#EEF1FA;}
+  body.pLight .pNotes{background:#fff;color:#1A2547;border:1px solid #D8E0F0;}
+  body.pLight .pNotes.pEmpty{color:#6A7796;}
+  body.pLight .pCueTime{color:#B36B00;}
+  body.pLight .pCueWarn{color:#C2402A;}
+  body.pLight .pCueBackup{color:#1D5FBF;}
+  body.pLight .pCounter{color:#0A1334;}
+  body.pLight .pClock{color:#5A6885;border-right-color:rgba(10,19,52,.18);}
+  body.pLight .pTimerDisplay{color:#3551B5;}
+  body.pLight .pTimerDisplay.running{color:#1E7A4C;}
+  body.pLight .pTimerRemain{background:rgba(10,19,52,.06);color:#33415E;}
+  body.pLight .pTimerRemain.soon{color:#B36B00;}
+  body.pLight .pTimerRemain.over{color:#fff;background:#C2402A;}
+  body.pLight #pTimerToggle.on{background:#DFF5E7;border-color:#1E7A4C;color:#1E7A4C;}
+  body.pLight #pTimerReset.armed{background:#C2402A;border-color:#C2402A;color:#fff;}
+  body.pLight #pTargetInput{background:#fff;color:#0A1334;border-color:#C9D4EA;}
+  body.pLight .pConnChip{color:#7A88A8;background:rgba(10,19,52,.04);border-color:rgba(10,19,52,.15);}
+  body.pLight .pConnChip.ok{color:#1E7A4C;border-color:rgba(30,122,76,.4);}
+  body.pLight .pEndCard{background:#EEF1FA;color:#3551B5;}
+  /* ── v3 개선 CSS ── */
+  #presenterRoot{user-select:none;}
+  .pNotes{user-select:text;}
+  .pCtrlSep{width:1px;height:26px;background:rgba(255,255,255,.14);flex:0 0 auto;}
+  body.pLight .pCtrlSep{background:rgba(10,19,52,.15);}
+  .pDwell{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;font-weight:600;color:#8A96BD;}
+  body.pLight .pDwell{color:#7A88A8;}
+  .pCounter{cursor:pointer;}
+  .pTimerDisplay{cursor:pointer;}
+  .pTimerDisplay.overrun{color:#FF9B9B;animation:pBlink 1.2s ease-in-out infinite;}
+  body.pLight .pTimerDisplay.overrun{color:#C2402A;}
+  .pNextNote{margin-top:6px;font-size:13px;line-height:1.5;color:#8FA3C8;background:rgba(255,255,255,.04);border-radius:8px;padding:8px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  body.pLight .pNextNote{color:#5A6885;background:rgba(10,19,52,.05);}
+  .pNotes.folded{max-height:38px;min-height:0;padding:8px 26px;overflow:hidden;opacity:.65;}
+  .pFilmstripHeaderRight{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .pHelpCard{position:relative;}
+  .pHelpClose{position:absolute;right:14px;top:12px;background:none;border:none;color:#8B9DEF;font-size:16px;cursor:pointer;padding:6px;line-height:1;}
+  .pHelpSec{padding-top:14px;font-size:11.5px;letter-spacing:.14em;color:#8B9DEF;font-weight:800;}
+  .pMiniToast.bad{border-color:#C2402A;color:#FF9B9B;}
+  #pTooSmall{position:fixed;top:8px;left:50%;transform:translateX(-50%);background:#C2402A;color:#fff;padding:6px 14px;border-radius:999px;font-size:12.5px;font-weight:700;z-index:50;display:none;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;}
+  body.pBlackOn #pCurClick .pStage{outline:3px solid #FFC46B;}
+  .nav button{background:none;border:none;color:inherit;font:inherit;cursor:pointer;padding:0;text-decoration:underline;}
+</style></head>
+<body><div class="deck"><div class="deck-inner" id="inner">
+
+<!-- ▼▼▼ 여기부터 여러분의 슬라이드로 교체하세요 (각 슬라이드 = <section class="slide">, 1600×900 기준) ▼▼▼ -->
+
+<!-- 01 표지 -->
+<section class="slide active" style="background:#0A1334;color:#fff;">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;">
+    <div style="font-size:15px;font-weight:700;letter-spacing:.3em;color:#8B9DEF;">PRESENTER MODE</div>
+    <div style="font-size:72px;font-weight:800;line-height:1.25;">HTML 한 장으로 끝내는<br>발표자 모드</div>
+    <div style="font-size:24px;font-weight:300;color:#8FA3C8;">설치 없음 · 인터넷 없음 · 파일 하나 — 지금 <b style="color:#fff;">P</b> 를 눌러보세요</div>
+  </div>
+</section>
+
+<!-- 02 노트 데모 -->
+<section class="slide" style="background:#F5F8FF;color:#0A1334;">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 140px;gap:26px;">
+    <div style="font-size:14px;font-weight:700;letter-spacing:.22em;color:#3551B5;">02 · 강사 노트</div>
+    <div style="font-size:52px;font-weight:800;">노트는 나만 봐요</div>
+    <div style="font-size:24px;line-height:1.7;color:#46506B;">발표자 창 아래 노트 칸을 보세요.<br>⏰ 시간 큐는 주황, ⚠️ 주의는 빨강, "백업" 줄은 파랑으로 자동 강조돼요.</div>
+  </div>
+</section>
+
+<!-- 03 노트 없는 장 -->
+<section class="slide" style="background:#fff;color:#0A1334;">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;">
+    <div style="font-size:52px;font-weight:800;">이 장엔 노트가 없어요</div>
+    <div style="font-size:23px;color:#6B7A99;">발표자 창에 "(이 슬라이드는 별도 노트가 없어요)"라고 뜨는 게 정상이에요.</div>
+  </div>
+</section>
+
+<!-- 04 점프 데모 -->
+<section class="slide" style="background:#F5F8FF;color:#0A1334;">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 140px;gap:26px;">
+    <div style="font-size:14px;font-weight:700;letter-spacing:.22em;color:#3551B5;">04 · 빠른 이동</div>
+    <div style="font-size:52px;font-weight:800;">숫자 + Enter = 점프</div>
+    <div style="font-size:24px;line-height:1.7;color:#46506B;">발표자 창에서 <b>1</b> 을 누르고 <b>Enter</b> — 표지로 바로 이동해요.<br>Q&amp;A 때 "아까 그 화면이요"를 3초 만에 소환할 수 있어요.</div>
+  </div>
+</section>
+
+<!-- 05 블랙아웃 데모 -->
+<section class="slide" style="background:#0A1334;color:#fff;">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center;">
+    <div style="font-size:52px;font-weight:800;">B 를 눌러보세요</div>
+    <div style="font-size:23px;line-height:1.7;color:#8FA3C8;">강의장 화면만 검게 가려져요 (발표자 창은 그대로).<br>쉬는 시간·실습 집중 유도에 좋아요. 슬라이드를 넘기면 자동 해제!</div>
+  </div>
+</section>
+
+<!-- 06 마무리 -->
+<section class="slide" style="background:#fff;color:#0A1334;">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center;">
+    <div style="font-size:52px;font-weight:800;">이제 여러분 차례예요</div>
+    <div style="font-size:23px;line-height:1.7;color:#46506B;">이 파일의 slides 영역을 여러분의 슬라이드로 바꾸고<br>NOTES 배열에 멘트를 채우면, 발표자 모드가 그대로 따라와요.</div>
+    <div style="font-size:16px;color:#8B9DEF;font-weight:600;">Made by DAYFOCUS LAB · 피드백 ceo@dayfocuslab.com</div>
+  </div>
+</section>
+
+<!-- ▲▲▲ 여기까지 교체 ▲▲▲ -->
+
+</div></div>
+<div class="nav">← → 이동 · P 또는 ⌘K 발표자 모드 · <button type="button" id="navHelpBtn" title="단축키 도움말">? 단축키 도움말</button></div>
+<button id="presenterBtn" type="button" title="발표자 모드 열기 (P 또는 ⌘K)">▶ 발표자 모드</button>
+<script>
+/* ═══════════════════════════════════════════════════════
+   발표자 모드 (Presenter Mode) — DAYFOCUS LAB
+   ▸ DECK_ID: 덱마다 고유한 값으로 바꿔주세요 (같은 브라우저에서
+     여러 덱을 써도 슬라이드 위치·타이머가 서로 안 섞이게 하는 열쇠)
+   ═══════════════════════════════════════════════════════ */
+const DECK_ID='demo';
+const DECK_TITLE=document.title;
+
+const inner=document.getElementById('inner');const slides=[...document.querySelectorAll('.slide')];
+const TOTAL=slides.length;
+let i=0;
+
+/* ============================================================
+   발표자 노트 데이터 (index = 슬라이드 순서, 0부터)
+   출처: handouts/00_강사_런오브쇼.md — 파트별 첫 멘트·데모 큐·컷라인·
+   추가 멘트·시연 안전 수칙. 매핑 애매한 슬라이드는 빈 문자열.
+   ============================================================ */
+const NOTES = [
+/*01*/ `발표자 모드에 오신 걸 환영해요. 이 칸이 "강사 노트"예요 — 청중에게는 보이지 않아요.`,
+/*02*/ `⏰ 10:30 컷라인 — 이렇게 시간 큐를 적으면 주황색으로 강조돼요.
+⚠️ 주의 문구는 빨간색으로 강조돼요.
+백업: backup_demo.png — "백업"이 들어간 줄은 파란색이에요.`,
+/*03*/ ``,
+/*04*/ `노트가 없는 슬라이드는 "별도 노트가 없어요"라고 떠요 (3번 장에서 확인해보세요).`,
+/*05*/ `B를 눌러 강의장 화면을 가려보세요. 슬라이드를 넘기면 자동으로 해제돼요.`,
+/*06*/ `수고하셨어요! 이제 slides 영역을 여러분의 슬라이드로 바꾸고 NOTES를 채우면 끝이에요.`
+];
+
+const isPresenter=location.hash.indexOf('presenter')!==-1;
+
+function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);inner.style.transform='scale('+s+')';}
+let _dwellStart=Date.now(),_lastIdx=-1;
+function render(){
+  slides.forEach((s,j)=>s.classList.toggle('active',j===i));
+  if(i!==_lastIdx){_lastIdx=i;_dwellStart=Date.now();} /* [v3-9] 슬라이드 체류 시간 리셋 */
+  if(isPresenter)renderPresenter();
+  else document.title=(i+1)+'/'+TOTAL+' — '+DECK_TITLE; /* [v3-24] 청중 창 탭 제목에도 진행 상황 */
+}
+/* [개선 4] 랩어라운드 제거: 마지막에서 →를 눌러도 처음으로 튀지 않고 경계 토스트만 표시 */
+let lastNavLocal=0;
+function show(n){
+  const c=Math.max(0,Math.min(n,TOTAL-1));
+  if(c===i&&n!==i){edgeToast(n>i?'마지막 슬라이드예요':'첫 슬라이드예요');return;}
+  i=c;lastNavLocal=Date.now();render();persist(i);
+  if(blackoutMode)setBlackout(blackoutMode); /* [v3-6] 슬라이드를 넘기면 블랙아웃 자동 해제 */
+}
+function applyRemote(n){const ni=Math.max(0,Math.min(n,TOTAL-1));if(ni===i)return;i=ni;render();}
+
+/* ── 양방향 동기화: localStorage(기본) + BroadcastChannel(병행) ── */
+const LS_KEY='dfl-presenter-idx-'+DECK_ID;
+const BLACK_KEY='dfl-presenter-blackout-'+DECK_ID;
+const BC=('BroadcastChannel' in window)?new BroadcastChannel('dfl-presenter-sync-'+DECK_ID):null;
+function persist(n){
+  try{localStorage.setItem(LS_KEY,String(n));}catch(e){}
+  if(BC){try{BC.postMessage({type:'idx',idx:n});}catch(e){}}
+}
+addEventListener('storage',e=>{
+  if(e.key===LS_KEY&&e.newValue!=null)applyRemote(parseInt(e.newValue,10)||0);
+  if(e.key===BLACK_KEY)applyBlackoutFromStore();
+});
+/* [개선 9·30] 하트비트: 발표자 창이 2초마다 ping → 청중 창이 pong + 어긋난 슬라이드 자동 재정렬 */
+let lastPong=0,lastPingSeen=0;
+if(BC){BC.onmessage=e=>{
+  const d=e&&e.data;if(!d)return;
+  if(d.type==='idx')applyRemote(d.idx);
+  else if(d.type==='blackout'){blackoutMode=(d.mode==='black'||d.mode==='white')?d.mode:null;applyBlackout();}
+  else if(d.type==='ping'&&!isPresenter){
+    lastPingSeen=Date.now();
+    try{BC.postMessage({type:'pong'});}catch(err){}
+    /* 드리프트 자동 복구: 청중 창에서 최근 2.5초 내 직접 조작이 없었을 때만 발표자 기준으로 맞춤 */
+    if(typeof d.idx==='number'&&d.idx!==i&&Date.now()-lastNavLocal>2500)applyRemote(d.idx);
+  }
+  else if(d.type==='pong'&&isPresenter)lastPong=Date.now();
+};}
+/* 발표 진행 중(발표자 창 연결됨)인 청중 창 = 강의장 투사 화면 — 도움말·점프 입력을 청중에게 노출하지 않음 */
+function isProjecting(){return !isPresenter&&Date.now()-lastPingSeen<5000;}
+
+/* [개선 5] B/W 블랙아웃 — 강의장 화면을 검게/희게 가리기 (쉬는시간·집중 유도) */
+let blackoutMode=null;
+function setBlackout(mode){
+  blackoutMode=(blackoutMode===mode)?null:mode;
+  try{localStorage.setItem(BLACK_KEY,blackoutMode||'');}catch(e){}
+  if(BC){try{BC.postMessage({type:'blackout',mode:blackoutMode});}catch(e){}}
+  applyBlackout();
+}
+function applyBlackoutFromStore(){
+  try{const v=localStorage.getItem(BLACK_KEY);blackoutMode=(v==='black'||v==='white')?v:null;}catch(e){}
+  applyBlackout();
+}
+function applyBlackout(){
+  if(!isPresenter){
+    let el=document.getElementById('blackoutOverlay');
+    if(!el){
+      el=document.createElement('div');el.id='blackoutOverlay';
+      el.title='클릭하면 화면이 다시 보여요';
+      el.addEventListener('click',()=>setBlackout(blackoutMode));
+      document.body.appendChild(el);
+    }
+    el.style.background=blackoutMode==='white'?'#fff':'#000';
+    el.classList.toggle('on',!!blackoutMode); /* [v3-7] 페이드 전환 */
+  }
+  const chip=document.getElementById('pBlackChip');
+  if(chip){
+    chip.style.display=blackoutMode?'inline-block':'none';
+    chip.textContent=blackoutMode==='white'?'⬜ 강의장 화면 가림 (흰색) · W 해제':'⬛ 강의장 화면 가림 · B 해제';
+  }
+  const bb=document.getElementById('pBlackBtn');
+  if(bb)bb.textContent=blackoutMode?'⬛ 가림 해제':'⬛ 가리기'; /* [v3-4] 클릭 버튼 상태 */
+  if(isPresenter)document.body.classList.toggle('pBlackOn',!!blackoutMode); /* [v3-28] 현재 슬라이드 주황 테두리 */
+}
+
+/* [개선 11] Wake Lock — 발표 중 화면 꺼짐·화면보호기 방지 */
+function requestWakeLock(){
+  if(!('wakeLock' in navigator))return;
+  try{navigator.wakeLock.request('screen').catch(()=>{});}catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')requestWakeLock();});
+requestWakeLock();
+
+/* [개선 6] F 키 전체화면 토글 — ⌃⌘F를 몰라도 됨 */
+function toggleFullscreen(){
+  if(document.fullscreenElement){if(document.exitFullscreen)document.exitFullscreen().catch(()=>{});}
+  else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});
+}
+
+/* [개선 4] 경계 토스트 */
+function edgeToast(msg){
+  let el=document.getElementById('edgeToast');
+  if(!el){el=document.createElement('div');el.id='edgeToast';el.className='pMiniToast';document.body.appendChild(el);}
+  el.textContent=msg;el.classList.add('on');
+  clearTimeout(window._edgeT);window._edgeT=setTimeout(()=>el.classList.remove('on'),1400);
+}
+/* [개선 3] 숫자 + Enter 슬라이드 점프 */
+let jumpBuf='';
+function updateJumpToast(){
+  let el=document.getElementById('jumpToast');
+  if(!el){el=document.createElement('div');el.id='jumpToast';el.className='pMiniToast';document.body.appendChild(el);}
+  if(jumpBuf){
+    const n=parseInt(jumpBuf,10);
+    const bad=!(n>=1&&n<=TOTAL);
+    el.textContent=bad?('슬라이드 '+jumpBuf+' — 없는 번호예요 (1~'+TOTAL+')'):('슬라이드 '+jumpBuf+' — Enter로 이동 · Esc 취소');
+    el.classList.toggle('bad',bad); /* [v3-21] 범위 밖 즉시 표시 */
+    el.classList.add('on');
+  }
+  else{el.classList.remove('on');el.classList.remove('bad');}
+}
+function jumpDigit(d){
+  if(isProjecting())return; /* [CCO] 발표 중 강의장 화면엔 점프 입력창 노출 금지 — 점프는 발표자 창에서 */
+  jumpBuf=(jumpBuf+d).slice(0,3);
+  clearTimeout(window._jumpT);window._jumpT=setTimeout(()=>{jumpBuf='';updateJumpToast();},4000);
+  updateJumpToast();
+}
+function jumpCommit(){
+  const n=parseInt(jumpBuf,10);jumpBuf='';updateJumpToast();clearTimeout(window._jumpT);
+  if(n>=1&&n<=TOTAL)show(n-1);
+  else if(n)edgeToast('1~'+TOTAL+' 사이 번호를 입력해주세요');
+}
+
+/* [개선 7] ? 또는 H — 단축키 도움말 오버레이 */
+function toggleHelp(force){
+  if(force!==false&&isProjecting())return; /* [CCO] 발표 중 강의장 화면엔 도움말 노출 금지 — 도움말은 발표자 창에서 */
+  let el=document.getElementById('helpOverlay');
+  if(!el){
+    el=document.createElement('div');el.id='helpOverlay';
+    const sec=t=>'<tr><td colspan="2" class="pHelpSec">'+t+'</td></tr>';
+    const row=(k,v)=>'<tr><td class="pKey">'+k+'</td><td>'+v+'</td></tr>';
+    el.innerHTML='<div class="pHelpCard"><button type="button" class="pHelpClose" aria-label="도움말 닫기">✕</button><div class="pHelpTitle">단축키 도움말</div><table>'+
+      sec('진행')+
+      row('← → · Space · Enter · 리모컨','슬라이드 넘기기 (PgUp/PgDn 클리커 호환)')+
+      row('숫자 + Enter','해당 번호 슬라이드로 바로 이동')+
+      row('Home / End','처음 / 마지막 슬라이드')+
+      sec('화면')+
+      row('B / W','강의장 화면 검게/희게 가리기 · 한 번 더 누르거나 슬라이드 넘기면 해제')+
+      row('F 또는 F5','전체화면 켜기/끄기')+
+      row('⌘Fn F1(맥) · Win+P(윈도우)','화면 미러링 ↔ 확장 전환 (시연↔발표 · OS 시스템 단축키)')+
+      sec('발표자 창')+
+      row('P · ⌘K(맥) · Ctrl+K(윈도우)','발표자 창 열기')+
+      row('V','보기 전환 (다음 슬라이드 ↔ 필름스트립)')+
+      row('T / R','타이머 시작·일시정지 / 리셋(두 번 누름)')+
+      row('타이머 숫자 클릭','시작·일시정지 · 카운터 클릭 = 남은 장수 표시')+
+      row('? 또는 H','이 도움말 열고 닫기')+
+      '</table><div class="pHelpHint">Esc 또는 아무 곳이나 클릭하면 닫혀요 · 개선 아이디어는 <a href="mailto:ceo@dayfocuslab.com?subject=%5B%EB%B0%9C%ED%91%9C%EC%9E%90%20%EB%AA%A8%EB%93%9C%20%ED%94%BC%EB%93%9C%EB%B0%B1%5D" style="color:#8B9DEF;">ceo@dayfocuslab.com</a></div></div>';
+    el.addEventListener('click',()=>el.classList.remove('on'));
+    document.body.appendChild(el);
+  }
+  const on=(force!==undefined)?force:!el.classList.contains('on');
+  el.classList.toggle('on',on);
+}
+
+/* ── P 키: 발표자 창 띄우기 ── */
+/* [개선 10] 팝업 차단 안내에 원클릭 [다시 열기] 버튼 — 허용 후 바로 복구 */
+function showPopupWarning(){
+  let el=document.getElementById('popupWarn');
+  if(!el){
+    el=document.createElement('div');el.id='popupWarn';
+    el.innerHTML='팝업이 차단된 것 같아요 — 브라우저 주소창의 팝업 차단 아이콘을 눌러 허용해주세요.<br>'+
+      '<button type="button" id="popupRetry">허용했어요 — 다시 열기</button>';
+    document.body.appendChild(el);
+    el.querySelector('#popupRetry').addEventListener('click',()=>{el.style.display='none';openPresenter();});
+  }
+  el.style.display='block';
+  clearTimeout(window._popupWarnT);
+  window._popupWarnT=setTimeout(()=>{el.style.display='none';},12000);
+}
+function openPresenter(){
+  const url=location.pathname+location.search+'#presenter';
+  let win=null;
+  try{win=window.open(url,'dflPresenter','width=1320,height=840,menubar=no,toolbar=no');}catch(e){win=null;}
+  if(!win||win.closed||typeof win.closed==='undefined'){showPopupWarning();}
+  else{persist(i);try{win.focus();}catch(e){}}
+}
+
+/* ── 발표자 창 UI ── */
+/* 현재/다음 슬라이드 박스: 부모(pStageOuter) 크기에 맞춰 정확히 16:9로 리사이즈(레터박스 제거) + 내부 클론 스케일 갱신 */
+function updateStage(outerEl,stageEl,_retry){
+  if(!outerEl||!stageEl)return;
+  const w=outerEl.clientWidth,h=outerEl.clientHeight;
+  if(w>0&&h>0){
+    const s=Math.min(w/16,h/9);
+    stageEl.style.width=Math.max(1,Math.floor(s*16))+'px';
+    stageEl.style.height=Math.max(1,Math.floor(s*9))+'px';
+  }else if(!_retry){
+    /* 최초 마운트 시 부모가 아직 0×0인 경우(레이아웃 미확정) 다음 프레임에 한 번 재시도 */
+    requestAnimationFrame(()=>updateStage(outerEl,stageEl,true));
+    return;
+  }
+  const clone=stageEl.querySelector('.pDeckInnerClone');
+  if(clone){
+    const rect=stageEl.getBoundingClientRect();
+    const scale=rect.width>0?rect.width/1600:1;
+    clone.style.transform='scale('+scale+')';
+  }
+}
+function cloneSlideInto(container,idx){
+  container.innerHTML='';
+  if(idx<0||idx>=slides.length)return;
+  const clone=slides[idx].cloneNode(true);
+  clone.classList.add('active');
+  clone.classList.add('pDeckInnerClone');
+  container.appendChild(clone);
+  updateStage(container.parentElement,container);
+}
+/* ResizeObserver: 현재/다음 슬라이드 박스 영역이 리사이즈(드래그·창크기변경)될 때마다 transform만 갱신(성능) */
+function initStageResize(){
+  if(!('ResizeObserver' in window))return;
+  const ro=new ResizeObserver(entries=>{
+    entries.forEach(en=>{
+      const outer=en.target;
+      const stage=outer.querySelector('.pStage');
+      if(stage)updateStage(outer,stage);
+    });
+  });
+  const cur=document.querySelector('.pCurrentWrap .pStageOuter');
+  const nxt=document.querySelector('.pNextWrap .pStageOuter');
+  if(cur)ro.observe(cur);
+  if(nxt)ro.observe(nxt);
+}
+/* [개선 18] 노트 글씨 크기 A−/A＋ (localStorage 기억) */
+const NOTE_SIZE_KEY='dfl-presenter-notesize-'+DECK_ID;
+function getNoteSize(){
+  try{const v=parseInt(localStorage.getItem(NOTE_SIZE_KEY),10);if(v>=14&&v<=36)return v;}catch(e){}
+  return 22;
+}
+function setNoteSize(px){
+  px=Math.max(14,Math.min(36,px));
+  const el=document.getElementById('pNotes');
+  if(el)el.style.fontSize=px+'px';
+  try{localStorage.setItem(NOTE_SIZE_KEY,String(px));}catch(e){}
+}
+function escHTML(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* [개선 19] 노트 큐 자동 하이라이트: ⏰ 컷라인=주황 · ⚠️ 주의=빨강 · 백업=파랑 */
+function noteHTML(note){
+  return note.split('\n').map(line=>{
+    const e=escHTML(line);
+    if(line.indexOf('⏰')!==-1)return '<span class="pCueTime">'+e+'</span>';
+    if(line.indexOf('⚠️')!==-1)return '<span class="pCueWarn">'+e+'</span>';
+    if(line.indexOf('백업')!==-1)return '<span class="pCueBackup">'+e+'</span>';
+    return e;
+  }).join('\n');
+}
+function renderPresenter(){
+  cloneSlideInto(document.getElementById('pCurrentStage'),i);
+  const nextStage=document.getElementById('pNextStage');
+  if(i+1>=TOTAL){
+    /* [개선 20] 마지막 슬라이드: 빈 검정 박스 대신 안내 카드 */
+    nextStage.innerHTML='<div class="pEndCard"><span style="font-size:26px;">🏁</span>마지막 슬라이드예요</div>';
+    updateStage(nextStage.parentElement,nextStage);
+  }else cloneSlideInto(nextStage,i+1);
+  const note=NOTES[i]||'';
+  const notesEl=document.getElementById('pNotes');
+  if(note)notesEl.innerHTML=noteHTML(note);
+  else notesEl.textContent='(이 슬라이드는 별도 노트가 없어요)';
+  notesEl.classList.toggle('pEmpty',!note);
+  document.getElementById('pCounter').textContent=window._counterRemain?('남은 '+(TOTAL-1-i)+'장'):(String(i+1).padStart(2,'0')+' / '+TOTAL); /* [v3-10] */
+  /* [v3-16] 다음 슬라이드 노트 미리보기 */
+  const nn=document.getElementById('pNextNote');
+  if(nn){
+    const nxt=(i+1<TOTAL)?(NOTES[i+1]||''):'';
+    if(nxt){nn.style.display='block';nn.textContent='다음 노트: '+nxt.split('\n')[0].slice(0,140);}
+    else nn.style.display='none';
+  }
+  /* [개선 21] 진행률 바 */
+  const fill=document.getElementById('pProgressFill');
+  if(fill)fill.style.width=((i+1)/TOTAL*100).toFixed(2)+'%';
+  /* [개선 28] 창 제목에 진행 상황 — 탭/독에서 바로 보임 */
+  document.title='발표자 '+(i+1)+'/'+TOTAL+' — '+DECK_TITLE;
+  /* [개선 27] 처음/끝에서 이전·다음 버튼 비활성 표시 */
+  const prevB=document.getElementById('pPrev'),nextB=document.getElementById('pNext');
+  if(prevB)prevB.disabled=(i===0);
+  if(nextB)nextB.disabled=(i===TOTAL-1);
+  updateFilmstripHighlight();
+}
+
+/* ── 필름스트립 썸네일 크기: 슬라이더로 실시간 조절 + localStorage 기억 ── */
+const THUMB_SIZE_KEY='dfl-presenter-thumbsize-'+DECK_ID;
+function getThumbSize(){
+  try{const v=parseInt(localStorage.getItem(THUMB_SIZE_KEY),10);if(v>=120&&v<=640)return v;}catch(e){}
+  return 224;
+}
+function setThumbSize(px){
+  px=Math.max(120,Math.min(640,px));
+  const root=document.getElementById('presenterRoot');
+  if(root)root.style.setProperty('--thumbW',px+'px');
+  const scale=px/1600;
+  document.querySelectorAll('#pFilmstrip .pDeckInnerClone').forEach(el=>{el.style.transform='scale('+scale+')';});
+  try{localStorage.setItem(THUMB_SIZE_KEY,String(px));}catch(e){}
+  scrollToCurrentThumb(false); /* [버그픽스] 리사이즈 후에도 현재 슬라이드가 화면에 고정 */
+}
+/* [v3-19] 필름스트립을 현재 슬라이드 위치로 */
+function scrollToCurrentThumb(smooth){
+  const strip=document.getElementById('pFilmstrip');
+  if(!strip)return;
+  const cur=strip.children[i];
+  if(cur)cur.scrollIntoView({behavior:smooth?'smooth':'auto',inline:'center',block:'center'});
+}
+function initThumbSizeControl(){
+  const range=document.getElementById('pThumbSize');
+  if(!range)return;
+  range.value=String(getThumbSize());
+  range.addEventListener('input',()=>{setThumbSize(parseInt(range.value,10)||224);});
+}
+/* ── 필름스트립: 전체 96장 썸네일, 최초 1회만 클론 생성(성능) ── */
+let filmstripBuilt=false;
+function buildFilmstrip(){
+  const strip=document.getElementById('pFilmstrip');
+  if(!strip||filmstripBuilt)return;
+  filmstripBuilt=true;
+  function makeOne(idx){
+    const scale=getThumbSize()/1600;
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='pThumb';
+    btn.setAttribute('aria-label','슬라이드 '+(idx+1)+'번으로 이동');
+    btn.title='슬라이드 '+(idx+1)+(NOTES[idx]?' · 노트 있음':''); /* [v3-18] hover 툴팁 */
+    const stage=document.createElement('div');
+    stage.className='pThumbStage';
+    const clone=slides[idx].cloneNode(true);
+    clone.classList.add('active');
+    clone.classList.add('pDeckInnerClone');
+    clone.style.transform='scale('+scale+')';
+    stage.appendChild(clone);
+    btn.appendChild(stage);
+    const num=document.createElement('span');
+    num.className='pThumbNum';
+    num.textContent=String(idx+1);
+    btn.appendChild(num);
+    /* [개선 22] 노트 있는 슬라이드에 ✎ 배지 */
+    if(NOTES[idx]){
+      const dot=document.createElement('span');
+      dot.className='pThumbNoteDot';
+      dot.title='강사 노트 있음';
+      dot.textContent='✎';
+      btn.appendChild(dot);
+    }
+    btn.addEventListener('click',()=>show(idx));
+    return btn;
+  }
+  /* [v3-20] 96장 클론을 12장씩 나눠 생성 — 발표자 창이 즉시 뜨고 나머지는 배경에서 채움 */
+  const CHUNK=12;
+  function addChunk(start){
+    const frag=document.createDocumentFragment();
+    for(let k=start;k<Math.min(start+CHUNK,slides.length);k++)frag.appendChild(makeOne(k));
+    strip.appendChild(frag);
+    if(start+CHUNK<slides.length)setTimeout(()=>addChunk(start+CHUNK),0);
+    else updateFilmstripHighlight();
+  }
+  addChunk(0);
+}
+function updateFilmstripHighlight(){
+  const strip=document.getElementById('pFilmstrip');
+  if(!strip||!filmstripBuilt)return;
+  const current=strip.children[i];
+  [...strip.children].forEach((btn,idx)=>btn.classList.toggle('pThumbCurrent',idx===i));
+  if(current)current.scrollIntoView({behavior:'auto',inline:'center',block:'nearest'});
+}
+/* ── 상단(현재+다음 슬라이드) 높이: 드래그 스플리터 + 토글 버튼이 공유하는 단일 상태. localStorage 기억 ── */
+const TOP_HEIGHT_KEY='dfl-presenter-toph-'+DECK_ID;
+function getSavedTopHeight(){
+  try{const v=parseFloat(localStorage.getItem(TOP_HEIGHT_KEY));if(v>=100&&v<=3000)return v;}catch(e){}
+  return null;
+}
+/* pTop 높이의 상/하한을 창 실제 높이 기준으로 통일(드래그·토글이 같은 clamp 공유) */
+function clampTopHeight(px,rootH){
+  const min=120;
+  const max=Math.max(min,(rootH||800)-260);
+  return Math.max(min,Math.min(max,px));
+}
+function applyTopHeight(px){
+  const top=document.getElementById('pTop');
+  const root=document.getElementById('presenterRoot');
+  if(!top)return;
+  const clamped=clampTopHeight(px,root?root.clientHeight:800);
+  top.style.flex='0 1 '+Math.round(clamped)+'px';
+  try{localStorage.setItem(TOP_HEIGHT_KEY,String(Math.round(clamped)));}catch(e){}
+}
+function toggleViewMode(){
+  const top=document.getElementById('pTop');
+  const root=document.getElementById('presenterRoot');
+  if(!top||!root)return;
+  const curH=top.getBoundingClientRect().height;
+  const rootH=root.clientHeight||curH*2;
+  const btn=document.getElementById('pViewToggle');
+  if(curH<rootH*0.4){
+    applyTopHeight(Math.round(rootH*0.62));
+    if(btn)btn.textContent='▸ 필름스트립 크게 보기';
+  }else{
+    applyTopHeight(220);
+    if(btn)btn.textContent='▸ 다음 슬라이드 크게 보기';
+  }
+}
+/* ── 상하 드래그 리사이저: 마우스/터치로 pTop 높이를 직접 조정 ── */
+function initSplitter(){
+  const splitter=document.getElementById('pSplitter');
+  const top=document.getElementById('pTop');
+  if(!splitter||!top)return;
+  let dragging=false,startY=0,startH=0;
+  function clientY(e){return e.touches&&e.touches.length?e.touches[0].clientY:e.clientY;}
+  function onMove(e){
+    if(!dragging)return;
+    const dy=clientY(e)-startY;
+    const root=document.getElementById('presenterRoot');
+    const rootH=root?root.clientHeight:800;
+    const newH=clampTopHeight(startH+dy,rootH);
+    top.style.flex='0 1 '+Math.round(newH)+'px';
+    e.preventDefault&&e.preventDefault();
+  }
+  function onUp(){
+    if(!dragging)return;
+    dragging=false;
+    document.body.classList.remove('pSplitterDragging');
+    removeEventListener('mousemove',onMove);
+    removeEventListener('mouseup',onUp);
+    removeEventListener('touchmove',onMove);
+    removeEventListener('touchend',onUp);
+    const h=top.getBoundingClientRect().height;
+    try{localStorage.setItem(TOP_HEIGHT_KEY,String(Math.round(h)));}catch(e){}
+  }
+  function onDown(e){
+    dragging=true;
+    startY=clientY(e);
+    startH=top.getBoundingClientRect().height;
+    document.body.classList.add('pSplitterDragging');
+    addEventListener('mousemove',onMove);
+    addEventListener('mouseup',onUp);
+    addEventListener('touchmove',onMove,{passive:false});
+    addEventListener('touchend',onUp);
+    e.preventDefault();
+  }
+  splitter.addEventListener('mousedown',onDown);
+  splitter.addEventListener('touchstart',onDown,{passive:false});
+}
+/* ── 현재↔다음 슬라이드 폭 비율: 좌우 드래그 스플리터. localStorage 기억 ── */
+const NEXT_W_KEY='dfl-presenter-nextw-'+DECK_ID;
+function getSavedNextWidth(){
+  try{const v=parseFloat(localStorage.getItem(NEXT_W_KEY));if(v>=100&&v<=2000)return v;}catch(e){}
+  return null;
+}
+function clampNextWidth(px,topWidth){
+  const min=140;
+  const max=Math.max(min,(topWidth||900)-320);
+  return Math.max(min,Math.min(max,px));
+}
+function applyNextWidth(px){
+  const root=document.getElementById('presenterRoot');
+  const top=document.getElementById('pTop');
+  if(!root)return;
+  const clamped=clampNextWidth(px,top?top.clientWidth:900);
+  root.style.setProperty('--nextW',Math.round(clamped)+'px');
+  try{localStorage.setItem(NEXT_W_KEY,String(Math.round(clamped)));}catch(e){}
+}
+/* pNextWrap은 flex-shrink:0(고정폭)이라 마운트 후 창 크기가 바뀌어도 저절로 줄지 않음 —
+   창 리사이즈 때마다 현재 --nextW를 최신 pTop 폭 기준으로 다시 clamp해서 현재 슬라이드 박스가 눌리는 것을 방지 */
+function reclampNextWidthOnResize(){
+  const root=document.getElementById('presenterRoot');
+  if(!root)return;
+  const cur=parseFloat(getComputedStyle(root).getPropertyValue('--nextW'))||240;
+  applyNextWidth(cur);
+}
+function initHSplitter(){
+  const splitter=document.getElementById('pHSplitter');
+  const nextWrap=document.getElementById('pNextWrap');
+  const top=document.getElementById('pTop');
+  if(!splitter||!nextWrap||!top)return;
+  let dragging=false,startX=0,startW=0;
+  function clientX(e){return e.touches&&e.touches.length?e.touches[0].clientX:e.clientX;}
+  function onMove(e){
+    if(!dragging)return;
+    const dx=clientX(e)-startX;
+    /* 스플리터가 next 박스 왼쪽에 있으므로 오른쪽으로 끌면(dx>0) next 폭이 줄어듦 */
+    applyNextWidth(startW-dx);
+    e.preventDefault&&e.preventDefault();
+  }
+  function onUp(){
+    if(!dragging)return;
+    dragging=false;
+    document.body.classList.remove('pHSplitterDragging');
+    removeEventListener('mousemove',onMove);
+    removeEventListener('mouseup',onUp);
+    removeEventListener('touchmove',onMove);
+    removeEventListener('touchend',onUp);
+  }
+  function onDown(e){
+    dragging=true;
+    startX=clientX(e);
+    startW=nextWrap.getBoundingClientRect().width;
+    document.body.classList.add('pHSplitterDragging');
+    addEventListener('mousemove',onMove);
+    addEventListener('mouseup',onUp);
+    addEventListener('touchmove',onMove,{passive:false});
+    addEventListener('touchend',onUp);
+    e.preventDefault();
+  }
+  splitter.addEventListener('mousedown',onDown);
+  splitter.addEventListener('touchstart',onDown,{passive:false});
+}
+/* [개선 13~17] 타이머: 시작/일시정지 단일 토글 · 경과 유지(창 재오픈 복원) · 목표 시간·남은 시간 · 리셋 2번 확인 */
+const TIMER_KEY='dfl-presenter-timer-'+DECK_ID;
+let timerMs=0,timerRunning=false,timerHandle=null,timerLast=0,timerTarget=0;
+function fmtTime(ms){
+  const neg=ms<0;const s=Math.floor(Math.abs(ms)/1000);const m=Math.floor(s/60);const ss=s%60;
+  return (neg?'-':'')+String(m).padStart(2,'0')+':'+String(ss).padStart(2,'0');
+}
+function saveTimer(){
+  try{localStorage.setItem(TIMER_KEY,JSON.stringify({ms:timerMs,running:timerRunning,last:Date.now(),target:timerTarget}));}catch(e){}
+}
+function loadTimer(){
+  /* [개선 14] 발표자 창을 실수로 닫아도 경과 시간이 이어짐 */
+  try{
+    const d=JSON.parse(localStorage.getItem(TIMER_KEY));
+    if(d&&typeof d.ms==='number'){
+      timerMs=d.ms;timerTarget=d.target||0;
+      if(d.running&&d.last){timerMs+=Date.now()-d.last;startTimer();}
+    }
+  }catch(e){}
+}
+function updateTimerUI(){
+  const disp=document.getElementById('pTimerDisplay');if(!disp)return;
+  disp.textContent=fmtTime(timerMs);
+  disp.classList.toggle('running',timerRunning);
+  disp.classList.toggle('overrun',timerTarget>0&&timerMs>timerTarget*60000); /* [v3-13] 초과 시 펄스 */
+  const btn=document.getElementById('pTimerToggle');
+  if(btn){btn.textContent=timerRunning?'⏸ 일시정지':'▶ 시작';btn.classList.toggle('on',timerRunning);}
+  const rem=document.getElementById('pTimerRemain');
+  if(rem){
+    if(timerTarget>0){
+      const left=timerTarget*60000-timerMs;
+      rem.style.display='inline-block';
+      rem.textContent=(left<0?'초과 ':'남은 ')+fmtTime(left);
+      rem.classList.toggle('over',left<0);
+      rem.classList.toggle('soon',left>=0&&left<5*60000);
+    }else rem.style.display='none';
+  }
+}
+let _prevLeft=null;
+function tickTimer(){
+  const now=Date.now();timerMs+=now-timerLast;timerLast=now;
+  if(timerTarget>0){
+    const left=timerTarget*60000-timerMs;
+    if(_prevLeft!==null){
+      if(left<=5*60000&&_prevLeft>5*60000)edgeToast('⏳ 목표까지 5분 남았어요'); /* [v3-12] */
+      if(left<=0&&_prevLeft>0)edgeToast('⏰ 목표 시간에 도달했어요'); /* [v3-11] */
+    }
+    _prevLeft=left;
+  }
+  updateTimerUI();saveTimer();
+}
+function startTimer(){if(timerRunning)return;timerRunning=true;timerLast=Date.now();timerHandle=setInterval(tickTimer,500);updateTimerUI();saveTimer();}
+function pauseTimer(){if(!timerRunning)return;timerRunning=false;clearInterval(timerHandle);updateTimerUI();saveTimer();}
+function toggleTimer(){if(timerRunning)pauseTimer();else startTimer();}
+/* [개선 16] 리셋 오조작 방지 — 2.2초 안에 한 번 더 눌러야 진짜 리셋 */
+let resetArmed=false,resetArmT=null;
+function resetTimerPress(){
+  const btn=document.getElementById('pTimerReset');
+  if(!resetArmed){
+    resetArmed=true;
+    if(btn){btn.textContent='한 번 더 → 리셋';btn.classList.add('armed');}
+    resetArmT=setTimeout(()=>{resetArmed=false;if(btn){btn.textContent='리셋';btn.classList.remove('armed');}},2200);
+  }else{
+    clearTimeout(resetArmT);resetArmed=false;
+    if(btn){btn.textContent='리셋';btn.classList.remove('armed');}
+    pauseTimer();timerMs=0;_prevLeft=null;updateTimerUI();saveTimer();
+  }
+}
+function initTimer(){
+  document.getElementById('pTimerToggle').onclick=toggleTimer;
+  document.getElementById('pTimerDisplay').onclick=toggleTimer; /* [v3-14] 큰 클릭 타겟 */
+  document.getElementById('pTimerDisplay').title='클릭: 시작/일시정지 (T)';
+  document.getElementById('pTimerReset').onclick=resetTimerPress;
+  /* [개선 17] 목표 시간(분) 설정 → 남은 시간 칩 표시 */
+  const tBtn=document.getElementById('pTimerTarget');
+  const tInput=document.getElementById('pTargetInput');
+  tBtn.onclick=()=>{
+    tInput.style.display='inline-block';
+    tInput.value=timerTarget||'';
+    tInput.focus();if(tInput.select)tInput.select();
+  };
+  function commitTarget(){
+    const v=parseInt(tInput.value,10);
+    timerTarget=(v>=1&&v<=600)?v:0;
+    _prevLeft=null;
+    tInput.style.display='none';
+    updateTimerUI();saveTimer();
+  }
+  tInput.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){e.preventDefault();commitTarget();}
+    else if(e.key==='Escape')tInput.style.display='none';
+    e.stopPropagation();
+  });
+  tInput.addEventListener('blur',commitTarget);
+  loadTimer();
+  updateTimerUI();
+}
+/* [개선 12] 현재 시각 시계 */
+const CLOCK_SEC_KEY='dfl-presenter-clocksec-'+DECK_ID;
+function initClock(){
+  const el=document.getElementById('pClock');if(!el)return;
+  let showSec=false;
+  try{showSec=localStorage.getItem(CLOCK_SEC_KEY)==='1';}catch(e){}
+  function upd(){
+    const d=new Date();
+    el.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+(showSec?':'+String(d.getSeconds()).padStart(2,'0'):'');
+  }
+  el.style.cursor='pointer';
+  el.title='현재 시각 · 클릭하면 초까지 보여요';
+  el.onclick=()=>{showSec=!showSec;try{localStorage.setItem(CLOCK_SEC_KEY,showSec?'1':'');}catch(e){}upd();}; /* [v3-15] */
+  upd();setInterval(upd,1000);
+}
+/* [v3-3] 라이트 테마 토글 */
+const THEME_KEY='dfl-presenter-theme-'+DECK_ID;
+function applyTheme(){
+  let light=false;
+  try{light=localStorage.getItem(THEME_KEY)==='light';}catch(e){}
+  document.body.classList.toggle('pLight',light);
+  const b=document.getElementById('pThemeToggle');
+  if(b)b.textContent=light?'🌙 어두운 배경':'☀️ 밝은 배경';
+}
+function toggleTheme(){
+  try{localStorage.setItem(THEME_KEY,document.body.classList.contains('pLight')?'':'light');}catch(e){}
+  applyTheme();
+}
+/* [v3-17] 노트 접기/펼치기 */
+const FOLD_KEY='dfl-presenter-notefold-'+DECK_ID;
+function applyNoteFold(){
+  let f=false;
+  try{f=localStorage.getItem(FOLD_KEY)==='1';}catch(e){}
+  const n=document.getElementById('pNotes');const b=document.getElementById('pNoteFold');
+  if(n)n.classList.toggle('folded',f);
+  if(b){b.textContent=f?'펼치기 ⌃':'접기 ⌄';b.title=f?'노트 펼치기':'노트 접기 (공간 확보)';}
+}
+/* [v3-30] 발표자 창이 너무 작을 때 안내 */
+function checkPresenterSize(){
+  let el=document.getElementById('pTooSmall');
+  if(!el){el=document.createElement('div');el.id='pTooSmall';el.textContent='창이 너무 작아요 — 창을 키우면 모든 기능이 보여요';document.body.appendChild(el);}
+  el.style.display=(innerWidth<640||innerHeight<480)?'block':'none';
+}
+/* [개선 9] 강의장 화면 연결 상태 칩 (하트비트 기반) */
+function initConnChip(){
+  const chip=document.getElementById('pConnChip');
+  if(!chip)return;
+  if(!BC){chip.style.display='none';return;}
+  setInterval(()=>{try{BC.postMessage({type:'ping',idx:i});}catch(e){}},2000);
+  setInterval(()=>{
+    const ok=Date.now()-lastPong<5000;
+    chip.classList.toggle('ok',ok);
+    chip.textContent=ok?'● 강의장 화면 연결됨':'○ 강의장 화면 응답 없음';
+    chip.title=ok?'슬라이드 창과 실시간 동기화 중이에요':'원래 슬라이드 창이 닫혔거나 응답이 없어요 — deck 창이 열려 있는지 확인해주세요';
+  },1000);
+}
+function initPresenter(){
+  document.body.classList.add('presenter-mode');
+  const root=document.createElement('div');
+  root.id='presenterRoot';
+  root.innerHTML=
+    '<div id="pProgress"><div id="pProgressFill"></div></div>'+
+    '<div class="pTop" id="pTop">'+
+      '<div class="pCurrentWrap"><div class="pTag">현재 슬라이드 <span class="pTagHint">클릭=다음 · 왼쪽 끝=이전</span></div><div class="pStageOuter pClickNav" id="pCurClick" title="클릭: 다음 슬라이드 (왼쪽 끝: 이전)"><div class="pStage" id="pCurrentStage"></div></div></div>'+
+      '<div class="pHSplitter" id="pHSplitter" title="드래그해서 폭 조정"><span></span><span></span><span></span></div>'+
+      '<div class="pNextWrap" id="pNextWrap"><div class="pTag">다음 슬라이드</div><div class="pStageOuter"><div class="pStage pStageSmall" id="pNextStage"></div></div></div>'+
+    '</div>'+
+    '<div class="pSplitter" id="pSplitter" title="드래그해서 영역 크기 조정"><span></span><span></span><span></span></div>'+
+    '<div class="pFilmstripWrap">'+
+      '<div class="pFilmstripHeader">'+
+        '<div class="pFilmstripHeaderLeft">'+
+          '<span class="pTag pTagKo" style="margin-bottom:0;">전체 흐름 · 클릭해서 이동</span>'+
+          '<div class="pSizeCtrl">'+
+            '<span class="pSizeLabel">썸네일 크기</span>'+
+            '<span class="pSizeIcon">−</span>'+
+            '<input type="range" id="pThumbSize" min="120" max="640" step="4" value="'+getThumbSize()+'" aria-label="썸네일 크기 조절">'+
+            '<span class="pSizeIcon">＋</span>'+
+          '</div>'+
+        '</div>'+
+        '<div class="pFilmstripHeaderRight">'+
+          '<button type="button" id="pLocBtn" class="pToggleBtn" title="필름스트립을 현재 슬라이드 위치로 스크롤">◎ 현재 위치</button>'+
+          '<button type="button" id="pThemeToggle" class="pToggleBtn" title="발표자 창 배경 밝게/어둡게 전환"></button>'+
+          '<button type="button" id="pViewToggle" class="pToggleBtn" title="보기 전환 (V)">▸ 다음 슬라이드 크게 보기</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="pFilmstrip" id="pFilmstrip"></div>'+
+    '</div>'+
+    '<div class="pBottom">'+
+      '<div class="pNotesWrap"><div class="pNotes" id="pNotes"></div>'+
+        '<div class="pNextNote" id="pNextNote" style="display:none;" title="다음 슬라이드의 노트 첫 줄"></div>'+
+        '<div class="pNoteSize">'+
+          '<button type="button" id="pNoteFold" title="노트 접기 (공간 확보)">접기 ⌄</button>'+
+          '<button type="button" id="pNoteMinus" title="노트 글씨 작게" aria-label="노트 글씨 작게">A−</button>'+
+          '<button type="button" id="pNotePlus" title="노트 글씨 크게" aria-label="노트 글씨 크게">A＋</button>'+
+        '</div></div>'+
+      '<div class="pControls">'+
+        '<div class="pNav"><button id="pPrev" title="이전 슬라이드 (←)">← 이전</button><button id="pNext" title="다음 슬라이드 (→ 또는 Space)">다음 →</button></div>'+
+        '<div class="pCounter" id="pCounter" title="클릭하면 남은 장수로 바뀌어요">01 / '+TOTAL+'</div>'+
+        '<span class="pDwell" id="pDwell" title="이 슬라이드에 머문 시간">00:00</span>'+
+        '<span class="pCtrlSep"></span>'+
+        '<span class="pConnChip" id="pConnChip" role="status">○ 확인 중…</span>'+
+        '<span class="pBlackChip" id="pBlackChip" style="display:none;"></span>'+
+        '<button type="button" id="pBlackBtn" class="pCtlBtn" title="강의장 화면 가리기/해제 (B)">⬛ 가리기</button>'+
+        '<button type="button" id="pHelpBtn" class="pCtlBtn" title="단축키 도움말 (? 또는 H)">? 단축키</button>'+
+        '<span class="pCtrlSep"></span>'+
+        '<div class="pTimer">'+
+          '<span class="pClock" id="pClock" title="현재 시각"></span>'+
+          '<span class="pTimerDisplay" id="pTimerDisplay" title="경과 시간">00:00</span>'+
+          '<span class="pTimerRemain" id="pTimerRemain" style="display:none;"></span>'+
+          '<button id="pTimerToggle" title="타이머 시작/일시정지 (T)">▶ 시작</button>'+
+          '<button id="pTimerReset" title="두 번 누르면 리셋 (R)">리셋</button>'+
+          '<button id="pTimerTarget" title="목표 시간(분)을 정하면 남은 시간을 보여줘요">목표</button>'+
+          '<input id="pTargetInput" type="number" min="1" max="600" placeholder="분" style="display:none;" aria-label="목표 시간(분)">'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  document.body.appendChild(root);
+  /* [개선 23] 현재 슬라이드 클릭 네비게이션 — 클릭=다음, 왼쪽 28%=이전 */
+  const curClick=document.getElementById('pCurClick');
+  curClick.addEventListener('click',e=>{
+    const r=curClick.getBoundingClientRect();
+    if((e.clientX-r.left)<r.width*0.28)show(i-1);else show(i+1);
+  });
+  document.getElementById('pNoteMinus').onclick=()=>setNoteSize(getNoteSize()-2);
+  document.getElementById('pNotePlus').onclick=()=>setNoteSize(getNoteSize()+2);
+  setNoteSize(getNoteSize());
+  /* [개선 8] 첫 실행 온보딩 배너 (1회만) */
+  try{
+    if(!localStorage.getItem('dfl-presenter-onboard-'+DECK_ID)){
+      const ob=document.createElement('div');ob.id='pOnboard';
+      ob.innerHTML='<span><strong>발표자 창이 처음이세요?</strong> ← →로 넘기고, <strong>B</strong>를 누르면 강의장 화면만 잠깐 가려져요. 하단 <strong>[? 단축키]</strong> 버튼(또는 ?)으로 전체 단축키를, <strong>[☀️ 밝은 배경]</strong> 버튼으로 배경색을 바꿀 수 있어요.</span>'+
+        '<button type="button" id="pOnboardOk">알겠어요</button>';
+      root.insertBefore(ob,document.getElementById('pTop'));
+      document.getElementById('pOnboardOk').onclick=()=>{
+        ob.remove();
+        try{localStorage.setItem('dfl-presenter-onboard-'+DECK_ID,'1');}catch(e){}
+      };
+    }
+  }catch(e){}
+  const savedTopH=getSavedTopHeight();
+  if(savedTopH){
+    const rh=root.clientHeight||800;
+    document.getElementById('pTop').style.flex='0 1 '+Math.round(clampTopHeight(savedTopH,rh))+'px';
+  }
+  const savedNextW=getSavedNextWidth();
+  if(savedNextW){
+    const tw=document.getElementById('pTop').clientWidth||900;
+    root.style.setProperty('--nextW',Math.round(clampNextWidth(savedNextW,tw))+'px');
+  }
+  setThumbSize(getThumbSize());
+  document.getElementById('pPrev').onclick=()=>show(i-1);
+  document.getElementById('pNext').onclick=()=>show(i+1);
+  document.getElementById('pViewToggle').onclick=toggleViewMode;
+  document.getElementById('pThemeToggle').onclick=toggleTheme; /* [v3-3] */
+  document.getElementById('pLocBtn').onclick=()=>scrollToCurrentThumb(true); /* [v3-19] */
+  document.getElementById('pHelpBtn').onclick=()=>toggleHelp(); /* [v3-1] 단축키를 화면에서 바로 */
+  document.getElementById('pBlackBtn').onclick=()=>setBlackout(blackoutMode||'black'); /* [v3-4] */
+  document.getElementById('pNoteFold').onclick=()=>{ /* [v3-17] */
+    try{localStorage.setItem(FOLD_KEY,localStorage.getItem(FOLD_KEY)==='1'?'':'1');}catch(e){}
+    applyNoteFold();
+  };
+  let counterRemain=false; /* [v3-10] 카운터 클릭 = 남은 장수 */
+  document.getElementById('pCounter').onclick=()=>{
+    counterRemain=!counterRemain;
+    window._counterRemain=counterRemain;
+    renderPresenter();
+  };
+  setInterval(()=>{ /* [v3-9] 슬라이드 체류 시간 */
+    const el=document.getElementById('pDwell');
+    if(el)el.textContent=fmtTime(Date.now()-_dwellStart);
+  },1000);
+  applyTheme();
+  applyNoteFold();
+  checkPresenterSize();
+  addEventListener('resize',checkPresenterSize);
+  initTimer();
+  initClock();
+  initConnChip();
+  initStageResize();
+  initSplitter();
+  initHSplitter();
+  buildFilmstrip();
+  initThumbSizeControl();
+  renderPresenter();
+  applyBlackout();
+}
+
+const presenterBtnEl=document.getElementById('presenterBtn');
+if(presenterBtnEl)presenterBtnEl.addEventListener('click',()=>{if(!isPresenter)openPresenter();});
+
+addEventListener('keydown',e=>{
+  const tag=e.target&&e.target.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA')return; /* 입력 중엔 단축키 무시 */
+  /* ⌘K: 발표자 모드 열기 — 브라우저 예약 단축키가 아니라 가로채기 가능(⌘L은 주소창 예약이라 미사용) */
+  if((e.metaKey||e.ctrlKey)&&e.code==='KeyK'){ /* [v3-26] 맥 ⌘K + 윈도우 Ctrl+K */
+    if(!isPresenter){e.preventDefault();openPresenter();}
+    return;
+  }
+  /* [개선 27] ⌘/Ctrl/Alt 조합키는 브라우저 기본 동작에 전부 양보 (⌘← 뒤로가기 등과 충돌 제거) */
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  /* [개선 3] 숫자 + Enter 점프 */
+  const dm=e.code.match(/^(?:Digit|Numpad)(\d)$/);
+  if(dm){jumpDigit(dm[1]);return;}
+  if(e.key==='Enter'){
+    if(jumpBuf){e.preventDefault();jumpCommit();return;}
+    if(tag==='BUTTON')return; /* 버튼 포커스 시 Enter는 버튼에 양보 */
+    show(i+1);return;
+  }
+  if(e.key==='Escape'){
+    jumpBuf='';updateJumpToast();
+    toggleHelp(false);
+    return;
+  }
+  if(e.key==='?'){toggleHelp();return;}
+  /* e.code(물리 키 위치) 기준 — 한/영 입력 모드와 무관하게 항상 반응 */
+  switch(e.code){
+    /* [개선 1] 리모컨(클리커) 호환: PgUp/PgDn·Space·Backspace */
+    case 'ArrowRight':case 'PageDown':e.preventDefault();show(i+1);break;
+    case 'ArrowLeft':case 'PageUp':e.preventDefault();show(i-1);break;
+    case 'Space':if(tag==='BUTTON')return;e.preventDefault();show(e.shiftKey?i-1:i+1);break;
+    case 'Backspace':e.preventDefault();show(i-1);break;
+    /* [개선 2] Home/End 점프 */
+    case 'Home':e.preventDefault();show(0);break;
+    case 'End':e.preventDefault();show(TOTAL-1);break;
+    case 'KeyP':if(!isPresenter)openPresenter();break;
+    case 'KeyV':if(isPresenter)toggleViewMode();break;
+    case 'KeyB':setBlackout('black');break;
+    case 'KeyW':setBlackout('white');break;
+    case 'KeyF':toggleFullscreen();break;
+    case 'F5':e.preventDefault();toggleFullscreen();break; /* [v3-22] 파워포인트 습관·클리커 F5 호환 */
+    case 'KeyT':if(isPresenter)toggleTimer();break;
+    case 'KeyR':if(isPresenter)resetTimerPress();break;
+    case 'KeyH':toggleHelp();break;
+  }
+});
+
+/* [개선 29] 타이머 작동 중 발표자 창을 닫으려 하면 한 번 확인 (실수 ⌘W 방지) */
+addEventListener('beforeunload',e=>{
+  if(isPresenter&&timerRunning){e.preventDefault();e.returnValue='';}
+});
+
+if(isPresenter){
+  try{const saved=localStorage.getItem(LS_KEY);if(saved!==null)i=Math.max(0,Math.min(parseInt(saved,10)||0,TOTAL-1));}catch(e){}
+  applyBlackoutFromStore();
+  initPresenter();
+  render();
+  addEventListener('resize',renderPresenter);
+  addEventListener('resize',reclampNextWidthOnResize);
+}else{
+  /* 청중 창 새로 열릴 땐 지난 세션의 블랙아웃 상태를 항상 해제 (열자마자 검은 화면 방지) */
+  blackoutMode=null;
+  try{localStorage.setItem(BLACK_KEY,'');}catch(e){}
+  applyBlackout();
+  addEventListener('resize',fit);fit();show(0);render();
+  const nhb=document.getElementById('navHelpBtn'); /* [v3-2] 하단 힌트에서 클릭으로 도움말 */
+  if(nhb)nhb.addEventListener('click',()=>toggleHelp());
+  /* [개선 24·25] 4초 아무 조작 없으면 하단 힌트·버튼 페이드 + 커서 숨김 (프로젝터 화면 청결) */
+  let _idleT=null;
+  function uiWake(){
+    document.body.classList.remove('uiIdle');
+    clearTimeout(_idleT);
+    _idleT=setTimeout(()=>document.body.classList.add('uiIdle'),4000);
+  }
+  ['mousemove','mousedown','keydown','touchstart'].forEach(ev=>addEventListener(ev,uiWake,{passive:true}));
+  uiWake();
+}
+
+</script>
+</body></html>
