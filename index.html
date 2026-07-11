@@ -224,6 +224,10 @@
   body.pLight .pConnChip{color:#7A88A8;background:rgba(10,19,52,.04);border-color:rgba(10,19,52,.15);}
   body.pLight .pConnChip.ok{color:#1E7A4C;border-color:rgba(30,122,76,.4);}
   body.pLight .pEndCard{background:#EEF1FA;color:#3551B5;}
+  body.pLight .pFilmstrip{background:#E9EEF8;}
+  body.pLight .pStage{box-shadow:0 10px 30px -14px rgba(10,19,52,.3);}
+  body.pLight .pNotes{box-shadow:0 1px 3px rgba(10,19,52,.06);}
+  body.pLight .pNextNote{background:rgba(10,19,52,.04);}
   /* ── v3 개선 CSS ── */
   #presenterRoot{user-select:none;}
   .pNotes{user-select:text;}
@@ -958,14 +962,15 @@ function initClock(){
 /* [v3-3] 라이트 테마 토글 */
 const THEME_KEY='dfl-presenter-theme-'+DECK_ID;
 function applyTheme(){
-  let light=false;
-  try{light=localStorage.getItem(THEME_KEY)==='light';}catch(e){}
-  document.body.classList.toggle('pLight',light);
+  /* 기본 = 라이트(브랜드 톤). 'dark' 저장 시에만 다크 — 어두운 강의장용 */
+  let dark=false;
+  try{dark=localStorage.getItem(THEME_KEY)==='dark';}catch(e){}
+  document.body.classList.toggle('pLight',!dark);
   const b=document.getElementById('pThemeToggle');
-  if(b)b.textContent=light?'🌙 어두운 배경':'☀️ 밝은 배경';
+  if(b)b.textContent=dark?'☀️ 밝은 배경':'🌙 어두운 배경';
 }
 function toggleTheme(){
-  try{localStorage.setItem(THEME_KEY,document.body.classList.contains('pLight')?'':'light');}catch(e){}
+  try{localStorage.setItem(THEME_KEY,document.body.classList.contains('pLight')?'dark':'');}catch(e){}
   applyTheme();
 }
 /* [v3-17] 노트 접기/펼치기 */
@@ -1070,7 +1075,7 @@ function initPresenter(){
   try{
     if(!localStorage.getItem('dfl-presenter-onboard-'+DECK_ID)){
       const ob=document.createElement('div');ob.id='pOnboard';
-      ob.innerHTML='<span><strong>발표자 창이 처음이세요?</strong> ← →로 넘기고, <strong>B</strong>를 누르면 강의장 화면만 잠깐 가려져요. 하단 <strong>[? 단축키]</strong> 버튼(또는 ?)으로 전체 단축키를, <strong>[☀️ 밝은 배경]</strong> 버튼으로 배경색을 바꿀 수 있어요.</span>'+
+      ob.innerHTML='<span><strong>발표자 창이 처음이세요?</strong> ← →로 넘기고, <strong>B</strong>를 누르면 강의장 화면만 잠깐 가려져요. 하단 <strong>[? 단축키]</strong> 버튼(또는 ?)으로 전체 단축키를 볼 수 있고, 어두운 강의장에선 <strong>[🌙 어두운 배경]</strong> 버튼이 눈부심을 줄여줘요.</span>'+
         '<button type="button" id="pOnboardOk">알겠어요</button>';
       root.insertBefore(ob,document.getElementById('pTop'));
       document.getElementById('pOnboardOk').onclick=()=>{
