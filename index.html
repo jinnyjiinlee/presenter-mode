@@ -359,6 +359,9 @@
   #magLens{position:fixed;width:340px;height:340px;border-radius:50%;border:3px solid rgba(99,102,241,.9);box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.5);overflow:hidden;z-index:9980;pointer-events:none;display:none;background:#fff;}
   #magLens .magInner{width:1600px;height:900px;position:absolute;top:0;left:0;transform-origin:0 0;}
   #magChip{position:fixed;z-index:9981;background:rgba(13,15,30,.9);color:#fff;border-radius:999px;padding:5px 12px;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:12.5px;font-weight:700;pointer-events:none;display:none;}
+  /* [v5.1] Z — 구역 확대: 드래그한 영역을 화면에 꽉 채움 */
+  .zoomAnim{transition:transform .4s cubic-bezier(.22,.61,.36,1);}
+  body.zoomSelMode #inkCanvas,body.zoomSelMode #pInkCanvas{pointer-events:auto;cursor:zoom-in;}
   @media print{
     #inkCanvas,#inkBar,#magLens,#magChip{display:none !important;}
   }
@@ -416,7 +419,7 @@
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 140px;gap:26px;">
     <div style="font-size:14px;font-weight:700;letter-spacing:.22em;color:#3551B5;">06 · 판서 &amp; 돋보기</div>
     <div style="font-size:52px;font-weight:800;">D를 누르고 그려보세요</div>
-    <div style="font-size:24px;line-height:1.7;color:#46506B;"><b>D</b> 펜 · <b>G</b> 형광펜 · <b>E</b> 지우개 — 발표자 창과 강의장 화면이 실시간으로 함께 그려져요.<br><b>M</b>을 누르면 마우스 돋보기가 켜져서 작은 글씨도 크게 보여줄 수 있어요 (휠로 배율 조절).</div>
+    <div style="font-size:24px;line-height:1.7;color:#46506B;"><b>D</b> 펜 · <b>G</b> 형광펜 · <b>E</b> 지우개 — 발표자 창과 강의장 화면이 실시간으로 함께 그려져요.<br><b>M</b>은 마우스 돋보기(휠로 배율), <b>Z</b>는 드래그한 구역을 화면 가득 확대예요 (다시 누르면 원위치).</div>
   </div>
 </section>
 
@@ -432,7 +435,7 @@
 <!-- ▲▲▲ 여기까지 교체 ▲▲▲ -->
 
 </div></div>
-<div class="nav">← → 이동 · P 또는 ⌘K 발표자 모드 · D 판서 · M 돋보기 · <button type="button" id="navHelpBtn" title="단축키 도움말">? 단축키 도움말</button></div>
+<div class="nav">← → 이동 · P 또는 ⌘K 발표자 모드 · D 판서 · M 돋보기 · Z 확대 · <button type="button" id="navHelpBtn" title="단축키 도움말">? 단축키 도움말</button></div>
 <button id="presenterBtn" type="button" title="발표자 모드 열기 (P 또는 ⌘K)">▶ 발표자 모드</button>
 <script>
 /* ═══════════════════════════════════════════════════════
@@ -459,7 +462,7 @@ const NOTES = [
 /*03*/ ``,
 /*04*/ `노트가 없는 슬라이드는 "별도 노트가 없어요"라고 떠요 (3번 장에서 확인해보세요).`,
 /*05*/ `B를 눌러 강의장 화면을 가려보세요. BREAK_SCREEN을 설정하면 로고·안내문·BGM이 뜨는 쉬는 시간 화면이 돼요. 슬라이드를 넘기면 자동으로 해제돼요.`,
-/*06*/ `D를 누르면 펜이 켜져요. 여기(발표자 창)에서 그려도 강의장 화면에 실시간으로 나타나요. G 형광펜, E 지우개, Esc 종료.`,
+/*06*/ `D를 누르면 펜이 켜져요. 여기(발표자 창)에서 그려도 강의장 화면에 실시간으로 나타나요. G 형광펜, E 지우개, Esc 종료. Z 구역 확대는 발표자 창의 현재 슬라이드에서 드래그해도 강의장 화면이 확대돼요.`,
 /*07*/ `수고하셨어요! 이제 slides 영역을 여러분의 슬라이드로 바꾸고 NOTES를 채우면 끝이에요.`
 ];
 
@@ -473,7 +476,7 @@ const NOTES = [
 const BREAK_SCREEN={
   title:'☕ 잠깐 쉬어가요',          // 큰 제목
   sub:'10분 뒤에 다시 시작할게요',    // 부제목 (줄바꿈은 \n)
-  logoText:'DAYFOCUS LAB',          // 텍스트 로고
+  logoText:'',                      // 텍스트 로고 — 여러분 브랜드로 채우세요 (예: 'OO컴퍼니')
   logoImg:'',                       // 이미지 로고 경로 (예: 'logo.png') — 있으면 logoText 대신 표시
   qrImg:'',                         // QR 이미지 경로 (예: 'qr.png') — 커뮤니티·웹사이트 안내용
   qrLabel:'',                       // QR 아래 설명 (예: '오픈채팅 참여하기')
@@ -483,7 +486,7 @@ const BREAK_SCREEN={
 
 const isPresenter=location.hash.indexOf('presenter')!==-1;
 
-function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);inner.style.transform='scale('+s+')';}
+function fit(){applyDeckTransform();} /* [v5.1] 기본 스케일 + 구역 확대 상태를 함께 반영 */
 let _dwellStart=Date.now(),_lastIdx=-1;
 function render(){
   slides.forEach((s,j)=>s.classList.toggle('active',j===i));
@@ -502,6 +505,7 @@ function show(n){
   if(c===i&&n!==i){edgeToast(n>i?'마지막 슬라이드예요':'첫 슬라이드예요');return;}
   i=c;lastNavLocal=Date.now();render();persist(i);
   if(blackoutMode)setBlackout(blackoutMode); /* [v3-6] 슬라이드를 넘기면 블랙아웃 자동 해제 */
+  if(zoomRegion)zoomSetRegion(null); /* [v5.1] 구역 확대도 자동 해제 */
 }
 function applyRemote(n){const ni=Math.max(0,Math.min(n,TOTAL-1));if(ni===i)return;i=ni;render();}
 
@@ -524,6 +528,7 @@ if(BC){BC.onmessage=e=>{
   const d=e&&e.data;if(!d)return;
   if(d.type==='idx')applyRemote(d.idx);
   else if(d.type==='ink')inkRecv(d); /* [v5] 판서 동기화 */
+  else if(d.type==='zoom'){zoomRegion=d.region||null;applyDeckTransform(true);zoomChipSync();} /* [v5.1] 구역 확대 동기화 */
   else if(d.type==='blackout'){blackoutMode=(d.mode==='black'||d.mode==='white')?d.mode:null;applyBlackout();}
   else if(d.type==='ping'&&!isPresenter){
     lastPingSeen=Date.now();
@@ -640,6 +645,12 @@ function inkRedraw(){
   const list=(INK[i]||[]).slice();
   if(inkLive&&inkLive.slide===i)list.push(inkLive.stroke);
   list.forEach(st=>inkPaint(ctx,st));
+  if(zoomSelMode&&zoomDrag){ /* [v5.1] 확대 구역 선택 사각형 */
+    const zx=Math.min(zoomDrag.a[0],zoomDrag.b[0]),zy=Math.min(zoomDrag.a[1],zoomDrag.b[1]);
+    const zw=Math.abs(zoomDrag.a[0]-zoomDrag.b[0]),zh=Math.abs(zoomDrag.a[1]-zoomDrag.b[1]);
+    ctx.save();ctx.setLineDash([12,8]);ctx.lineWidth=3;ctx.strokeStyle='#6366F1';ctx.fillStyle='rgba(99,102,241,.12)';
+    ctx.fillRect(zx,zy,zw,zh);ctx.strokeRect(zx,zy,zw,zh);ctx.restore();
+  }
 }
 function inkPaint(ctx,st){
   const p=st.pts;if(!p||!p.length)return;
@@ -677,6 +688,7 @@ function inkEraseAt(p){
 }
 function inkAttach(cv){
   cv.addEventListener('pointerdown',e=>{
+    if(zoomSelMode&&e.button===0){e.preventDefault();e.stopPropagation();try{cv.setPointerCapture(e.pointerId);}catch(err){}zoomDrag={a:inkPointOf(cv,e),b:inkPointOf(cv,e)};inkRedraw();return;} /* [v5.1] */
     if(!inkTool||e.button!==0)return;
     e.preventDefault();e.stopPropagation();
     try{cv.setPointerCapture(e.pointerId);}catch(err){}
@@ -688,6 +700,7 @@ function inkAttach(cv){
     inkRedraw();
   });
   cv.addEventListener('pointermove',e=>{
+    if(zoomSelMode){if(zoomDrag){e.preventDefault();zoomDrag.b=inkPointOf(cv,e);inkRedraw();}return;} /* [v5.1] */
     if(!inkDragging||!inkTool)return;
     e.preventDefault();
     const p=inkPointOf(cv,e);
@@ -700,13 +713,14 @@ function inkAttach(cv){
     if(Date.now()-_inkLiveT>60){_inkLiveT=Date.now();inkSend({op:'live',slide:i,stroke:inkCur});}
   });
   function up(){
+    if(zoomSelMode){if(zoomDrag)zoomCommit();return;} /* [v5.1] */
     if(!inkDragging)return;
     inkDragging=false;
     if(inkCur){inkSend({op:'add',slide:i,stroke:inkCur});inkCur=null;}
   }
   cv.addEventListener('pointerup',up);
   cv.addEventListener('pointercancel',up);
-  cv.addEventListener('click',e=>{if(inkTool)e.stopPropagation();}); /* 발표자 창 클릭 네비게이션과 충돌 방지 */
+  cv.addEventListener('click',e=>{if(inkTool||zoomSelMode)e.stopPropagation();}); /* 발표자 창 클릭 네비게이션과 충돌 방지 */
 }
 function buildInkBar(){
   if(document.getElementById('inkBar'))return;
@@ -738,6 +752,47 @@ function inkSetTool(t){
   if(inkTool)buildInkBar();
   document.body.classList.toggle('inkOn',!!inkTool);
   inkBarSync();
+}
+
+/* ═══ [v5.1] Z — 구역 확대: 드래그한 영역을 화면에 꽉 채워 확대 ═══
+   강의장 화면에서 Z → 드래그로 영역 선택. 발표자 창에서도 현재 슬라이드 박스 위에서 선택하면
+   강의장 화면이 확대돼요. 다시 Z·Esc·슬라이드 넘기면 원위치. 확대 중 판서·돋보기 조합 가능. */
+let zoomRegion=null,zoomSelMode=false,zoomDrag=null;
+function applyDeckTransform(anim){
+  if(isPresenter||!inner)return;
+  if(anim){inner.classList.add('zoomAnim');clearTimeout(window._zoomAnimT);window._zoomAnimT=setTimeout(()=>inner.classList.remove('zoomAnim'),480);}
+  const s=Math.min(innerWidth/1600,innerHeight/900);
+  if(zoomRegion)inner.style.transform='scale('+(s*zoomRegion.zf)+') translate('+(800-zoomRegion.cx)+'px,'+(450-zoomRegion.cy)+'px)';
+  else inner.style.transform='scale('+s+')';
+}
+function zoomChipSync(){const chip=document.getElementById('pZoomChip');if(chip)chip.style.display=zoomRegion?'inline-block':'none';}
+function zoomSetRegion(rg,noSend){
+  zoomRegion=rg;
+  applyDeckTransform(true);
+  zoomChipSync();
+  if(!noSend&&BC){try{BC.postMessage({type:'zoom',region:rg});}catch(e){}}
+}
+function zoomSelModeSet(on){
+  zoomSelMode=on;zoomDrag=null;
+  document.body.classList.toggle('zoomSelMode',on);
+  if(on&&inkTool)inkSetTool(null);
+  if(on)edgeToast('🔎 확대할 구역을 드래그로 선택하세요 · 클릭 = 2배 · Z 취소');
+  inkRedraw();
+}
+function zoomToggle(){
+  if(zoomRegion||zoomSelMode){zoomSelModeSet(false);if(zoomRegion)zoomSetRegion(null);}
+  else zoomSelModeSet(true);
+}
+function zoomCommit(){
+  const a=zoomDrag.a,b=zoomDrag.b;zoomDrag=null;
+  const x=Math.min(a[0],b[0]),y=Math.min(a[1],b[1]),w=Math.abs(a[0]-b[0]),h=Math.abs(a[1]-b[1]);
+  let cx,cy,zf;
+  if(w<30&&h<30){zf=2;cx=(a[0]+b[0])/2;cy=(a[1]+b[1])/2;} /* 클릭 = 그 지점 2배 */
+  else{zf=Math.max(1.15,Math.min(5,Math.min(1600/Math.max(w,40),900/Math.max(h,24))));cx=x+w/2;cy=y+h/2;}
+  cx=Math.max(800/zf,Math.min(1600-800/zf,cx)); /* 슬라이드 밖이 보이지 않게 중심 보정 */
+  cy=Math.max(450/zf,Math.min(900-450/zf,cy));
+  zoomSelModeSet(false);
+  zoomSetRegion({cx:Math.round(cx),cy:Math.round(cy),zf:Math.round(zf*100)/100});
 }
 
 /* ═══ [v5] M — 마우스 돋보기 (청중 창, 휠로 배율 조절) — 커뮤니티 피드백 반영 ═══ */
@@ -786,7 +841,7 @@ function magChipShow(){
   window._magChipT=setTimeout(()=>{magChip.style.display='none';},1200);
 }
 function magToggle(){
-  if(isPresenter)return;
+  if(isPresenter){edgeToast('🔍 돋보기는 강의장 화면을 클릭한 뒤 M — 발표자 창에서는 Z(구역 확대)를 쓰세요');return;}
   magOn=!magOn;
   if(magOn){
     if(!magEl)magBuild();
@@ -867,6 +922,7 @@ function toggleHelp(force){
       sec('판서 · 돋보기')+
       row('D / G / E','펜 / 형광펜 / 지우개 — 발표자 창·강의장 화면 어디서 그려도 실시간 동기화 · Esc 종료')+
       row('M','마우스 돋보기 (강의장 화면) · 휠로 배율 조절')+
+      row('Z','구역 확대 — 드래그한 영역을 화면에 꽉 채움 · 클릭=2배 · 다시 Z 또는 슬라이드 넘기면 원위치')+
       row('⌘Fn F1(맥) · Win+P(윈도우)','화면 미러링 ↔ 확장 전환 (시연↔발표 · OS 시스템 단축키)')+
       sec('발표자 창')+
       row('P · ⌘K(맥) · Ctrl+K(윈도우)','발표자 창 열기')+
@@ -1431,6 +1487,7 @@ function initPresenter(){
         '<span class="pCtrlSep"></span>'+
         '<span class="pConnChip" id="pConnChip" role="status">○ 확인 중…</span>'+
         '<span class="pBlackChip" id="pBlackChip" style="display:none;"></span>'+
+        '<span class="pBlackChip" id="pZoomChip" style="display:none;background:#8FC6FF;cursor:pointer;" title="클릭하면 확대 해제 (Z)">🔎 구역 확대 중 · Z 해제</span>'+
         '<button type="button" id="pBlackBtn" class="pCtlBtn" title="강의장 화면 가리기/해제 (B)">⬛ 가리기</button>'+
         '<button type="button" id="pInkBtn" class="pCtlBtn" title="판서 펜 켜기/끄기 (D) — 현재 슬라이드 위에 그리면 강의장 화면에도 실시간으로 보여요">✏️ 판서</button>'+
         '<button type="button" id="pHelpBtn" class="pCtlBtn" title="단축키 도움말 (? 또는 H)">? 단축키</button>'+
@@ -1493,6 +1550,7 @@ function initPresenter(){
   inkAttach(pInkCanvas);
   document.getElementById('pInkBtn').onclick=()=>inkSetTool(inkTool?null:'pen');
   inkSend({op:'req'}); /* 먼저 열려 있던 창의 판서 상태 받아오기 */
+  document.getElementById('pZoomChip').onclick=()=>zoomToggle(); /* [v5.1] */
   document.getElementById('pNoteFold').onclick=()=>{ /* [v3-17] */
     try{localStorage.setItem(FOLD_KEY,localStorage.getItem(FOLD_KEY)==='1'?'':'1');}catch(e){}
     applyNoteFold();
@@ -1546,6 +1604,7 @@ addEventListener('keydown',e=>{
   }
   if(e.key==='Escape'){
     if(inkTool){inkSetTool(null);return;} /* [v5] 판서 먼저 종료 */
+    if(zoomSelMode||zoomRegion){zoomToggle();return;} /* [v5.1] 구역 확대 종료 */
     jumpBuf='';updateJumpToast();
     toggleHelp(false);
     return;
@@ -1575,6 +1634,7 @@ addEventListener('keydown',e=>{
     case 'KeyG':inkSetTool('hl');break;
     case 'KeyE':inkSetTool('erase');break;
     case 'KeyM':magToggle();break;
+    case 'KeyZ':zoomToggle();break;
   }
 });
 
