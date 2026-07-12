@@ -359,6 +359,33 @@
   #magLens{position:fixed;width:340px;height:340px;border-radius:50%;border:3px solid rgba(99,102,241,.9);box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.5);overflow:hidden;z-index:9980;pointer-events:none;display:none;background:#fff;}
   #magLens .magInner{width:1600px;height:900px;position:absolute;top:0;left:0;transform-origin:0 0;}
   #magChip{position:fixed;z-index:9981;background:rgba(13,15,30,.9);color:#fff;border-radius:999px;padding:5px 12px;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:12.5px;font-weight:700;pointer-events:none;display:none;}
+  /* [v5.2] ☕ 쉬는화면 설정 모달 — 코드 수정 없이 발표자 창에서 꾸미기 */
+  #breakCfgOverlay{position:fixed;inset:0;z-index:9999;background:rgba(4,8,24,.72);display:none;align-items:center;justify-content:center;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;backdrop-filter:blur(3px);}
+  #breakCfgOverlay.on{display:flex;}
+  .bcCard{background:#151932;border:1px solid rgba(138,147,248,.3);border-radius:16px;padding:26px 30px;color:#fff;width:540px;max-width:92vw;max-height:86vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.5);}
+  .bcTitle{font-size:18px;font-weight:800;margin-bottom:6px;}
+  .bcHint{font-size:12.5px;color:#8FA3C8;margin-bottom:16px;line-height:1.55;}
+  .bcRow{margin-bottom:12px;}
+  .bcRow>label{display:block;font-size:12.5px;font-weight:700;color:#8A93F8;margin-bottom:5px;}
+  .bcRow input[type=text]{width:100%;background:#0F1A40;color:#fff;border:1px solid rgba(139,157,239,.4);border-radius:8px;padding:9px 12px;font-size:14px;font-family:inherit;box-sizing:border-box;}
+  .bcInline{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .bcCheck{display:flex;gap:8px;align-items:center;font-size:14px;cursor:pointer;}
+  .bcCheck input{accent-color:#6366F1;width:16px;height:16px;}
+  .bcThumb{height:40px;border-radius:6px;background:#fff;padding:3px;display:none;}
+  .bcPresets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+  .bcPreset{background:#1A1E36;color:#DCE4FA;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;}
+  .bcPreset:hover{background:#232848;border-color:rgba(138,147,248,.5);}
+  body.pLight .bcPreset{background:#F6F7FE;color:#1A2035;border-color:#E2E5F0;}
+  body.pLight .bcPreset:hover{background:#EEF0F9;}
+  .bcActions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+  .bcBtn{background:#4F46E5;color:#fff;border:none;border-radius:8px;padding:10px 16px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;}
+  .bcBtn:hover{background:#6366F1;}
+  .bcBtn.ghost{background:#1A1E36;color:#fff;border:1px solid rgba(255,255,255,.14);}
+  .bcBtn.ghost:hover{background:#232848;}
+  body.pLight .bcCard{background:#fff;color:#12172B;border-color:#E4E7F2;}
+  body.pLight .bcRow input[type=text]{background:#fff;color:#0A1334;border-color:#C9D4EA;}
+  body.pLight .bcHint{color:#5B6478;}
+  body.pLight .bcBtn.ghost{background:#F6F7FE;color:#1A2035;border-color:#E2E5F0;}
   /* [v5.1] Z — 구역 확대: 드래그한 영역을 화면에 꽉 채움 */
   .zoomAnim{transition:transform .4s cubic-bezier(.22,.61,.36,1);}
   body.zoomSelMode #inkCanvas,body.zoomSelMode #pInkCanvas{pointer-events:auto;cursor:zoom-in;}
@@ -521,6 +548,7 @@ addEventListener('storage',e=>{
   if(e.key===LS_KEY&&e.newValue!=null)applyRemote(parseInt(e.newValue,10)||0);
   if(e.key===BLACK_KEY)applyBlackoutFromStore();
   if(e.key===INK_MSG_KEY&&e.newValue&&!BC){try{inkRecv(JSON.parse(e.newValue));}catch(err){}} /* [v5] BC 미지원 브라우저 폴백 */
+  if(e.key===BREAK_CFG_KEY)breakCfgChanged(); /* [v5.2] 쉬는화면 설정 동기화 */
 });
 /* [개선 9·30] 하트비트: 발표자 창이 2초마다 ping → 청중 창이 pong + 어긋난 슬라이드 자동 재정렬 */
 let lastPong=0,lastPingSeen=0;
@@ -529,6 +557,7 @@ if(BC){BC.onmessage=e=>{
   if(d.type==='idx')applyRemote(d.idx);
   else if(d.type==='ink')inkRecv(d); /* [v5] 판서 동기화 */
   else if(d.type==='zoom'){zoomRegion=d.region||null;applyDeckTransform(true);zoomChipSync();} /* [v5.1] 구역 확대 동기화 */
+  else if(d.type==='breakcfg')breakCfgChanged(); /* [v5.2] 쉬는화면 설정 동기화 */
   else if(d.type==='blackout'){blackoutMode=(d.mode==='black'||d.mode==='white')?d.mode:null;applyBlackout();}
   else if(d.type==='ping'&&!isPresenter){
     lastPingSeen=Date.now();
@@ -577,26 +606,47 @@ function applyBlackout(){
   if(isPresenter)document.body.classList.toggle('pBlackOn',!!blackoutMode); /* [v3-28] 현재 슬라이드 주황 테두리 */
 }
 
-/* ═══ [v5] 쉬는 시간(B) 커스텀 화면 + BGM — 커뮤니티 피드백 반영 ═══ */
-function breakConfigured(){return !!(BREAK_SCREEN.title||BREAK_SCREEN.sub||BREAK_SCREEN.logoText||BREAK_SCREEN.logoImg||BREAK_SCREEN.qrImg);}
+/* ═══ [v5] 쉬는 시간(B) 커스텀 화면 + BGM — 커뮤니티 피드백 반영 ═══
+   [v5.2] 코드의 BREAK_SCREEN(기본값) 위에, 발표자 창 [☕ 쉬는화면] 버튼으로 저장한
+   설정(localStorage, 덱별)이 덮어써져요 — 코드 수정 없이 누구나 꾸밀 수 있어요. */
+const BREAK_CFG_KEY='dfl-presenter-breakcfg-'+DECK_ID;
+let _breakOverride=null,_breakLoaded=false;
+function breakCfg(){
+  if(!_breakLoaded){
+    _breakLoaded=true;
+    try{_breakOverride=JSON.parse(localStorage.getItem(BREAK_CFG_KEY)||'null');}catch(e){_breakOverride=null;}
+  }
+  return _breakOverride?Object.assign({},BREAK_SCREEN,_breakOverride):BREAK_SCREEN;
+}
+function breakCfgChanged(){ /* 설정이 바뀌면 화면·오디오 캐시 무효화 후 즉시 반영 */
+  _breakLoaded=false;
+  if(bgmAudio){try{bgmAudio.pause();}catch(e){}bgmAudio=null;}
+  const el=document.getElementById('blackoutOverlay');
+  if(el){
+    const w=el.querySelector('.boWrap');if(w)w.remove();
+    if(blackoutMode)applyBlackout();else el.classList.remove('boCustom');
+  }
+}
+function breakConfigured(){const B=breakCfg();return !!(B.title||B.sub||B.logoText||B.logoImg||B.qrImg);}
 function renderBreakScreen(el){
   const custom=blackoutMode==='black'&&breakConfigured();
   el.classList.toggle('boCustom',custom);
   if(!custom||el.querySelector('.boWrap'))return;
+  const B=breakCfg();
   const w=document.createElement('div');w.className='boWrap';
   let h='';
-  if(BREAK_SCREEN.logoImg)h+='<img class="boLogoImg" src="'+BREAK_SCREEN.logoImg+'" alt="로고">';
-  else if(BREAK_SCREEN.logoText)h+='<div class="boLogoText">'+escHTML(BREAK_SCREEN.logoText)+'</div>';
-  if(BREAK_SCREEN.title)h+='<div class="boTitle">'+escHTML(BREAK_SCREEN.title)+'</div>';
-  if(BREAK_SCREEN.sub)h+='<div class="boSub">'+escHTML(BREAK_SCREEN.sub).replace(/\n/g,'<br>')+'</div>';
-  if(BREAK_SCREEN.showClock)h+='<div class="boClock" id="boClock"></div>';
-  if(BREAK_SCREEN.qrImg)h+='<div class="boQrBox"><img class="boQr" src="'+BREAK_SCREEN.qrImg+'" alt="QR 코드">'+(BREAK_SCREEN.qrLabel?'<div class="boQrLabel">'+escHTML(BREAK_SCREEN.qrLabel)+'</div>':'')+'</div>';
-  if(BREAK_SCREEN.bgm)h+='<button type="button" id="boBgmBtn">♪ BGM 재생</button>';
+  if(B.logoImg)h+='<img class="boLogoImg" src="'+B.logoImg+'" alt="로고">';
+  else if(B.logoText)h+='<div class="boLogoText">'+escHTML(B.logoText)+'</div>';
+  if(B.title)h+='<div class="boTitle">'+escHTML(B.title)+'</div>';
+  if(B.sub)h+='<div class="boSub">'+escHTML(B.sub).replace(/\n/g,'<br>')+'</div>';
+  if(B.showClock)h+='<div class="boClock" id="boClock"></div>';
+  if(B.qrImg)h+='<div class="boQrBox"><img class="boQr" src="'+B.qrImg+'" alt="QR 코드">'+(B.qrLabel?'<div class="boQrLabel">'+escHTML(B.qrLabel)+'</div>':'')+'</div>';
+  if(B.bgm)h+='<button type="button" id="boBgmBtn">♪ BGM 재생</button>';
   w.innerHTML=h;
   el.appendChild(w);
   const bb=w.querySelector('#boBgmBtn');
   if(bb)bb.addEventListener('click',ev=>{ev.stopPropagation();bgmWant=!(bgmAudio&&!bgmAudio.paused);bgmSync();});
-  if(BREAK_SCREEN.showClock){
+  if(B.showClock){
     const upd=()=>{const c=document.getElementById('boClock');if(!c)return;const d=new Date();c.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');};
     upd();setInterval(upd,5000);
   }
@@ -604,10 +654,11 @@ function renderBreakScreen(el){
 /* BGM: 쉬는 시간(B) 동안 청중 창에서 재생. 브라우저가 자동재생을 막으면 ♪ 버튼으로 수동 시작 */
 let bgmAudio=null,bgmWant=true;
 function bgmSync(){
-  if(isPresenter||!BREAK_SCREEN.bgm)return;
+  const B=breakCfg();
+  if(isPresenter||!B.bgm)return;
   const on=blackoutMode==='black'&&bgmWant;
   if(on){
-    if(!bgmAudio){bgmAudio=new Audio(BREAK_SCREEN.bgm);bgmAudio.loop=true;bgmAudio.volume=0.35;}
+    if(!bgmAudio){bgmAudio=new Audio(B.bgm);bgmAudio.loop=true;bgmAudio.volume=0.35;}
     bgmAudio.play().then(bgmBtnSync).catch(()=>{edgeToast('브라우저가 자동재생을 막았어요 — 화면의 ♪ 버튼을 눌러주세요');bgmBtnSync();});
   }else if(bgmAudio&&!bgmAudio.paused)bgmAudio.pause();
   bgmBtnSync();
@@ -615,6 +666,120 @@ function bgmSync(){
 function bgmBtnSync(){
   const b=document.getElementById('boBgmBtn');if(!b)return;
   b.textContent=(bgmAudio&&!bgmAudio.paused)?'⏸ BGM 정지':'♪ BGM 재생';
+}
+/* ═══ [v5.2] ☕ 쉬는화면 설정 모달 (발표자 창) ═══ */
+/* [v5.2] 상황별 프리셋 — 클릭 한 번으로 바로 적용, 문구는 폼에서 자유 수정 */
+const BREAK_PRESETS=[
+  {name:'⬛ 검은 화면 (기본)',cfg:{title:'',sub:'',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:false,bgm:''}},
+  {name:'☕ 쉬는 시간',cfg:{title:'☕ 쉬는 시간입니다',sub:'잠시 후 다시 시작할게요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
+  {name:'🍽 점심시간',cfg:{title:'🍽 점심시간입니다',sub:'맛있게 드시고 오세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
+  {name:'💻 실습 시간',cfg:{title:'💻 실습 시간입니다',sub:'막히면 편하게 손 들어주세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
+  {name:'🙋 Q&A',cfg:{title:'🙋 Q&A 시간입니다',sub:'궁금한 것 편하게 물어봐주세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:false,bgm:''}},
+  {name:'🕘 곧 시작',cfg:{title:'곧 시작합니다',sub:'잠시만 기다려주세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}}
+];
+function bcApply(o,msg){
+  try{localStorage.setItem(BREAK_CFG_KEY,JSON.stringify(o));}catch(e){edgeToast('저장 공간이 부족해요 — 이미지 크기를 줄여주세요');return false;}
+  if(BC){try{BC.postMessage({type:'breakcfg'});}catch(e){}}
+  breakCfgChanged();
+  edgeToast(msg||'저장했어요 — B를 눌러 확인해보세요');
+  return true;
+}
+let _bcLogoData,_bcQrData;
+function bcFileRow(id,label){
+  return '<div class="bcRow"><label>'+label+'</label><div class="bcInline">'+
+    '<input type="file" id="'+id+'" accept="image/*" style="font-size:12.5px;max-width:230px;">'+
+    '<img class="bcThumb" id="'+id+'Thumb" alt="미리보기">'+
+    '<button type="button" class="bcBtn ghost" id="'+id+'Clear" style="padding:6px 10px;font-size:12.5px;">지우기</button>'+
+    '</div></div>';
+}
+function bcBindFile(id,setData,curVal){
+  const inp=document.getElementById(id),thumb=document.getElementById(id+'Thumb');
+  if(curVal){thumb.src=curVal;thumb.style.display='inline-block';}
+  inp.addEventListener('change',()=>{
+    const f=inp.files&&inp.files[0];if(!f)return;
+    if(f.size>1500000){edgeToast('이미지가 너무 커요 — 1.5MB 이하로 줄여주세요');inp.value='';return;}
+    const rd=new FileReader();
+    rd.onload=()=>{setData(rd.result);thumb.src=rd.result;thumb.style.display='inline-block';};
+    rd.readAsDataURL(f);
+  });
+  document.getElementById(id+'Clear').addEventListener('click',()=>{setData('');inp.value='';thumb.style.display='none';});
+}
+function toggleBreakCfg(force){
+  let el=document.getElementById('breakCfgOverlay');
+  if(!el){
+    el=document.createElement('div');el.id='breakCfgOverlay';
+    const B=breakCfg();
+    _bcLogoData=undefined;_bcQrData=undefined;
+    el.innerHTML='<div class="bcCard">'+
+      '<div class="bcTitle">☕ 쉬는 시간(B) 화면 꾸미기</div>'+
+      '<div class="bcHint">B를 눌렀을 때 강의장 화면에 뜨는 내용이에요. 프리셋을 고르면 바로 적용되고, 아래 폼에서 자유롭게 고칠 수 있어요.<br>설정은 이 브라우저에 덱별로 저장돼요 (코드 수정 없음).</div>'+
+      '<div class="bcPresets">'+BREAK_PRESETS.map((pz,k)=>'<button type="button" class="bcPreset" data-preset="'+k+'">'+pz.name+'</button>').join('')+'</div>'+
+      '<div class="bcRow"><label>큰 제목</label><input type="text" id="bcTitle" placeholder="예: ☕ 잠깐 쉬어가요"></div>'+
+      '<div class="bcRow"><label>부제목</label><input type="text" id="bcSub" placeholder="예: 10분 뒤에 다시 시작할게요"></div>'+
+      '<div class="bcRow"><label>로고 텍스트</label><input type="text" id="bcLogoText" placeholder="예: OO컴퍼니"></div>'+
+      bcFileRow('bcLogoImg','로고 이미지 (있으면 텍스트 대신 표시)')+
+      bcFileRow('bcQrImg','QR 이미지 (커뮤니티·웹사이트 안내)')+
+      '<div class="bcRow"><label>QR 아래 설명</label><input type="text" id="bcQrLabel" placeholder="예: 오픈채팅 참여하기"></div>'+
+      '<div class="bcRow"><label class="bcCheck"><input type="checkbox" id="bcClock"> 현재 시각 표시</label></div>'+
+      '<div class="bcRow"><label>BGM 파일 경로 (선택)</label><input type="text" id="bcBgm" placeholder="예: break.mp3 — deck 파일과 같은 폴더에 두세요"></div>'+
+      '<div class="bcActions">'+
+        '<button type="button" class="bcBtn" id="bcSave">저장</button>'+
+        '<button type="button" class="bcBtn ghost" id="bcReset">기본(검은 화면)으로 초기화</button>'+
+        '<button type="button" class="bcBtn ghost" id="bcClose">닫기</button>'+
+      '</div></div>';
+    document.body.appendChild(el);
+    el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('on');});
+    document.getElementById('bcTitle').value=B.title||'';
+    document.getElementById('bcSub').value=B.sub||'';
+    document.getElementById('bcLogoText').value=B.logoText||'';
+    document.getElementById('bcQrLabel').value=B.qrLabel||'';
+    document.getElementById('bcClock').checked=!!B.showClock;
+    document.getElementById('bcBgm').value=B.bgm||'';
+    bcBindFile('bcLogoImg',v=>{_bcLogoData=v;},B.logoImg);
+    bcBindFile('bcQrImg',v=>{_bcQrData=v;},B.qrImg);
+    el.querySelectorAll('.bcPreset').forEach(btn=>btn.addEventListener('click',()=>{
+      const cfg=BREAK_PRESETS[parseInt(btn.dataset.preset,10)].cfg;
+      document.getElementById('bcTitle').value=cfg.title;
+      document.getElementById('bcSub').value=cfg.sub;
+      document.getElementById('bcLogoText').value=cfg.logoText;
+      document.getElementById('bcQrLabel').value=cfg.qrLabel;
+      document.getElementById('bcClock').checked=cfg.showClock;
+      document.getElementById('bcBgm').value=cfg.bgm;
+      _bcLogoData='';_bcQrData='';
+      document.getElementById('bcLogoImgThumb').style.display='none';
+      document.getElementById('bcQrImgThumb').style.display='none';
+      bcApply(Object.assign({},cfg),btn.textContent+' 적용됐어요 — B를 눌러 확인해보세요');
+    }));
+    document.getElementById('bcClose').addEventListener('click',()=>el.classList.remove('on'));
+    document.getElementById('bcSave').addEventListener('click',()=>{
+      const B0=breakCfg();
+      const o={
+        title:document.getElementById('bcTitle').value.trim(),
+        sub:document.getElementById('bcSub').value.trim(),
+        logoText:document.getElementById('bcLogoText').value.trim(),
+        logoImg:(_bcLogoData!==undefined)?_bcLogoData:(B0.logoImg||''),
+        qrImg:(_bcQrData!==undefined)?_bcQrData:(B0.qrImg||''),
+        qrLabel:document.getElementById('bcQrLabel').value.trim(),
+        showClock:document.getElementById('bcClock').checked,
+        bgm:document.getElementById('bcBgm').value.trim()
+      };
+      try{localStorage.setItem(BREAK_CFG_KEY,JSON.stringify(o));}catch(e){edgeToast('저장 공간이 부족해요 — 이미지 크기를 줄여주세요');return;}
+      if(BC){try{BC.postMessage({type:'breakcfg'});}catch(e){}}
+      breakCfgChanged();
+      el.classList.remove('on');
+      edgeToast('저장했어요 — B를 눌러 확인해보세요');
+    });
+    document.getElementById('bcReset').addEventListener('click',()=>{
+      try{localStorage.removeItem(BREAK_CFG_KEY);}catch(e){}
+      _bcLogoData=undefined;_bcQrData=undefined;
+      if(BC){try{BC.postMessage({type:'breakcfg'});}catch(e){}}
+      breakCfgChanged();
+      el.remove(); /* 폼을 기본값으로 다시 그리기 위해 제거 */
+      edgeToast('기본(검은 화면)으로 되돌렸어요');
+    });
+  }
+  const on=(force!==undefined)?force:!el.classList.contains('on');
+  el.classList.toggle('on',on);
 }
 
 /* ═══ [v5] 판서: 펜(D)·형광펜(G)·지우개(E) — 커뮤니티 피드백 반영 ═══
@@ -917,7 +1082,7 @@ function toggleHelp(force){
       row('숫자 + Enter','해당 번호 슬라이드로 바로 이동')+
       row('Home / End','처음 / 마지막 슬라이드')+
       sec('화면')+
-      row('B / W','강의장 화면 가리기 (검정/흰색) · 한 번 더 누르거나 슬라이드 넘기면 해제 — B는 BREAK_SCREEN 설정으로 로고·안내문·BGM이 뜨는 쉬는 시간 화면이 돼요')+
+      row('B / W','강의장 화면 가리기 (검정/흰색) · 한 번 더 누르거나 슬라이드 넘기면 해제 — B는 발표자 창 [☕ 쉬는화면] 버튼으로 로고·안내문·QR·BGM 화면으로 꾸밀 수 있어요 (기본은 검은 화면)')+
       row('F 또는 F5','전체화면 켜기/끄기')+
       sec('판서 · 돋보기')+
       row('D / G / E','펜 / 형광펜 / 지우개 — 발표자 창·강의장 화면 어디서 그려도 실시간 동기화 · Esc 종료')+
@@ -1490,6 +1655,7 @@ function initPresenter(){
         '<span class="pBlackChip" id="pZoomChip" style="display:none;background:#8FC6FF;cursor:pointer;" title="클릭하면 확대 해제 (Z)">🔎 구역 확대 중 · Z 해제</span>'+
         '<button type="button" id="pBlackBtn" class="pCtlBtn" title="강의장 화면 가리기/해제 (B)">⬛ 가리기</button>'+
         '<button type="button" id="pInkBtn" class="pCtlBtn" title="판서 펜 켜기/끄기 (D) — 현재 슬라이드 위에 그리면 강의장 화면에도 실시간으로 보여요">✏️ 판서</button>'+
+        '<button type="button" id="pBreakCfgBtn" class="pCtlBtn" title="쉬는 시간(B) 화면 꾸미기 — 로고·문구·QR·시계·BGM (기본은 검은 화면)">☕ 쉬는화면</button>'+
         '<button type="button" id="pHelpBtn" class="pCtlBtn" title="단축키 도움말 (? 또는 H)">? 단축키</button>'+
         '<span class="pCtrlSep"></span>'+
         '<div class="pTimer">'+
@@ -1551,6 +1717,7 @@ function initPresenter(){
   document.getElementById('pInkBtn').onclick=()=>inkSetTool(inkTool?null:'pen');
   inkSend({op:'req'}); /* 먼저 열려 있던 창의 판서 상태 받아오기 */
   document.getElementById('pZoomChip').onclick=()=>zoomToggle(); /* [v5.1] */
+  document.getElementById('pBreakCfgBtn').onclick=()=>toggleBreakCfg(); /* [v5.2] */
   document.getElementById('pNoteFold').onclick=()=>{ /* [v3-17] */
     try{localStorage.setItem(FOLD_KEY,localStorage.getItem(FOLD_KEY)==='1'?'':'1');}catch(e){}
     applyNoteFold();
@@ -1605,6 +1772,7 @@ addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     if(inkTool){inkSetTool(null);return;} /* [v5] 판서 먼저 종료 */
     if(zoomSelMode||zoomRegion){zoomToggle();return;} /* [v5.1] 구역 확대 종료 */
+    const bco=document.getElementById('breakCfgOverlay');if(bco&&bco.classList.contains('on')){bco.classList.remove('on');return;} /* [v5.2] */
     jumpBuf='';updateJumpToast();
     toggleHelp(false);
     return;
