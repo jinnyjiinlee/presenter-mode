@@ -676,14 +676,15 @@ function bgmBtnSync(){
   b.textContent=(bgmAudio&&!bgmAudio.paused)?'⏸ BGM 정지':'♪ BGM 재생';
 }
 /* ═══ [v5.2] ☕ 쉬는화면 설정 모달 (발표자 창) ═══ */
-/* [v5.2] 상황별 프리셋 — 클릭 한 번으로 바로 적용, 문구는 폼에서 자유 수정 */
+/* [v5.2] 상황별 프리셋 — 클릭 한 번으로 바로 적용, 문구는 폼에서 자유 수정
+   title은 청중에게 보이는 안내문(시그니지)이라 의도적으로 격식체(-입니다) 사용 */
 const BREAK_PRESETS=[
   {name:'⬛ 검은 화면 (기본)',cfg:{title:'',sub:'',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:false,bgm:''}},
   {name:'☕ 쉬는 시간',cfg:{title:'☕ 쉬는 시간입니다',sub:'잠시 후 다시 시작할게요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
   {name:'🍽 점심시간',cfg:{title:'🍽 점심시간입니다',sub:'맛있게 드시고 오세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
   {name:'💻 실습 시간',cfg:{title:'💻 실습 시간입니다',sub:'막히면 편하게 손 들어주세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
   {name:'🙋 Q&A',cfg:{title:'🙋 Q&A 시간입니다',sub:'궁금한 것 편하게 물어봐주세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:false,bgm:''}},
-  {name:'🕘 곧 시작',cfg:{title:'곧 시작합니다',sub:'잠시만 기다려주세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}}
+  {name:'🕘 곧 시작',cfg:{title:'🕘 곧 시작합니다',sub:'잠시만 기다려주세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}}
 ];
 function bcMarkActivePreset(){ /* [UX] 현재 적용 중인 프리셋 하이라이트 */
   const el=document.getElementById('breakCfgOverlay');if(!el)return;
@@ -763,7 +764,8 @@ function toggleBreakCfg(force){
       _bcLogoData='';_bcQrData='';
       document.getElementById('bcLogoImgThumb').style.display='none';
       document.getElementById('bcQrImgThumb').style.display='none';
-      bcApply(Object.assign({},cfg),btn.textContent+' 적용됐어요 — B를 눌러 확인해보세요');
+      const k=parseInt(btn.dataset.preset,10);
+      bcApply(Object.assign({},cfg),k===0?'기본(검은 화면)으로 설정했어요':btn.textContent+' 적용됐어요 — B를 눌러 확인해보세요');
       bcMarkActivePreset();
     }));
     document.getElementById('bcClose').addEventListener('click',()=>el.classList.remove('on'));
@@ -1708,7 +1710,7 @@ function initPresenter(){
   try{
     if(!localStorage.getItem('dfl-presenter-onboard-'+DECK_ID)){
       const ob=document.createElement('div');ob.id='pOnboard';
-      ob.innerHTML='<span><strong>발표자 창이 처음이세요?</strong> ← →로 넘기고 <strong>D</strong> 판서 · <strong>Z</strong> 구역 확대 · <strong>B</strong> 쉬는 시간 화면을 눌러보세요. 쉬는 화면은 하단 <strong>[☕ 쉬는화면]</strong>에서 프리셋으로 꾸밀 수 있고, 전체 단축키는 <strong>[? 단축키]</strong>(또는 ?)에 있어요.</span>'+
+      ob.innerHTML='<span><strong>발표자 창이 처음이세요?</strong> ← →로 넘기고 <strong>D</strong> 판서 · <strong>Z</strong> 구역 확대 · <strong>B</strong> 쉬는화면을 눌러보세요. 쉬는화면은 하단 <strong>[☕ 쉬는화면]</strong> 버튼에서 프리셋으로 꾸밀 수 있고, 전체 단축키는 <strong>[? 단축키]</strong>(또는 ?)에 있어요.</span>'+
         '<button type="button" id="pOnboardOk">알겠어요</button>';
       root.insertBefore(ob,document.getElementById('pTop'));
       document.getElementById('pOnboardOk').onclick=()=>{
