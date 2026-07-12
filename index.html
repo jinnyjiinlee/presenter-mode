@@ -410,7 +410,7 @@
 <section class="slide" style="background:#0A1334;color:#fff;">
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center;">
     <div style="font-size:52px;font-weight:800;">B를 눌러보세요</div>
-    <div style="font-size:23px;line-height:1.7;color:#8FA3C8;">강의장 화면에 쉬는 시간 안내 화면이 떠요 (발표자 창은 그대로).<br>로고·안내 문구·QR·BGM까지 BREAK_SCREEN 설정에서 바꿀 수 있어요. 슬라이드를 넘기면 자동 해제!</div>
+    <div style="font-size:23px;line-height:1.7;color:#8FA3C8;">강의장 화면만 검게 가려져요 (발표자 창은 그대로).<br>BREAK_SCREEN을 설정하면 로고·문구·QR·BGM이 뜨는 쉬는 시간 화면으로 바뀌어요. 슬라이드를 넘기면 자동 해제!</div>
   </div>
 </section>
 
@@ -474,14 +474,14 @@ const NOTES = [
    W(흰 화면)는 항상 순수 흰색으로 유지돼요.
    ============================================================ */
 const BREAK_SCREEN={
-  title:'☕ 잠깐 쉬어가요',          // 큰 제목
-  sub:'10분 뒤에 다시 시작할게요',    // 부제목 (줄바꿈은 \n)
-  logoText:'',                      // 텍스트 로고 — 여러분 브랜드로 채우세요 (예: 'OO컴퍼니')
-  logoImg:'',                       // 이미지 로고 경로 (예: 'logo.png') — 있으면 logoText 대신 표시
-  qrImg:'',                         // QR 이미지 경로 (예: 'qr.png') — 커뮤니티·웹사이트 안내용
-  qrLabel:'',                       // QR 아래 설명 (예: '오픈채팅 참여하기')
-  showClock:true,                   // 현재 시각 표시
-  bgm:''                            // 쉬는 시간 배경음악 mp3 경로 (예: 'break.mp3') — ♪ 버튼으로 재생/정지
+  title:'',        // 큰 제목 (예: '☕ 잠깐 쉬어가요') — 전부 비우면(기본) 순수 검은 화면
+  sub:'',          // 부제목 (예: '10분 뒤에 다시 시작할게요' · 줄바꿈은 \n)
+  logoText:'',     // 텍스트 로고 (예: 'OO컴퍼니')
+  logoImg:'',      // 이미지 로고 경로 (예: 'logo.png') — 있으면 logoText 대신 표시
+  qrImg:'',        // QR 이미지 경로 (예: 'qr.png') — 커뮤니티·웹사이트 안내용
+  qrLabel:'',      // QR 아래 설명 (예: '오픈채팅 참여하기')
+  showClock:false, // 현재 시각 표시
+  bgm:''           // 쉬는 시간 배경음악 mp3 경로 (예: 'break.mp3') — ♪ 버튼으로 재생/정지
 };
 
 const isPresenter=location.hash.indexOf('presenter')!==-1;
