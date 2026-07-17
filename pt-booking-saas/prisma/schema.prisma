@@ -1,0 +1,112 @@
+// Prisma schema for the PT booking SaaS (Phase 1)
+//
+// - 모든 시간(DateTime)은 UTC(timestamptz)로 저장합니다. 응답 시 KST 로 변환합니다.
+// - AvailabilityRule.startTime/endTime 은 "HH:mm" 형식의 KST 벽시계 시간(문자열)입니다.
+// - Booking 시간 겹침 방지 EXCLUDE 제약은 Prisma 로 표현할 수 없어
+//   prisma/migrations/20240101000001_booking_exclude_constraint 에 raw SQL 로 관리합니다.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+model Tenant {
+  id                String   @id @default(cuid())
+  name              String
+  timezone          String   @default("Asia/Seoul")
+  cancelPolicyHours Int      @default(24) @map("cancel_policy_hours")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  trainers Trainer[]
+  members  Member[]
+
+  @@map("tenants")
+}
+
+model Trainer {
+  id       String @id @default(cuid())
+  tenantId String @map("tenant_id")
+  name     String
+
+  tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  availabilityRules AvailabilityRule[]
+  memberships       Membership[]
+  bookings          Booking[]
+
+  @@index([tenantId])
+  @@map("trainers")
+}
+
+model AvailabilityRule {
+  id        String @id @default(cuid())
+  trainerId String @map("trainer_id")
+  weekday   Int // 0 = Sunday ... 6 = Saturday (JS getUTCDay 기준)
+  startTime String @map("start_time") // "HH:mm" (KST 벽시계)
+  endTime   String @map("end_time") // "HH:mm" (KST 벽시계)
+
+  trainer Trainer @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([trainerId, weekday])
+  @@map("availability_rules")
+}
+
+model Member {
+  id       String @id @default(cuid())
+  tenantId String @map("tenant_id")
+  name     String
+  phone    String
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  memberships Membership[]
+
+  @@index([tenantId])
+  @@map("members")
+}
+
+model Membership {
+  id            String   @id @default(cuid())
+  memberId      String   @map("member_id")
+  trainerId     String   @map("trainer_id")
+  totalSessions Int      @map("total_sessions")
+  usedSessions  Int      @default(0) @map("used_sessions")
+  expiresAt     DateTime @map("expires_at") @db.Timestamptz(3)
+
+  member   Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  trainer  Trainer   @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  bookings Booking[]
+
+  @@index([memberId])
+  @@index([trainerId])
+  @@map("memberships")
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  membershipId  String        @map("membership_id")
+  trainerId     String        @map("trainer_id")
+  startAt       DateTime      @map("start_at") @db.Timestamptz(3)
+  endAt         DateTime      @map("end_at") @db.Timestamptz(3)
+  status        BookingStatus @default(CONFIRMED)
+  cancelledAt   DateTime?     @map("cancelled_at") @db.Timestamptz(3)
+  googleEventId String?       @map("google_event_id")
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  membership Membership @relation(fields: [membershipId], references: [id], onDelete: Cascade)
+  trainer    Trainer    @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([trainerId, startAt])
+  @@index([membershipId])
+  @@map("bookings")
+}
