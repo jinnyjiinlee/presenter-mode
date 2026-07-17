@@ -73,6 +73,13 @@ export async function POST(req: NextRequest) {
       if (overlap) {
         throw new HttpError(409, "SLOT_TAKEN", "이미 예약된 시간대입니다.");
       }
+      const blocked = await tx.busyBlock.findFirst({
+        where: { trainerId, startAt: { lt: end }, endAt: { gt: start } },
+        select: { id: true },
+      });
+      if (blocked) {
+        throw new HttpError(409, "SLOT_TAKEN", "선생님이 막아둔 시간대입니다.");
+      }
 
       // c. Booking 생성 (status=CONFIRMED)
       const created = await tx.booking.create({

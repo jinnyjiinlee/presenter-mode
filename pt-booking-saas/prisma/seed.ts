@@ -71,8 +71,9 @@ async function main() {
   console.log("memberId      :", member.id);
   console.log("membershipId  :", membership.id);
   console.log("──────────────────────────────────────────────");
-  console.log(`예약 페이지    : /book/${trainer.id}`);
-  console.log(`위 membershipId 를 예약 페이지에 입력해 예약을 테스트하세요.`);
+  console.log(`회원용 조회 링크 : /t/${trainer.id}`);
+  console.log(`선생님 설정      : /t/${trainer.id}/settings`);
+  console.log(`셀프 예약 데모   : /book/${trainer.id} (membershipId 필요)`);
 }
 
 main()

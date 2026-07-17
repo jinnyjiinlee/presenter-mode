@@ -7,7 +7,7 @@ export default function Home() {
 
         <div style={{ marginTop: 20 }}>
           <p className="muted" style={{ marginBottom: 8 }}>
-            예약 페이지는 트레이너별로 열립니다:
+            페이지는 트레이너별로 열립니다:
           </p>
           <code
             style={{
@@ -16,13 +16,18 @@ export default function Home() {
               padding: "10px 12px",
               borderRadius: 8,
               fontSize: 14,
+              lineHeight: 1.9,
             }}
           >
-            /book/&lt;trainerId&gt;
+            /t/&lt;trainerId&gt; — 회원용 빈 시간 조회 (카톡 공유용)
+            <br />
+            /t/&lt;trainerId&gt;/settings — 선생님 설정 (가능 시간·시간 막기)
+            <br />
+            /book/&lt;trainerId&gt; — 셀프 예약 데모 (Phase 1)
           </code>
           <p className="muted" style={{ marginTop: 12 }}>
-            <code>npm run db:seed</code> 실행 시 콘솔에 출력되는 trainerId /
-            membershipId 를 사용하세요.
+            <code>npm run db:seed</code> 실행 시 콘솔에 출력되는 trainerId 를
+            사용하세요.
           </p>
         </div>
       </div>

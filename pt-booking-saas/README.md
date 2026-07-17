@@ -1,10 +1,28 @@
 # PT 예약 SaaS — Phase 1
 
-Next.js(App Router) + TypeScript + Supabase(PostgreSQL) + Prisma 로 만든 PT 예약 시스템의 1단계입니다.
-**구글 연동 없이 자체 DB만으로 예약이 도는 것**까지가 목표입니다.
+Next.js(App Router) + TypeScript + Supabase(PostgreSQL) + Prisma 로 만든 PT 예약 시스템입니다.
 
 - 모든 시간은 **UTC(timestamptz)** 로 저장하고, 응답/화면에서는 **KST(Asia/Seoul)** 로 변환합니다.
 - 예약 시간 겹침은 애플리케이션 재검증 + **DB의 `EXCLUDE` 제약**으로 이중 방어합니다.
+
+## 사용 방식 (조회 전용 모드 — 현재 권장)
+
+실제 운영 흐름은 **"회원은 보고, 확정은 카톡으로"** 입니다.
+
+1. 선생님이 `/t/<trainerId>/settings` 에서 **요일별 가능 시간**을 설정
+2. 회원에게 `/t/<trainerId>` 링크를 카톡으로 공유 (링크는 고정, 내용은 열 때마다 최신)
+3. 회원은 빈 시간을 보고 원하는 시간을 골라 **"카톡 문구 복사"** → 선생님께 전송
+4. 선생님이 카톡으로 확정하면 설정 페이지에서 **그 시간을 눌러 막음** → 링크에서 사라짐
+5. (Phase 2-b 예정) 구글 캘린더 연동이 붙으면 4번이 자동화됩니다 — 선생님이
+   구글 캘린더에 일정을 넣으면 링크에서 자동으로 빠짐 (`BusyBlock.source = GOOGLE` 자리 마련됨)
+
+| 페이지 | 누가 | 무엇을 |
+| --- | --- | --- |
+| `/t/<trainerId>` | 회원 | 빈 시간 조회 + 카톡 문구 복사 (로그인 불필요) |
+| `/t/<trainerId>/settings` | 선생님 | 요일별 가능 시간 설정, 특정 시간 막기/열기, 회원 링크 복사 |
+| `/book/<trainerId>` | (데모) | Phase 1 셀프 예약 흐름 — 회원권 차감/취소정책 엔진 검증용 |
+
+> ⚠️ 아직 로그인이 없으므로 `/settings` 링크는 선생님만 알고 있어야 합니다. (추후 인증 예정)
 
 ---
 
@@ -122,9 +140,11 @@ npm run dev                   #    개발 서버
 
 ## API
 
-### `GET /api/trainers/:id/slots?date=YYYY-MM-DD&duration=60`
+### `GET /api/trainers/:id/slots?date=YYYY-MM-DD&duration=60[&view=all]`
 
-해당 요일의 `AvailabilityRule` 가용시간에서 `CONFIRMED` 예약을 뺀 `duration`(분) 단위 빈 슬롯 배열.
+해당 요일의 `AvailabilityRule` 가용시간에서 `CONFIRMED` 예약과 `BusyBlock`(막은 시간)을 뺀
+`duration`(분) 단위 빈 슬롯 배열. `view=all` 이면 `BOOKED`/`BLOCKED` 슬롯도 상태와 함께
+반환합니다(설정 페이지용).
 
 ```jsonc
 {
@@ -169,6 +189,16 @@ Prisma 트랜잭션 안에서 순서대로:
 - 예약 시작까지 남은 시간이 테넌트의 `cancelPolicyHours` 이내면 취소 거부 → `422`.
 - 취소 성공 시 `status=CANCELLED`, `cancelledAt` 기록, `Membership.usedSessions -= 1`.
 
+### `GET · PUT /api/trainers/:id/availability`
+
+요일별 가능 시간 조회/교체. PUT body: `{ "rules": [{ "weekday": 1, "startTime": "09:00", "endTime": "21:00" }] }`
+(weekday 0=일 … 6=토, 트랜잭션으로 전체 교체)
+
+### `POST /api/trainers/:id/busy` · `DELETE /api/busy-blocks/:id`
+
+특정 시간 막기/열기. POST body: `{ "startAt": "…ISO…", "duration": 60, "note?" }`.
+`source=GOOGLE` 블록(추후 구글 동기화분)은 DELETE 불가(`422`).
+
 ---
 
 ## 데이터 모델
@@ -181,6 +211,7 @@ Prisma 트랜잭션 안에서 순서대로:
 - `Member` — `tenantId`, `name`, `phone`
 - `Membership` — `memberId`, `trainerId`, `totalSessions`, `usedSessions`, `expiresAt`
 - `Booking` — `membershipId`, `trainerId`, `startAt`/`endAt`(timestamptz), `status`(CONFIRMED/CANCELLED/COMPLETED/NO_SHOW), `cancelledAt`, `googleEventId`(nullable, Phase 2 구글 연동용)
+- `BusyBlock` — `trainerId`, `startAt`/`endAt`, `source`(MANUAL=선생님이 직접 막음 / GOOGLE=구글 동기화 예정), `googleEventId`, `note`
 
 ---
 

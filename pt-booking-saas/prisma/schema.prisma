@@ -22,6 +22,11 @@ enum BookingStatus {
   NO_SHOW
 }
 
+enum BusySource {
+  MANUAL // 선생님이 설정 페이지에서 직접 막은 시간
+  GOOGLE // (Phase 2-b) 구글 캘린더 동기화로 들어온 일정
+}
+
 model Tenant {
   id                String   @id @default(cuid())
   name              String
@@ -44,6 +49,7 @@ model Trainer {
   availabilityRules AvailabilityRule[]
   memberships       Membership[]
   bookings          Booking[]
+  busyBlocks        BusyBlock[]
 
   @@index([tenantId])
   @@map("trainers")
@@ -109,4 +115,23 @@ model Booking {
   @@index([trainerId, startAt])
   @@index([membershipId])
   @@map("bookings")
+}
+
+// 예약 외에 "이 시간은 안 됨"을 나타내는 블록.
+// - MANUAL: 선생님이 직접 막은 시간 (카톡으로 확정한 수업 등)
+// - GOOGLE: 구글 캘린더 동기화(Phase 2-b)가 쓰게 될 자리
+model BusyBlock {
+  id            String     @id @default(cuid())
+  trainerId     String     @map("trainer_id")
+  startAt       DateTime   @map("start_at") @db.Timestamptz(3)
+  endAt         DateTime   @map("end_at") @db.Timestamptz(3)
+  source        BusySource @default(MANUAL)
+  googleEventId String?    @map("google_event_id")
+  note          String?
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  trainer Trainer @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([trainerId, startAt])
+  @@map("busy_blocks")
 }
