@@ -1,0 +1,40 @@
+{
+  "name": "presenter-mode",
+  "version": "6.0.0",
+  "description": "PowerPoint-grade presenter view for HTML slide decks — speaker notes, timer, ink, area zoom, break screen. One file, no install, works offline.",
+  "bin": {
+    "presenter-mode": "bin/cli.js"
+  },
+  "files": [
+    "index.html",
+    "bin/"
+  ],
+  "scripts": {
+    "start": "node bin/cli.js"
+  },
+  "keywords": [
+    "presentation",
+    "presenter-view",
+    "speaker-notes",
+    "slides",
+    "html-slides",
+    "slideshow",
+    "deck",
+    "offline",
+    "teaching",
+    "lecture"
+  ],
+  "author": "Jinny Lee <ceo@dayfocuslab.com> (https://www.dayfocuslab.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jinnyjiinlee/presenter-mode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jinnyjiinlee/presenter-mode/issues"
+  },
+  "homepage": "https://github.com/jinnyjiinlee/presenter-mode#readme",
+  "engines": {
+    "node": ">=16"
+  }
+}

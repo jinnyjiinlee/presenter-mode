@@ -7,7 +7,7 @@
 > Add a PowerPoint-grade **presenter view** to your HTML slides.
 > **One file · no install · no internet.**
 
-![Presenter view](docs/presenter-view.png)
+![Presenter view](https://raw.githubusercontent.com/jinnyjiinlee/presenter-mode/main/docs/presenter-view.png)
 
 - 🖥️ **Presenter window (only you see it)** — current/next slide · speaker notes · timer · filmstrip
 - 📽️ **Audience screen** — clean fullscreen slides, nothing else
@@ -28,6 +28,13 @@ The screen PowerPoint gives you for free — your notes, the next slide, a timer
 ---
 
 ## ▶ 1. Try it in 3 minutes
+
+```bash
+npx presenter-mode        # opens the demo — press P!
+npx presenter-mode init   # copies the template into the current folder
+```
+
+No Node? No problem:
 
 1. Green `Code` button → `Download ZIP` → unzip
 2. **Double-click** `index.html` (opens in Chrome)
