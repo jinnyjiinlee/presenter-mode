@@ -1,108 +1,113 @@
-# 발표자 모드 (Presenter Mode)
+# Presenter Mode
 
-![License: MIT](https://img.shields.io/badge/license-MIT-blue) ![No Install](https://img.shields.io/badge/설치-필요없음-brightgreen) ![Offline](https://img.shields.io/badge/인터넷-필요없음-brightgreen) ![Browser](https://img.shields.io/badge/크롬·엣지-지원-orange)
+**English** | [한국어](README.ko.md)
 
-> HTML 슬라이드에 파워포인트급 **"발표자 보기"** 를 더해요.
-> **파일 하나 · 설치 없음 · 인터넷 없음.**
+![License: MIT](https://img.shields.io/badge/license-MIT-blue) ![No Install](https://img.shields.io/badge/install-none-brightgreen) ![Offline](https://img.shields.io/badge/internet-not%20required-brightgreen) ![Browser](https://img.shields.io/badge/Chrome%20·%20Edge-supported-orange)
 
-![발표자 창](docs/presenter-view.png)
+> Add a PowerPoint-grade **presenter view** to your HTML slides.
+> **One file · no install · no internet.**
 
-- 🖥️ **발표자 창(나만 봄)** — 현재/다음 슬라이드 · 강사 노트 · 타이머 · 필름스트립
-- 📽️ **강의장 화면(청중)** — 슬라이드만 깨끗하게, 전체화면
-- 🔌 강의장 와이파이가 죽어도 그대로 작동 — 실제 기업·기관 강의(7시간 풀데이 포함)에서 쓰는 도구예요
+![Presenter view](docs/presenter-view.png)
 
-## 왜 만들었나
+- 🖥️ **Presenter window (only you see it)** — current/next slide · speaker notes · timer · filmstrip
+- 📽️ **Audience screen** — clean fullscreen slides, nothing else
+- 🔌 Keeps working when the venue Wi-Fi dies — battle-tested in real corporate and institutional lectures (including 7-hour full days)
+- 🌐 **English & Korean UI** — auto-detected from your browser, switchable anytime with the 🌐 button (or `?lang=en` / `?lang=ko`)
 
-저는 AI 강의를 다니는 강사예요. 강의 교안은 클로드코드 에이전트로 **HTML 슬라이드**로 만들어요 — PPT보다 훨씬 빠르고, 디자인도 예쁘게 나와요.
+## Why this exists
 
-그런데 딱 하나가 없었어요. **발표자 보기.**
+I'm a lecturer who teaches AI classes. I build my course decks as **HTML slides** with AI coding agents — much faster than PowerPoint, and they look better too.
 
-파워포인트라면 당연히 있는 그 화면 — 노트 보면서, 다음 슬라이드 확인하면서, 시간 체크하면서 진행하는 화면이요. HTML 슬라이드는 그게 없어서 노트를 종이로 뽑아 들고 7시간 강의를 뛰었어요. 그래서 직접 만들었고, 이제 HTML 슬라이드를 쓰는 모든 분들과 나눠요.
+But one thing was missing: **presenter view.**
 
-| 목차 | [① 3분 체험](#-1-일단-3분-체험) → [② 내 슬라이드에 붙이기](#-2-내-슬라이드에-붙이기--방법은-2가지) → [③ 기능](#-3-기능-한눈에) → [④ 단축키](#-4-단축키) → [⑤ 강의장 세팅](#-5-강의장-세팅-체크리스트) → [⑥ 작동 원리](#-6-어떻게-동작하나요) → [FAQ](#faq) · [변경 이력](CHANGELOG.md) |
+The screen PowerPoint gives you for free — your notes, the next slide, a timer, all while the audience sees only the slides. HTML slides don't have it, so I ran 7-hour lectures holding printed notes. So I built it, and now I'm sharing it with everyone who presents with HTML slides.
+
+| Contents | [① Try it in 3 minutes](#-1-try-it-in-3-minutes) → [② Attach it to your slides](#-2-attach-it-to-your-slides--two-ways) → [③ Features](#-3-features-at-a-glance) → [④ Shortcuts](#-4-keyboard-shortcuts) → [⑤ Venue setup](#-5-venue-setup-checklist) → [⑥ How it works](#-6-how-it-works) → [FAQ](#faq) · [Changelog](CHANGELOG.md) |
 |---|---|
 
 ---
 
-## ▶ 1. 일단 3분 체험
+## ▶ 1. Try it in 3 minutes
 
-1. 초록색 `Code` 버튼 → `Download ZIP` → 압축 풀기
-2. `index.html` **더블클릭** (크롬으로 열려요)
-3. 키보드 **`P`** — 발표자 창 등장!
+1. Green `Code` button → `Download ZIP` → unzip
+2. **Double-click** `index.html` (opens in Chrome)
+3. Press **`P`** — the presenter window appears!
 
 > [!TIP]
-> 데모 슬라이드 7장이 곧 튜토리얼이에요. 방향키로 넘기며 노트 강조 → `B` 쉬는 시간 화면 → `D` 판서 → `M` 돋보기 → `Z` 구역 확대 → `4` `Enter` 점프를 순서대로 눌러보세요.
+> The 7 demo slides are the tutorial. Use the arrow keys and try, in order: note highlighting → `B` break screen → `D` draw → `M` magnifier → `Z` area zoom → `4` `Enter` jump.
 
 ---
 
-## ▶ 2. 내 슬라이드에 붙이기 — 방법은 2가지
+## ▶ 2. Attach it to your slides — two ways
 
-|  | **방법 1 · AI에게 시키기** ⭐ | **방법 2 · 직접 붙이기** |
+|  | **Way 1 · Ask an AI** ⭐ | **Way 2 · Do it by hand** |
 |---|---|---|
-| 누구에게 | 비개발자, 바쁜 분 | HTML이 편한 분 |
-| 걸리는 시간 | 약 5분 | 10~20분 |
-| 필요한 것 | 클로드코드 등 AI 코딩 도구 | 텍스트 에디터 |
+| Best for | Non-developers, busy people | Anyone comfortable with HTML |
+| Time | ~5 minutes | 10–20 minutes |
+| You need | An AI coding tool (e.g. Claude Code) | A text editor |
 
-### 방법 1 · AI에게 시키기 ⭐
+### Way 1 · Ask an AI ⭐
 
-아래 프롬프트를 클로드코드에 그대로 붙여넣으세요. **바꿀 곳은 대괄호 `[ ]` 두 곳뿐**이에요.
+Paste the prompt below into Claude Code (or any AI coding tool). **Only the two `[ ]` brackets need editing.**
 
 ```text
-아래 저장소의 "발표자 모드"를 내 슬라이드 파일에 붙여줘.
+Attach the "Presenter Mode" from the repo below to my slide file.
 
-저장소: https://github.com/jinnyjiinlee/presenter-mode
-내 슬라이드 파일: [내 슬라이드 HTML 파일 경로. 예: ~/Desktop/발표자료.html]
+Repo: https://github.com/jinnyjiinlee/presenter-mode
+My slide file: [path to my slide HTML, e.g. ~/Desktop/deck.html]
 
-작업 순서:
-1. 저장소의 index.html에서 발표자 모드 엔진을 통째로 가져와
-   (CSS의 "발표자 모드 (Presenter View)" 섹션부터 끝까지 + <script> 블록 전체)
-2. 내 슬라이드 파일 구조를 먼저 읽고, 슬라이드 한 장이 <section class="slide">
-   하나가 되도록 맞춰줘 (첫 장만 class="slide active").
-   내 슬라이드가 1600×900 기준이 아니면 .deck-inner/.slide 크기와
-   fit() 함수의 계산을 내 슬라이드 크기에 맞게 바꿔줘.
-3. NOTES 배열을 내 슬라이드 장수만큼 만들어줘. 내용은 일단 전부 빈 문자열로
-   두되, 각 줄에 /*번호 슬라이드제목*/ 주석을 달아서 내가 나중에 채우기 쉽게 해줘.
-4. DECK_ID를 '[내 덱 이름. 예: sales-2026]'으로 바꿔줘.
-5. 다 되면 크롬으로 열어서 확인해줘: P 키로 발표자 창이 뜨는지,
-   방향키로 넘길 때 두 창이 같이 움직이는지, B 키 블랙아웃이 되는지.
+Steps:
+1. Take the whole presenter-mode engine from the repo's index.html
+   (from the "Presenter View" CSS section to the end + the entire <script> block)
+2. Read my slide file's structure first, then make each slide one
+   <section class="slide"> (only the first one class="slide active").
+   If my slides aren't 1600×900, adjust .deck-inner/.slide sizes and
+   the fit() calculation to my slide dimensions.
+3. Build the NOTES array with one entry per slide. Leave them all as
+   empty strings, but add a /*number slide-title*/ comment on each line
+   so I can fill them in later.
+4. Change DECK_ID to '[my deck name, e.g. sales-2026]'.
+5. When done, open it in Chrome and verify: P opens the presenter
+   window, both windows move together with the arrow keys, and B
+   blacks out the screen.
 
-주의: 내 원본 슬라이드의 디자인과 내용은 절대 바꾸지 마.
+Important: do not change the design or content of my original slides.
 ```
 
-끝나면 크롬에서 열고 `P` — 그게 전부예요. 노트도 AI에게 시키면 돼요:
+When it's done, open the file in Chrome and press `P` — that's it. Notes can be delegated too:
 
 ```text
-3번 슬라이드 노트에 "여기서 질문 받기"라고 넣어줘.
+Put "take questions here" in the notes for slide 3.
 ```
 
 <details>
-<summary><b>방법 2 · 직접 붙이기</b> — 세 군데만 바꾸면 돼요 (클릭해서 펼치기)</summary>
+<summary><b>Way 2 · Do it by hand</b> — only three places to change (click to expand)</summary>
 
 <br>
 
-`index.html`이 곧 템플릿이에요.
+`index.html` is the template.
 
-**① 슬라이드 교체** — 파일 안 `▼▼▼ 여기부터 교체` 주석 사이의 `<section class="slide">` 들을 여러분 슬라이드로 바꿔요.
+**① Replace the slides** — swap the `<section class="slide">` blocks between the `▼▼▼ REPLACE FROM HERE` comments with your own slides.
 
 ```html
-<section class="slide">   <!-- 슬라이드 1장 = section.slide 하나 -->
-  <!-- 1600×900 기준으로 디자인하면 자동으로 화면에 맞게 스케일돼요 -->
+<section class="slide">   <!-- one slide = one section.slide -->
+  <!-- design at 1600×900 and it scales to any screen automatically -->
 </section>
 ```
 
-- 첫 슬라이드에만 `class="slide active"` — 내부 디자인은 완전 자유
+- Only the first slide gets `class="slide active"` — the design inside is entirely up to you
 
-**② 노트 채우기** — `<script>` 안 `NOTES` 배열에 슬라이드 순서대로 멘트를 적어요.
+**② Fill in the notes** — write your lines, in slide order, in the `NOTES` array inside `<script>`.
 
 ```js
 const NOTES = [
-/*01*/ `오프닝 멘트. ⏰ 10:30 컷라인 — 시간 큐는 주황으로 강조돼요.`,
-/*02*/ ``,   // 노트 없는 장은 빈 문자열
-/*03*/ `⚠️ 이 시연은 와이파이 필요. 백업: backup.png`,
+/*01*/ `Opening line. ⏰ 10:30 cutline — time cues are highlighted orange.`,
+/*02*/ ``,   // slides without notes: empty string
+/*03*/ `⚠️ This demo needs Wi-Fi. backup: backup.png`,
 ];
 ```
 
-**③ 덱 이름 정하기** — `DECK_ID`를 덱마다 다르게. (같은 브라우저에서 여러 덱을 써도 슬라이드 위치·타이머가 안 섞이는 열쇠예요)
+**③ Name the deck** — give each deck its own `DECK_ID`. (This is what keeps slide position and timer separate when you use several decks in one browser.)
 
 ```js
 const DECK_ID='my-lecture-2026';
@@ -112,197 +117,202 @@ const DECK_ID='my-lecture-2026';
 
 ---
 
-## ▶ 3. 기능 한눈에
+## ▶ 3. Features at a glance
 
-| 🖥️ 발표자 창 | 📽️ 강의장 화면 | 🎯 진행 |
+| 🖥️ Presenter window | 📽️ Audience screen | 🎯 Flow |
 |---|---|---|
-| 현재/다음 슬라이드 (비율 드래그 조절) | `B`/`W` 블랙아웃 — 슬라이드 넘기면 자동 해제 | 리모컨(클리커) 호환 |
-| 강사 노트 — `⏰`주황 `⚠️`빨강 `백업`파랑 자동 강조 + 다음 노트 미리보기 | ✏️ 판서 — 펜·형광펜·지우개, 두 창 실시간 동기화 | 숫자+`Enter` 점프 |
-| 필름스트립 — 클릭 이동 · 노트 있는 장 ✎ 배지 | ☕ 쉬는 시간 화면 — 기본은 검정, [☕ 쉬는화면] 버튼으로 로고·안내문·QR·시계·BGM 꾸미기 | 두 창 자동 동기화 (2초 내 자동 복구) |
-| 타이머 — 목표 설정 → 남은 시간·5분 전 알림, 창 닫아도 유지 | 🔍 돋보기 · `Z` 구역 확대 — 원하는 부분만 크게 | 마지막 장에서 안 튐 |
-| 현재 시각 · 체류 시간 · 연결 상태 ●/○ · 🌙 다크 토글 | 4초 뒤 커서·힌트 숨김 · Wake Lock · 도움말 청중 노출 차단 | `Home`/`End` · `F5` |
+| Current/next slide (drag-resizable ratio) | `B`/`W` blackout — auto-cleared on slide change | Remote clicker compatible |
+| Speaker notes — `⏰` orange, `⚠️` red, `backup` blue auto-highlighting + next-note preview | ✏️ Ink — pen·highlighter·eraser, live-synced across both windows | number+`Enter` jump |
+| Filmstrip — click to jump · ✎ badge on slides with notes | ☕ Break screen — plain black by default, customizable with logo·message·QR·clock·BGM via the [☕ Break screen] button | Both windows auto-sync (self-heals within 2s) |
+| Timer — set a target → time left + 5-min warning, survives window close | 🔍 Magnifier · `Z` area zoom — enlarge exactly what matters | No wrap-around at the last slide |
+| Clock · dwell time · connection status ●/○ · 🌙 dark toggle | Cursor/hints auto-hide after 4s · Wake Lock · help never leaks to the audience | `Home`/`End` · `F5` |
 
-### ✏️ 판서 — 펜 · 형광펜 · 지우개
+### ✏️ Ink — pen · highlighter · eraser
 
-`D`를 누르면 화면 하단에 판서 툴바가 떠요.
+Press `D` and a floating toolbar appears at the bottom.
 
-| 항목 | 내용 |
+| | |
 |---|---|
-| 도구 | ✏️ 펜 `D` · 🖍️ 형광펜 `G` · ⌫ 지우개 `E` — 같은 키를 다시 누르면 꺼져요 (`Esc`도 종료) |
-| 색상 | 빨강 · 주황 · 노랑 · 초록 · 파랑 · 검정 6종 — 펜과 형광펜의 색을 따로 기억해요 |
-| 동기화 | 발표자 창의 "현재 슬라이드" 위에 그려도, 강의장 화면에 직접 그려도 **양쪽에 실시간**으로 나타나요 |
-| 유지 범위 | 슬라이드별로 유지 — 다른 장에 갔다 돌아와도 그대로예요. 단, 창을 새로고침하면 초기화돼요 |
-| 지우기 | ⌫ 지우개 = 획 단위 삭제 (문지르면 지워져요) · 🗑 모두 지우기 = 현재 슬라이드 전체 |
+| Tools | ✏️ Pen `D` · 🖍️ Highlighter `G` · ⌫ Eraser `E` — press the same key again to turn off (`Esc` also exits) |
+| Colors | red · orange · yellow · green · blue · black — pen and highlighter remember their colors separately |
+| Sync | Draw on the presenter window's "current slide" or directly on the audience screen — it appears on **both, in real time** |
+| Persistence | Per slide — leave and come back and it's still there. Cleared on window refresh |
+| Erasing | ⌫ eraser removes whole strokes as you rub · 🗑 Clear all wipes the current slide |
 
 > [!TIP]
-> 판서 좌표는 슬라이드 기준(1600×900)으로 저장돼서, 발표자 창과 강의장 화면의 크기가 달라도 정확히 같은 위치에 그려져요.
+> Ink coordinates are stored in slide space (1600×900), so strokes land in exactly the same spot even when the two windows are different sizes.
 
-### 🔎 Z — 구역 확대
+### 🔎 Z — area zoom
 
-작은 표·코드·그림을 "저기만 크게" 보여주고 싶을 때 써요.
+For "let me blow up just that table/code/diagram" moments.
 
-1. `Z`를 누르면 커서가 🔎 선택 모드가 돼요
-2. 크게 보여줄 구역을 **드래그** → 그 영역이 화면에 꽉 차게 확대돼요 (그냥 **클릭**하면 그 지점 2배)
-3. 원위치는 3가지 중 아무거나 — 다시 `Z` · `Esc` · 슬라이드 넘기기
+1. Press `Z` — the cursor enters 🔎 select mode
+2. **Drag** the area you want enlarged → it fills the screen (a plain **click** zooms 2× at that point)
+3. Reset with any of: `Z` again · `Esc` · changing slides
 
-- 발표자 창의 "현재 슬라이드" 위에서 드래그해도 **강의장 화면이 확대**돼요 (발표자 창 화면은 그대로라 전체 흐름을 계속 볼 수 있어요)
-- 확대 배율은 선택한 영역에 맞춰 자동 계산돼요 (최대 5배)
-- 확대 상태에서 판서(`D`)를 하면 확대된 디테일 위에 정밀하게 그릴 수 있어요
+- Dragging on the presenter window's "current slide" zooms **the audience screen** (your own view stays put, so you keep the full picture)
+- The zoom factor is computed from the selected area automatically (up to 5×)
+- Draw (`D`) while zoomed to annotate enlarged details precisely
 
-### 🔍 M — 마우스 돋보기
+### 🔍 M — mouse magnifier
 
-커서를 따라다니는 원형 돋보기예요. 구역 확대(`Z`)가 "고정 확대"라면, 돋보기는 "훑으면서 확대"예요.
+A circular lens that follows your cursor. `Z` is "fixed zoom"; the magnifier is "sweep and zoom".
 
-- **강의장 화면(슬라이드 창)을 클릭해 포커스를 준 뒤** `M` — 발표자 창에서 누르면 안내만 떠요
-- 마우스휠로 배율 조절 (1.5~4배), 다시 `M`으로 끄기
-- 구글밋·줌으로 화면 공유하며 작은 글씨를 짚어줄 때 특히 좋아요
+- **Click the audience screen (slide window) first to focus it**, then press `M` — pressing it in the presenter window just shows a hint
+- Scroll to adjust magnification (1.5–4×), `M` again to turn off
+- Great for pointing at small text while screen-sharing on Meet/Zoom
 
-### ☕ 쉬는 시간 화면 커스터마이즈 (v5)
+### ☕ Break screen customization (v5)
 
-`B`의 기본 동작은 순수 검은 화면이에요. 꾸미고 싶은 사람만 설정하면 웨비나 대기·브레이크 타임용 안내 화면으로 바뀌어요. 방법은 2가지:
+`B` defaults to a plain black screen. If you want more, it becomes a waiting-room / break-time notice. Two ways:
 
-- **방법 1 · 버튼으로 (코드 수정 없음)** — 발표자 창 하단 **[☕ 쉬는화면]** 버튼 → 프리셋(☕ 쉬는 시간 · 🍽 점심시간 · 💻 실습 시간 · 🙋 Q&A · 🕘 곧 시작)을 클릭 한 번으로 적용하거나, 제목·문구·로고/QR 이미지·시계·BGM을 폼에서 직접 설정. 브라우저에 덱별로 저장돼요.
-- **방법 2 · 코드 기본값** — `<script>` 안 `BREAK_SCREEN`을 채우면 그게 이 덱의 기본값이 돼요 (버튼 설정이 있으면 그쪽이 우선).
+- **Way 1 · The button (no code)** — the **[☕ Break screen]** button at the bottom of the presenter window → apply a preset in one click (☕ Break · 🍽 Lunch · 💻 Hands-on · 🙋 Q&A · 🕘 Starting soon), or set the heading, message, logo/QR image, clock and BGM in the form. Saved per deck in your browser.
+- **Way 2 · Code defaults** — fill in `BREAK_SCREEN` inside `<script>` and that becomes the deck's default (button settings take precedence).
 
 ```js
 const BREAK_SCREEN={
-  title:'☕ 잠깐 쉬어가요',          // 큰 제목 — 전부 비우면(기본) 순수 검은 화면
-  sub:'10분 뒤에 다시 시작할게요',    // 부제목
-  logoText:'OO컴퍼니',               // 텍스트 로고 (이미지는 logoImg에 경로)
-  logoImg:'',                       // 예: 'logo.png'
-  qrImg:'',                         // 예: 'qr.png' — 커뮤니티·웹사이트 QR
-  qrLabel:'',                       // QR 아래 설명
-  showClock:true,                   // 현재 시각 표시
-  bgm:''                            // 예: 'break.mp3' — 쉬는 시간 BGM (♪ 버튼으로 재생/정지)
+  title:'☕ Take a short break',   // heading — leave all empty (default) for plain black
+  sub:"We'll be back in 10 minutes",
+  logoText:'ACME Inc.',            // text logo (or set logoImg to an image path)
+  logoImg:'',                      // e.g. 'logo.png'
+  qrImg:'',                        // e.g. 'qr.png' — community / website QR
+  qrLabel:'',                      // caption under the QR
+  showClock:true,                  // show the current time
+  bgm:''                           // e.g. 'break.mp3' — break BGM (♪ button to play/pause)
 };
 ```
 
 > [!NOTE]
-> BGM은 브라우저 자동재생 정책 때문에 첫 재생 시 화면의 ♪ 버튼을 한 번 눌러야 할 수 있어요.
+> Because of browser autoplay policies, the first BGM playback may need one click on the on-screen ♪ button.
 
 ---
 
-## ▶ 4. 단축키
+## ▶ 4. Keyboard shortcuts
 
 > [!TIP]
-> 외울 필요 없어요 — 발표자 창 하단 **[? 단축키]** 버튼(또는 `?`)을 누르면 화면에 다 떠요.
+> No need to memorize — the **[? Shortcuts]** button (or `?`) in the presenter window shows them all.
 
-| 키 | 동작 |
+| Key | Action |
 |---|---|
-| `←` `→` · `Space` · `Enter` · 리모컨 | 슬라이드 이동 |
-| 숫자 + `Enter` | 해당 번호로 점프 |
-| `Home` / `End` | 처음 / 마지막 |
-| `B` / `W` | 강의장 화면 가리기 — `B`는 쉬는 시간 화면(커스터마이즈 가능) / `W`는 흰 화면 |
-| `D` / `G` / `E` | 펜 / 형광펜 / 지우개 — 두 창 실시간 동기화 · `Esc` 종료 |
-| `M` | 마우스 돋보기 (강의장 화면) · 휠로 배율 조절 |
-| `Z` | 구역 확대 — 드래그한 영역을 화면에 꽉 채움 (클릭=2배 · 다시 `Z`면 원위치) |
-| `F` 또는 `F5` | 전체화면 |
-| `P` · `⌘K`(맥) · `Ctrl+K`(윈도우) | 발표자 창 열기 |
-| `V` | 발표자 창 보기 전환 |
-| `T` / `R` | 타이머 시작·정지 / 리셋(두 번) |
-| `?` 또는 `H` | 단축키 도움말 |
+| `←` `→` · `Space` · `Enter` · clicker | Move between slides |
+| number + `Enter` | Jump to that slide |
+| `Home` / `End` | First / last slide |
+| `B` / `W` | Hide the audience screen — `B` is the (customizable) break screen / `W` is plain white |
+| `D` / `G` / `E` | Pen / highlighter / eraser — live-synced across windows · `Esc` to exit |
+| `M` | Mouse magnifier (audience screen) · scroll to zoom |
+| `Z` | Area zoom — drag an area to fill the screen (click = 2× · `Z` again to reset) |
+| `F` or `F5` | Fullscreen |
+| `P` · `⌘K` (Mac) · `Ctrl+K` (Windows) | Open the presenter window |
+| `V` | Switch presenter view |
+| `T` / `R` | Timer start·pause / reset (press twice) |
+| `?` or `H` | Shortcut help |
 
 ---
 
-## ▶ 5. 강의장 세팅 체크리스트
+## ▶ 5. Venue setup checklist
 
 > [!IMPORTANT]
-> 디스플레이는 꼭 **"확장"** 모드로! 미러링(복제) 상태면 발표자 노트가 청중에게 그대로 보여요.
+> Set the display to **"Extend"**! In mirror mode your speaker notes are projected to the audience.
 
-1. 빔프로젝터 연결 → **"확장"** 모드 (맥: `⌘+Fn+F1` 토글 · 윈도우: `Win+P`)
-2. 내 덱 HTML 열고 `P` → 발표자 창 등장
-3. 슬라이드 창(=강의장 화면)을 프로젝터로 드래그 → `F` 전체화면
-4. 발표자 창 하단 **"● 강의장 화면 연결됨"** 초록불 확인 — 끝!
+1. Connect the projector → **"Extend"** mode (Mac: `⌘+Fn+F1` toggles · Windows: `Win+P`)
+2. Open your deck HTML, press `P` → presenter window appears
+3. Drag the slide window (= audience screen) onto the projector → `F` for fullscreen
+4. Check the green **"● Audience screen connected"** light at the bottom of the presenter window — done!
 
-라이브 시연 땐 `⌘+Fn+F1`로 잠깐 미러링 → 끝나면 다시 확장. 슬라이드 위치는 안 흐트러져요.
+For live demos, `⌘+Fn+F1` to mirror briefly → back to extend when done. Your slide position is preserved.
 
-### 💻 온라인 발표 (구글밋 · 줌 · 웨비나)
+### 💻 Presenting online (Meet · Zoom · webinars)
 
-빔프로젝터 대신 화면 공유만 다를 뿐, 나머지는 똑같아요.
+Same flow — only the projector becomes screen sharing.
 
-1. 덱 HTML을 열고 `P` → 발표자 창 등장 (두 창이 생겨요)
-2. 구글밋/줌에서 **"창 공유" → 슬라이드 창(강의장 화면)** 선택 — 전체 화면 공유가 아니라 **창 공유**여야 발표자 노트가 안 새어나가요
-3. 발표자 창을 보면서 진행 — 넘김·판서·확대 전부 공유되는 창에 실시간 반영돼요
-4. 쉬는 시간엔 `B` — 대기 안내 화면(로고·QR·BGM)이 참가자에게 보여요. 웨비나 시작 전 대기 화면으로는 [☕ 쉬는화면]의 "🕘 곧 시작" 프리셋이 딱이에요
+1. Open the deck HTML and press `P` → two windows appear
+2. In Meet/Zoom choose **"Share a window" → the slide window (audience screen)** — share a *window*, not the entire screen, so your notes never leak
+3. Present from the presenter window — navigation, ink and zoom all appear live in the shared window
+4. On breaks press `B` — participants see your break screen (logo·QR·BGM). The "🕘 Starting soon" preset makes a perfect pre-webinar waiting screen
 
 ---
 
-## ▶ 6. 어떻게 동작하나요
+## ▶ 6. How it works
 
 ```
-[내 노트북]   발표자 창 (#presenter) — 노트 · 타이머 · 다음 슬라이드
+[Your laptop]   Presenter window (#presenter) — notes · timer · next slide
      ▲
-     │  localStorage + BroadcastChannel 실시간 동기화
-     │  (전부 브라우저 안 — 인터넷 불필요)
+     │  localStorage + BroadcastChannel real-time sync
+     │  (all inside the browser — no internet needed)
      ▼
-[빔프로젝터]  강의장 화면 — 슬라이드만 전체화면
+[Projector]     Audience screen — fullscreen slides only
 ```
 
-- 같은 HTML 파일을 **창 2개**로 열어요. URL 해시가 `#presenter`면 발표자 UI, 아니면 슬라이드를 렌더링해요.
-- 발표자 창이 2초마다 ping, 강의장 화면이 pong — 연결 상태 표시(●/○)와 어긋남 자동 복구의 원리예요.
-- 미리보기·썸네일은 슬라이드 DOM을 `cloneNode` + `scale()`로 축소한 것 — 이미지 캡처가 아니라 항상 원본과 똑같아요.
-- 타이머·테마·레이아웃은 `localStorage`에 저장 — 창을 닫아도 유지돼요.
+- The same HTML file is opened in **two windows**. With the `#presenter` URL hash it renders the presenter UI; without it, the slides.
+- The presenter window pings every 2 seconds and the audience screen pongs back — that's the connection light (●/○) and automatic drift recovery.
+- Previews and thumbnails are the slide DOM itself, shrunk with `cloneNode` + `scale()` — not screenshots, so they always match the real thing.
+- Timer, theme and layout live in `localStorage` — they survive closing the window.
 
-**요구 사항** — 크롬/엣지 권장 · 맥·윈도우 지원 · 서버·빌드·설치 불필요 (`file://`로 그냥 열면 돼요)
+**Requirements** — Chrome/Edge recommended · macOS & Windows · no server, no build, no install (just open via `file://`)
 
 ---
 
 ## FAQ
 
-<details><summary><b>발표자 창을 실수로 닫았어요.</b></summary><br>
+<details><summary><b>I closed the presenter window by accident.</b></summary><br>
 
-`P`로 다시 열면 현재 슬라이드·타이머까지 그대로 따라와요.
+Press `P` to reopen — current slide and timer carry right over.
 </details>
 
-<details><summary><b>팝업이 차단됐대요.</b></summary><br>
+<details><summary><b>The popup was blocked.</b></summary><br>
 
-주소창 오른쪽 팝업 아이콘에서 "항상 허용" 후, 화면 안내의 [허용했어요 — 다시 열기] 버튼을 누르면 돼요.
+Choose "Always allow" from the popup icon at the right of the address bar, then press the [Allowed — open again] button in the on-screen notice.
 </details>
 
-<details><summary><b>PDF로도 뽑고 싶어요.</b></summary><br>
+<details><summary><b>Can I export a PDF?</b></summary><br>
 
-크롬 인쇄(`⌘P`)에서 PDF 저장 — 발표자 UI는 인쇄에서 자동 제외돼요.
+Chrome print (`⌘P`) → save as PDF — the presenter UI is automatically excluded from printing.
 </details>
 
-<details><summary><b>두 대의 컴퓨터에서 쓸 수 있나요?</b></summary><br>
+<details><summary><b>Can I use it across two computers?</b></summary><br>
 
-아니요 — 한 컴퓨터의 화면 2개(노트북+프로젝터) 구조예요. 동기화가 브라우저 안에서만 일어나기 때문이에요.
+No — it's a two-screens-one-computer design (laptop + projector), because the sync happens entirely inside one browser.
 </details>
 
-<details><summary><b>판서한 내용은 저장되나요?</b></summary><br>
+<details><summary><b>Is ink saved?</b></summary><br>
 
-발표하는 동안(슬라이드를 오가도) 유지되고, 창을 새로고침하거나 닫으면 초기화돼요. 판서 결과를 남기고 싶으면 화면 캡처를 추천해요.
+It persists throughout the talk (even as you move between slides) and resets when the window is refreshed or closed. If you want to keep it, take a screenshot.
 </details>
 
-<details><summary><b>돋보기(M)가 안 눌려요.</b></summary><br>
+<details><summary><b>The magnifier (M) won't turn on.</b></summary><br>
 
-돋보기는 강의장 화면(슬라이드 창) 전용이에요. 슬라이드 창을 한 번 클릭해 포커스를 준 뒤 `M`을 눌러주세요. 발표자 창에서는 `Z` 구역 확대를 쓰면 돼요.
+The magnifier lives on the audience screen (slide window). Click that window once to focus it, then press `M`. In the presenter window use `Z` area zoom instead.
 </details>
 
-<details><summary><b>B 화면에 우리 회사 로고·QR을 넣고 싶어요.</b></summary><br>
+<details><summary><b>I want our company logo·QR on the B screen.</b></summary><br>
 
-발표자 창 하단 [☕ 쉬는화면] 버튼에서 코드 수정 없이 설정할 수 있어요. 로고·QR은 이미지 파일 선택만 하면 되고, 프리셋(쉬는 시간·점심시간·실습 시간·Q&A·곧 시작)도 준비돼 있어요.
+Use the [☕ Break screen] button at the bottom of the presenter window — no code needed. Logo and QR are file pickers, and presets (Break · Lunch · Hands-on · Q&A · Starting soon) are ready to go.
 </details>
 
-<details><summary><b>쉬는 시간에 음악(BGM)도 나오게 할 수 있나요?</b></summary><br>
+<details><summary><b>Can it play music (BGM) during breaks?</b></summary><br>
 
-네 — [☕ 쉬는화면] 설정의 BGM 칸에 mp3 파일명을 넣으면 돼요 (덱 파일과 같은 폴더에 두세요). 브라우저 자동재생 정책 때문에 첫 재생은 화면의 ♪ 버튼을 한 번 눌러야 할 수 있어요.
+Yes — put an mp3 filename in the BGM field of the [☕ Break screen] settings (keep the file next to your deck). Due to autoplay policies, the first playback may need one click on the on-screen ♪ button.
 </details>
 
-<details><summary><b>파워포인트/키노트 파일에도 붙일 수 있나요?</b></summary><br>
+<details><summary><b>Does it work with PowerPoint/Keynote files?</b></summary><br>
 
-아니요, HTML 슬라이드 전용이에요. 요즘은 AI에게 "이 PPT 내용을 HTML 슬라이드로 만들어줘"라고 한 뒤 붙이는 방법도 있어요.
+No — HTML slides only. These days you can also ask an AI to "turn this PPT into HTML slides" and then attach it.
+</details>
+
+<details><summary><b>How do I change the language?</b></summary><br>
+
+The UI auto-detects your browser language (Korean → Korean, everything else → English). Switch anytime with the 🌐 button in the bottom bar / presenter window, or open the file with `?lang=en` / `?lang=ko`.
 </details>
 
 ---
 
-## 피드백
+## Feedback
 
-쓰다가 불편한 점, 아이디어가 있다면 —
+Rough edges? Ideas? —
 
-- 이 저장소에 **[Issue](../../issues)** 를 남겨주세요
-- 또는 **ceo@dayfocuslab.com** 으로 `[발표자 모드 피드백]` 제목으로 보내주세요
+- Open an **[Issue](../../issues)** on this repo
+- Or email **ceo@dayfocuslab.com** with the subject `[Presenter Mode Feedback]`
 
-## 라이선스
+## License
 
-MIT — 자유롭게 쓰고 고치고 나눠주세요. © [DAYFOCUS LAB](https://www.dayfocuslab.com)
+MIT — use it, change it, share it. © [DAYFOCUS LAB](https://www.dayfocuslab.com)

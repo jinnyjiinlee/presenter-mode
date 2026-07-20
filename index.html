@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko"><head><meta charset="utf-8"/>
-<title>발표자 모드 데모 — DAYFOCUS LAB</title>
+<html lang="en"><head><meta charset="utf-8"/>
+<title>Presenter Mode Demo — DAYFOCUS LAB</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   .deck{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;background:#E9EDF3;overflow:hidden;}
@@ -404,81 +404,400 @@
 </style></head>
 <body><div class="deck"><div class="deck-inner" id="inner">
 
+<!-- ▼▼▼ REPLACE FROM HERE with your own slides (each slide = <section class="slide">, 1600×900) ▼▼▼ -->
 <!-- ▼▼▼ 여기부터 여러분의 슬라이드로 교체하세요 (각 슬라이드 = <section class="slide">, 1600×900 기준) ▼▼▼ -->
 
-<!-- 01 표지 -->
+<!-- 01 cover -->
 <section class="slide active" style="background:#0A1334;color:#fff;">
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;">
     <div style="font-size:15px;font-weight:700;letter-spacing:.3em;color:#8B9DEF;">PRESENTER MODE</div>
-    <div style="font-size:72px;font-weight:800;line-height:1.25;">HTML 한 장으로 끝내는<br>발표자 모드</div>
-    <div style="font-size:24px;font-weight:300;color:#8FA3C8;">설치 없음 · 인터넷 없음 · 파일 하나 — 지금 <b style="color:#fff;">P</b>를 눌러보세요</div>
+    <div style="font-size:72px;font-weight:800;line-height:1.25;" data-i18n="s1t">A full presenter view<br>in one HTML file</div>
+    <div style="font-size:24px;font-weight:300;color:#8FA3C8;" data-i18n="s1s">No install · no internet · one file — press <b style="color:#fff;">P</b> now</div>
   </div>
 </section>
 
-<!-- 02 노트 데모 -->
+<!-- 02 speaker notes demo -->
 <section class="slide" style="background:#F5F8FF;color:#0A1334;">
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 140px;gap:26px;">
-    <div style="font-size:14px;font-weight:700;letter-spacing:.22em;color:#3551B5;">02 · 강사 노트</div>
-    <div style="font-size:52px;font-weight:800;">노트는 나만 봐요</div>
-    <div style="font-size:24px;line-height:1.7;color:#46506B;">발표자 창 아래 노트 칸을 보세요.<br>⏰ 시간 큐는 주황, ⚠️ 주의는 빨강, "백업" 줄은 파랑으로 자동 강조돼요.</div>
+    <div style="font-size:14px;font-weight:700;letter-spacing:.22em;color:#3551B5;" data-i18n="s2e">02 · SPEAKER NOTES</div>
+    <div style="font-size:52px;font-weight:800;" data-i18n="s2t">Notes only you can see</div>
+    <div style="font-size:24px;line-height:1.7;color:#46506B;" data-i18n="s2s">Look at the notes panel in the presenter window.<br>⏰ time cues turn orange, ⚠️ warnings turn red, and "backup" lines turn blue — automatically.</div>
   </div>
 </section>
 
-<!-- 03 노트 없는 장 -->
+<!-- 03 slide without notes -->
 <section class="slide" style="background:#fff;color:#0A1334;">
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;">
-    <div style="font-size:52px;font-weight:800;">이 장엔 노트가 없어요</div>
-    <div style="font-size:23px;color:#5A6885;">발표자 창에 "(이 슬라이드는 별도 노트가 없어요)"라고 뜨는 게 정상이에요.</div>
+    <div style="font-size:52px;font-weight:800;" data-i18n="s3t">This slide has no notes</div>
+    <div style="font-size:23px;color:#5A6885;" data-i18n="s3s">The presenter window shows "(No notes for this slide)" — that's expected.</div>
   </div>
 </section>
 
-<!-- 04 점프 데모 -->
+<!-- 04 quick jump demo -->
 <section class="slide" style="background:#F5F8FF;color:#0A1334;">
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 140px;gap:26px;">
-    <div style="font-size:14px;font-weight:700;letter-spacing:.22em;color:#3551B5;">04 · 빠른 이동</div>
-    <div style="font-size:52px;font-weight:800;">숫자 + Enter = 점프</div>
-    <div style="font-size:24px;line-height:1.7;color:#46506B;">발표자 창에서 <b>1</b>을 누르고 <b>Enter</b> — 표지로 바로 이동해요.<br>Q&amp;A 때 "아까 그 화면이요"를 3초 만에 소환할 수 있어요.</div>
+    <div style="font-size:14px;font-weight:700;letter-spacing:.22em;color:#3551B5;" data-i18n="s4e">04 · QUICK JUMP</div>
+    <div style="font-size:52px;font-weight:800;" data-i18n="s4t">Number + Enter = jump</div>
+    <div style="font-size:24px;line-height:1.7;color:#46506B;" data-i18n="s4s">In the presenter window, press <b>1</b> then <b>Enter</b> — you're back at the cover.<br>During Q&amp;A, summon "that slide from earlier" in 3 seconds.</div>
   </div>
 </section>
 
-<!-- 05 블랙아웃(쉬는 시간) 데모 -->
+<!-- 05 blackout (break) demo -->
 <section class="slide" style="background:#0A1334;color:#fff;">
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center;">
-    <div style="font-size:52px;font-weight:800;">B를 눌러보세요</div>
-    <div style="font-size:23px;line-height:1.7;color:#8FA3C8;">강의장 화면만 검게 가려져요 (발표자 창은 그대로).<br>BREAK_SCREEN을 설정하면 로고·문구·QR·BGM이 뜨는 쉬는 시간 화면으로 바뀌어요. 슬라이드를 넘기면 자동 해제!</div>
+    <div style="font-size:52px;font-weight:800;" data-i18n="s5t">Press B</div>
+    <div style="font-size:23px;line-height:1.7;color:#8FA3C8;" data-i18n="s5s">Only the audience screen goes dark (your presenter window stays on).<br>Configure BREAK_SCREEN and it becomes a break screen with logo, message, QR and BGM. Changing slides clears it automatically!</div>
   </div>
 </section>
 
-<!-- 06 판서·돋보기 데모 -->
+<!-- 06 draw & magnifier demo -->
 <section class="slide" style="background:#F5F8FF;color:#0A1334;">
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 140px;gap:26px;">
-    <div style="font-size:14px;font-weight:700;letter-spacing:.22em;color:#3551B5;">06 · 판서 &amp; 돋보기</div>
-    <div style="font-size:52px;font-weight:800;">D를 누르고 그려보세요</div>
-    <div style="font-size:24px;line-height:1.7;color:#46506B;"><b>D</b> 펜 · <b>G</b> 형광펜 · <b>E</b> 지우개 — 발표자 창과 강의장 화면이 실시간으로 함께 그려져요.<br><b>M</b>은 마우스 돋보기(휠로 배율), <b>Z</b>는 드래그한 구역을 화면 가득 확대예요 (다시 누르면 원위치).</div>
+    <div style="font-size:14px;font-weight:700;letter-spacing:.22em;color:#3551B5;" data-i18n="s6e">06 · DRAW &amp; MAGNIFY</div>
+    <div style="font-size:52px;font-weight:800;" data-i18n="s6t">Press D and draw</div>
+    <div style="font-size:24px;line-height:1.7;color:#46506B;" data-i18n="s6s"><b>D</b> pen · <b>G</b> highlighter · <b>E</b> eraser — the presenter window and the audience screen draw together in real time.<br><b>M</b> is a mouse magnifier (scroll to zoom), <b>Z</b> fills the screen with any area you drag (press again to reset).</div>
   </div>
 </section>
 
-<!-- 07 마무리 -->
+<!-- 07 outro -->
 <section class="slide" style="background:#fff;color:#0A1334;">
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center;">
-    <div style="font-size:52px;font-weight:800;">이제 여러분 차례예요</div>
-    <div style="font-size:23px;line-height:1.7;color:#46506B;">이 파일의 slides 영역을 여러분의 슬라이드로 바꾸고<br>NOTES 배열에 멘트를 채우면, 발표자 모드가 그대로 따라와요.</div>
-    <div style="font-size:16px;color:#8B9DEF;font-weight:600;">Made by DAYFOCUS LAB · 피드백 ceo@dayfocuslab.com</div>
+    <div style="font-size:52px;font-weight:800;" data-i18n="s7t">Now it's your turn</div>
+    <div style="font-size:23px;line-height:1.7;color:#46506B;" data-i18n="s7s">Replace the slides section of this file with your own slides<br>and fill the NOTES array — the presenter view follows along.</div>
+    <div style="font-size:16px;color:#8B9DEF;font-weight:600;" data-i18n="s7c">Made by DAYFOCUS LAB · feedback ceo@dayfocuslab.com</div>
   </div>
 </section>
 
-<!-- ▲▲▲ 여기까지 교체 ▲▲▲ -->
+<!-- ▲▲▲ REPLACE UP TO HERE ▲▲▲ / ▲▲▲ 여기까지 교체 ▲▲▲ -->
 
 </div></div>
-<div class="nav">← → 이동 · P 또는 ⌘K 발표자 모드 · D 판서 · M 돋보기 · Z 확대 · <button type="button" id="navHelpBtn" title="단축키 도움말">? 단축키 도움말</button></div>
-<button id="presenterBtn" type="button" title="발표자 모드 열기 (P 또는 ⌘K)">▶ 발표자 모드</button>
+<div class="nav"><span id="navHint"></span><button type="button" id="navHelpBtn"></button> · <button type="button" id="navLangBtn" title="Switch language / 언어 전환"></button></div>
+<button id="presenterBtn" type="button"></button>
 <script>
 /* ═══════════════════════════════════════════════════════
-   발표자 모드 (Presenter Mode) — DAYFOCUS LAB
+   Presenter Mode — DAYFOCUS LAB
+   ▸ DECK_ID: give every deck a unique id (keeps slide position,
+     timer, etc. separate when you use several decks in one browser)
    ▸ DECK_ID: 덱마다 고유한 값으로 바꿔주세요 (같은 브라우저에서
      여러 덱을 써도 슬라이드 위치·타이머가 서로 안 섞이게 하는 열쇠)
    ═══════════════════════════════════════════════════════ */
 const DECK_ID='demo';
+
+/* ═══ Language (i18n) — auto-detect + manual toggle ═══
+   Default: browser language (Korean browsers → Korean, everything else → English).
+   Override: ?lang=en / ?lang=ko in the URL, or the 🌐 button (saved in this browser).
+   언어는 브라우저 언어로 자동 감지돼요. 🌐 버튼이나 ?lang=ko 로 바꿀 수 있어요. */
+const LANG_KEY='dfl-presenter-lang';
+const LANG=(function(){
+  try{
+    const q=new URLSearchParams(location.search).get('lang');
+    if(q==='ko'||q==='en'){localStorage.setItem(LANG_KEY,q);return q;}
+  }catch(e){}
+  try{const v=localStorage.getItem(LANG_KEY);if(v==='ko'||v==='en')return v;}catch(e){}
+  return ((navigator.language||'').toLowerCase().indexOf('ko')===0)?'ko':'en';
+})();
+document.documentElement.lang=LANG;
+function t(k){
+  const d=(LANG==='ko'&&I18N_KO[k]!==undefined)?I18N_KO:I18N_EN;
+  let s=(d[k]!==undefined)?d[k]:k;
+  for(let a=1;a<arguments.length;a++)s=s.replace('{'+(a-1)+'}',arguments[a]);
+  return s;
+}
+function setLang(l){
+  try{localStorage.setItem(LANG_KEY,l);}catch(e){}
+  try{if(BC)BC.postMessage({type:'lang'});}catch(e){}
+  location.reload();
+}
+
+/* UI strings — English (source of truth) */
+const I18N_EN={
+  toastLast:'Last slide',
+  toastFirst:'First slide',
+  boClickTitle:'Click to show the screen again',
+  chipWhite:'⬜ Audience screen hidden (white) · W to restore',
+  chipBlack:'⬛ Audience screen hidden · B to restore',
+  btnUnhide:'⬛ Unhide',
+  btnHide:'⬛ Hide screen',
+  altLogo:'Logo',
+  altQr:'QR code',
+  bgmPlay:'♪ Play BGM',
+  bgmStop:'⏸ Pause BGM',
+  toastBgmBlocked:'The browser blocked autoplay — press the ♪ button on screen',
+  presetBlackName:'⬛ Black screen (default)',
+  presetBreakName:'☕ Break',presetBreakTitle:'☕ Time for a break',presetBreakSub:"We'll be back shortly",
+  presetLunchName:'🍽 Lunch',presetLunchTitle:'🍽 Lunch break',presetLunchSub:'Enjoy your meal!',
+  presetLabName:'💻 Hands-on',presetLabTitle:'💻 Hands-on time',presetLabSub:'Raise your hand if you get stuck',
+  presetQnaName:'🙋 Q&A',presetQnaTitle:'🙋 Q&A time',presetQnaSub:'Feel free to ask anything',
+  presetSoonName:'🕘 Starting soon',presetSoonTitle:'🕘 Starting soon',presetSoonSub:"We'll begin in a moment",
+  toastStorageFull:'Storage is full — please use a smaller image',
+  toastSaved:'Saved — press B to preview',
+  toastImgTooBig:'Image is too large — keep it under 1.5MB',
+  altPreview:'Preview',
+  btnClearFile:'Clear',
+  bcModalTitle:'☕ Customize the break (B) screen',
+  bcModalHint:'This is what the audience screen shows when you press B. Pick a preset to apply it instantly, then fine-tune below.<br>Settings are saved per deck in this browser (no code editing).',
+  bcLabelTitle:'Heading',bcPhTitle:'e.g. ☕ Take a short break',
+  bcLabelSub:'Subtitle',bcPhSub:"e.g. We'll be back in 10 minutes",
+  bcLabelLogoText:'Logo text',bcPhLogoText:'e.g. ACME Inc.',
+  bcLabelLogoImg:'Logo image (replaces logo text)',
+  bcLabelQrImg:'QR image (community · website)',
+  bcLabelQrLabel:'Caption under QR',bcPhQrLabel:'e.g. Join our community',
+  bcLabelClock:'Show current time',
+  bcLabelBgm:'BGM file path (optional)',bcPhBgm:'e.g. break.mp3 — same folder as this deck',
+  btnSave:'Save',
+  btnResetDefault:'Reset to default (black screen)',
+  btnClose:'Close',
+  toastPresetDefault:'Set to default (black screen)',
+  toastPresetApplied:'{0} applied — press B to preview',
+  toastResetDone:'Restored to default (black screen)',
+  inkPen:'✏️ Pen',inkHl:'🖍️ Highlighter',inkErase:'⌫ Eraser',
+  titleShortcut:'Shortcut',
+  ariaPenColor:'Pen color',
+  inkClearAll:'🗑 Clear all',titleInkClearAll:'Erase all ink on this slide',
+  inkClose:'✕ Done',titleInkClose:'Exit drawing (Esc)',
+  inkBtnOn:'✏️ Drawing',inkBtnOff:'✏️ Draw',
+  toastZoomOn:'🔎 Zoomed — press Z again or change slides to reset',
+  toastZoomSelect:'🔎 Drag to select an area · click = 2× · Z to cancel',
+  toastMagPresenter:'🔍 The magnifier lives on the audience screen (click it, then M) — here use Z (area zoom)',
+  toastMagOn:'🔍 Magnifier on — scroll to change zoom · M to turn off',
+  jumpBad:'Slide {0} — out of range (1–{1})',
+  jumpOk:'Slide {0} — Enter to jump · Esc to cancel',
+  jumpRange:'Enter a number between 1 and {0}',
+  ariaCloseHelp:'Close help',
+  helpTitle:'Keyboard shortcuts',
+  secNav:'Navigation',
+  helpArrowsKey:'← → · Space · Enter · clicker',helpArrows:'Next / previous slide (PgUp/PgDn clicker compatible)',
+  helpJumpKey:'number + Enter',helpJump:'Jump straight to that slide',
+  helpHomeEnd:'First / last slide',
+  secScreen:'Screen',
+  helpBW:'Hide the audience screen (black/white) · press again or change slides to restore — customize B into a break screen with logo·message·QR·BGM via the [☕ Break screen] button in the presenter window (default: plain black)',
+  helpFsKey:'F or F5',helpFs:'Toggle fullscreen',
+  secInk:'Draw · Magnify',
+  helpDGE:'Pen / highlighter / eraser — draw in either window, synced live · Esc to exit',
+  helpM:'Mouse magnifier (audience screen) · scroll to change zoom',
+  helpZ:'Area zoom — drag an area to fill the screen · click = 2× · press Z again or change slides to reset',
+  helpMirrorKey:'⌘Fn F1 (Mac) · Win+P (Windows)',helpMirror:'Mirror ↔ extend displays (demo ↔ presenting · OS shortcut)',
+  secPresenter:'Presenter window',
+  helpPKey:'P · ⌘K (Mac) · Ctrl+K (Windows)',helpP:'Open the presenter window',
+  helpV:'Switch view (next slide ↔ filmstrip)',
+  helpTR:'Start·pause timer / reset (press twice)',
+  helpTimerClickKey:'click timer digits',helpTimerClick:'Start·pause · click the counter for slides remaining',
+  helpQmKey:'? or H',helpQm:'Open/close this help',
+  helpHint:'Press Esc or click anywhere to close · ideas welcome at <a href="mailto:ceo@dayfocuslab.com?subject=%5BPresenter%20Mode%20Feedback%5D" style="color:#8B9DEF;">ceo@dayfocuslab.com</a>',
+  popupBlocked:'Popups seem to be blocked — click the popup icon in the address bar to allow them.',
+  popupRetry:'Allowed — open again',
+  pTagCurrent:'Current slide',pTagCurrentHint:'click = next · left edge = prev',
+  titleCurClick:'Click: next slide (left edge: previous)',
+  titleNextGo:'Click: go to the next slide',
+  titleHSplit:'Drag to resize',
+  pTagNext:'Next slide',
+  titleVSplit:'Drag to resize',
+  pTagFilmstrip:'All slides · click to jump',
+  labelThumbSize:'Thumbnail size',ariaThumbSize:'Adjust thumbnail size',
+  btnLocate:'◎ Current',titleLocate:'Scroll the filmstrip to the current slide',
+  titleTheme:'Toggle light/dark presenter background',
+  btnViewNext:'▸ Enlarge next slide',btnViewFilm:'▸ Enlarge filmstrip',titleView:'Switch view (V)',
+  titleNextNote:"First line of the next slide's notes",
+  btnFold:'Fold ⌄',btnUnfold:'Unfold ⌃',titleFold:'Fold notes (save space)',titleUnfold:'Unfold notes',
+  titleNoteMinus:'Smaller note text',titleNotePlus:'Larger note text',
+  btnPrev:'← Prev',titlePrev:'Previous slide (←)',
+  btnNext:'Next →',titleNext:'Next slide (→ or Space)',
+  titleCounter:'Click to show slides remaining',
+  titleDwell:'Time spent on this slide',
+  connChecking:'○ Checking…',
+  connOk:'● Audience screen connected',connNo:'○ Audience screen not responding',
+  connOkTitle:'Synced with the audience screen in real time',
+  connNoTitle:'The audience screen is closed or not responding — check that the slide window is open',
+  zoomChip:'🔎 Area zoom on · Z to reset',titleZoomChip:'Click to reset zoom (Z)',
+  titleBlackBtn:'Hide/show the audience screen (B)',
+  titleInkBtn:'Toggle pen (D) — draw on the current slide and it appears on the audience screen live',
+  btnBreakCfg:'☕ Break screen',titleBreakCfg:'Customize the break (B) screen — logo·message·QR·clock·BGM (default: black)',
+  btnHelp:'? Shortcuts',titleHelp:'Keyboard shortcuts (? or H)',
+  titleClock:'Current time',clockTitle:'Current time · click to show seconds',
+  titleTimerDisplay:'Elapsed time',timerClickTitle:'Click: start/pause (T)',
+  btnTimerStart:'▶ Start',btnTimerPause:'⏸ Pause',titleTimerToggle:'Start/pause timer (T)',
+  btnReset:'Reset',btnResetConfirm:'Once more → reset',titleReset:'Press twice to reset (R)',
+  btnTarget:'Target',titleTarget:'Set a target time (min) to see time remaining',
+  phMin:'min',ariaTarget:'Target time (minutes)',
+  remainOver:'Over ',remainLeft:'Left ',
+  toast5min:'⏳ 5 minutes to target',
+  toastTargetHit:'⏰ Target time reached',
+  btnThemeLight:'☀️ Light background',btnThemeDark:'🌙 Dark background',
+  onboard:'<span><strong>New to the presenter window?</strong> Use ← → to navigate, then try <strong>D</strong> draw · <strong>Z</strong> area zoom · <strong>B</strong> break screen. Style the break screen with presets via the <strong>[☕ Break screen]</strong> button below, and find every shortcut under <strong>[? Shortcuts]</strong> (or ?).</span>',
+  btnGotIt:'Got it',
+  notesEmpty:'(No notes for this slide)',
+  counterRemain:'{0} slides left',
+  nextNotePrefix:'Next note: ',
+  presenterTitlePrefix:'Presenter ',
+  endCard:'Last slide',
+  ariaThumbGoto:'Go to slide {0}',
+  titleThumb:'Slide {0}',titleThumbHasNote:' · has notes',titleNoteDot:'Has speaker notes',
+  tooSmall:'The window is too small — enlarge it to see every feature',
+  navHint:'← → navigate · P or ⌘K presenter view · D draw · M magnify · Z zoom · ',
+  navHelp:'? shortcuts',
+  presenterBtn:'▶ Presenter view',titlePresenterBtn:'Open presenter view (P or ⌘K)',
+  langBtn:'🌐 한국어'
+};
+
+/* UI 문자열 — 한국어 */
+const I18N_KO={
+  toastLast:'마지막 슬라이드예요',
+  toastFirst:'첫 슬라이드예요',
+  boClickTitle:'클릭하면 화면이 다시 보여요',
+  chipWhite:'⬜ 강의장 화면 가림 (흰색) · W 해제',
+  chipBlack:'⬛ 강의장 화면 가림 · B 해제',
+  btnUnhide:'⬛ 가림 해제',
+  btnHide:'⬛ 가리기',
+  altLogo:'로고',
+  altQr:'QR 코드',
+  bgmPlay:'♪ BGM 재생',
+  bgmStop:'⏸ BGM 정지',
+  toastBgmBlocked:'브라우저가 자동재생을 막았어요 — 화면의 ♪ 버튼을 눌러주세요',
+  presetBlackName:'⬛ 검은 화면 (기본)',
+  presetBreakName:'☕ 쉬는 시간',presetBreakTitle:'☕ 쉬는 시간입니다',presetBreakSub:'잠시 후 다시 시작할게요',
+  presetLunchName:'🍽 점심시간',presetLunchTitle:'🍽 점심시간입니다',presetLunchSub:'맛있게 드시고 오세요',
+  presetLabName:'💻 실습 시간',presetLabTitle:'💻 실습 시간입니다',presetLabSub:'막히면 편하게 손 들어주세요',
+  presetQnaName:'🙋 Q&A',presetQnaTitle:'🙋 Q&A 시간입니다',presetQnaSub:'궁금한 것 편하게 물어봐주세요',
+  presetSoonName:'🕘 곧 시작',presetSoonTitle:'🕘 곧 시작합니다',presetSoonSub:'잠시만 기다려주세요',
+  toastStorageFull:'저장 공간이 부족해요 — 이미지 크기를 줄여주세요',
+  toastSaved:'저장했어요 — B를 눌러 확인해보세요',
+  toastImgTooBig:'이미지가 너무 커요 — 1.5MB 이하로 줄여주세요',
+  altPreview:'미리보기',
+  btnClearFile:'지우기',
+  bcModalTitle:'☕ 쉬는 시간(B) 화면 꾸미기',
+  bcModalHint:'B를 눌렀을 때 강의장 화면에 뜨는 내용이에요. 프리셋을 고르면 바로 적용되고, 아래 폼에서 자유롭게 고칠 수 있어요.<br>설정은 이 브라우저에 덱별로 저장돼요 (코드 수정 없음).',
+  bcLabelTitle:'큰 제목',bcPhTitle:'예: ☕ 잠깐 쉬어가요',
+  bcLabelSub:'부제목',bcPhSub:'예: 10분 뒤에 다시 시작할게요',
+  bcLabelLogoText:'로고 텍스트',bcPhLogoText:'예: OO컴퍼니',
+  bcLabelLogoImg:'로고 이미지 (있으면 텍스트 대신 표시)',
+  bcLabelQrImg:'QR 이미지 (커뮤니티·웹사이트 안내)',
+  bcLabelQrLabel:'QR 아래 설명',bcPhQrLabel:'예: 오픈채팅 참여하기',
+  bcLabelClock:'현재 시각 표시',
+  bcLabelBgm:'BGM 파일 경로 (선택)',bcPhBgm:'예: break.mp3 — deck 파일과 같은 폴더에 두세요',
+  btnSave:'저장',
+  btnResetDefault:'기본(검은 화면)으로 초기화',
+  btnClose:'닫기',
+  toastPresetDefault:'기본(검은 화면)으로 설정했어요',
+  toastPresetApplied:'{0} 적용됐어요 — B를 눌러 확인해보세요',
+  toastResetDone:'기본(검은 화면)으로 되돌렸어요',
+  inkPen:'✏️ 펜',inkHl:'🖍️ 형광펜',inkErase:'⌫ 지우개',
+  titleShortcut:'단축키',
+  ariaPenColor:'펜 색상',
+  inkClearAll:'🗑 모두 지우기',titleInkClearAll:'이 슬라이드의 판서 모두 지우기',
+  inkClose:'✕ 종료',titleInkClose:'판서 종료 (Esc)',
+  inkBtnOn:'✏️ 판서 중',inkBtnOff:'✏️ 판서',
+  toastZoomOn:'🔎 확대 중 — 다시 Z 또는 슬라이드를 넘기면 원위치',
+  toastZoomSelect:'🔎 확대할 구역을 드래그로 선택하세요 · 클릭 = 2배 · Z 취소',
+  toastMagPresenter:'🔍 돋보기는 강의장 화면을 클릭한 뒤 M — 발표자 창에서는 Z(구역 확대)를 쓰세요',
+  toastMagOn:'🔍 돋보기 켜짐 — 휠로 배율 조절 · M 으로 끄기',
+  jumpBad:'슬라이드 {0} — 없는 번호예요 (1~{1})',
+  jumpOk:'슬라이드 {0} — Enter로 이동 · Esc 취소',
+  jumpRange:'1~{0} 사이 번호를 입력해주세요',
+  ariaCloseHelp:'도움말 닫기',
+  helpTitle:'단축키 도움말',
+  secNav:'진행',
+  helpArrowsKey:'← → · Space · Enter · 리모컨',helpArrows:'슬라이드 넘기기 (PgUp/PgDn 클리커 호환)',
+  helpJumpKey:'숫자 + Enter',helpJump:'해당 번호 슬라이드로 바로 이동',
+  helpHomeEnd:'처음 / 마지막 슬라이드',
+  secScreen:'화면',
+  helpBW:'강의장 화면 가리기 (검정/흰색) · 한 번 더 누르거나 슬라이드 넘기면 해제 — B는 발표자 창 [☕ 쉬는화면] 버튼으로 로고·안내문·QR·BGM 화면으로 꾸밀 수 있어요 (기본은 검은 화면)',
+  helpFsKey:'F 또는 F5',helpFs:'전체화면 켜기/끄기',
+  secInk:'판서 · 돋보기',
+  helpDGE:'펜 / 형광펜 / 지우개 — 발표자 창·강의장 화면 어디서 그려도 실시간 동기화 · Esc 종료',
+  helpM:'마우스 돋보기 (강의장 화면) · 휠로 배율 조절',
+  helpZ:'구역 확대 — 드래그한 영역을 화면에 꽉 채움 · 클릭=2배 · 다시 Z 또는 슬라이드 넘기면 원위치',
+  helpMirrorKey:'⌘Fn F1(맥) · Win+P(윈도우)',helpMirror:'화면 미러링 ↔ 확장 전환 (시연↔발표 · OS 시스템 단축키)',
+  secPresenter:'발표자 창',
+  helpPKey:'P · ⌘K(맥) · Ctrl+K(윈도우)',helpP:'발표자 창 열기',
+  helpV:'보기 전환 (다음 슬라이드 ↔ 필름스트립)',
+  helpTR:'타이머 시작·일시정지 / 리셋(두 번 누름)',
+  helpTimerClickKey:'타이머 숫자 클릭',helpTimerClick:'시작·일시정지 · 카운터 클릭 = 남은 장수 표시',
+  helpQmKey:'? 또는 H',helpQm:'이 도움말 열고 닫기',
+  helpHint:'Esc 또는 아무 곳이나 클릭하면 닫혀요 · 개선 아이디어는 <a href="mailto:ceo@dayfocuslab.com?subject=%5B%EB%B0%9C%ED%91%9C%EC%9E%90%20%EB%AA%A8%EB%93%9C%20%ED%94%BC%EB%93%9C%EB%B0%B1%5D" style="color:#8B9DEF;">ceo@dayfocuslab.com</a>',
+  popupBlocked:'팝업이 차단된 것 같아요 — 브라우저 주소창의 팝업 차단 아이콘을 눌러 허용해주세요.',
+  popupRetry:'허용했어요 — 다시 열기',
+  pTagCurrent:'현재 슬라이드',pTagCurrentHint:'클릭=다음 · 왼쪽 끝=이전',
+  titleCurClick:'클릭: 다음 슬라이드 (왼쪽 끝: 이전)',
+  titleNextGo:'클릭: 다음 슬라이드로 이동',
+  titleHSplit:'드래그해서 폭 조정',
+  pTagNext:'다음 슬라이드',
+  titleVSplit:'드래그해서 영역 크기 조정',
+  pTagFilmstrip:'전체 흐름 · 클릭해서 이동',
+  labelThumbSize:'썸네일 크기',ariaThumbSize:'썸네일 크기 조절',
+  btnLocate:'◎ 현재 위치',titleLocate:'필름스트립을 현재 슬라이드 위치로 스크롤',
+  titleTheme:'발표자 창 배경 밝게/어둡게 전환',
+  btnViewNext:'▸ 다음 슬라이드 크게 보기',btnViewFilm:'▸ 필름스트립 크게 보기',titleView:'보기 전환 (V)',
+  titleNextNote:'다음 슬라이드의 노트 첫 줄',
+  btnFold:'접기 ⌄',btnUnfold:'펼치기 ⌃',titleFold:'노트 접기 (공간 확보)',titleUnfold:'노트 펼치기',
+  titleNoteMinus:'노트 글씨 작게',titleNotePlus:'노트 글씨 크게',
+  btnPrev:'← 이전',titlePrev:'이전 슬라이드 (←)',
+  btnNext:'다음 →',titleNext:'다음 슬라이드 (→ 또는 Space)',
+  titleCounter:'클릭하면 남은 장수로 바뀌어요',
+  titleDwell:'이 슬라이드에 머문 시간',
+  connChecking:'○ 확인 중…',
+  connOk:'● 강의장 화면 연결됨',connNo:'○ 강의장 화면 응답 없음',
+  connOkTitle:'강의장 화면과 실시간 동기화 중이에요',
+  connNoTitle:'강의장 화면이 닫혔거나 응답이 없어요 — 슬라이드 창이 열려 있는지 확인해주세요',
+  zoomChip:'🔎 구역 확대 중 · Z 해제',titleZoomChip:'클릭하면 확대 해제 (Z)',
+  titleBlackBtn:'강의장 화면 가리기/해제 (B)',
+  titleInkBtn:'판서 펜 켜기/끄기 (D) — 현재 슬라이드 위에 그리면 강의장 화면에도 실시간으로 보여요',
+  btnBreakCfg:'☕ 쉬는화면',titleBreakCfg:'쉬는 시간(B) 화면 꾸미기 — 로고·문구·QR·시계·BGM (기본은 검은 화면)',
+  btnHelp:'? 단축키',titleHelp:'단축키 도움말 (? 또는 H)',
+  titleClock:'현재 시각',clockTitle:'현재 시각 · 클릭하면 초까지 보여요',
+  titleTimerDisplay:'경과 시간',timerClickTitle:'클릭: 시작/일시정지 (T)',
+  btnTimerStart:'▶ 시작',btnTimerPause:'⏸ 일시정지',titleTimerToggle:'타이머 시작/일시정지 (T)',
+  btnReset:'리셋',btnResetConfirm:'한 번 더 → 리셋',titleReset:'두 번 누르면 리셋 (R)',
+  btnTarget:'목표',titleTarget:'목표 시간(분)을 정하면 남은 시간을 보여줘요',
+  phMin:'분',ariaTarget:'목표 시간(분)',
+  remainOver:'초과 ',remainLeft:'남은 ',
+  toast5min:'⏳ 목표까지 5분 남았어요',
+  toastTargetHit:'⏰ 목표 시간에 도달했어요',
+  btnThemeLight:'☀️ 밝은 배경',btnThemeDark:'🌙 어두운 배경',
+  onboard:'<span><strong>발표자 창이 처음이세요?</strong> ← →로 넘기고 <strong>D</strong> 판서 · <strong>Z</strong> 구역 확대 · <strong>B</strong> 쉬는화면을 눌러보세요. 쉬는화면은 하단 <strong>[☕ 쉬는화면]</strong> 버튼에서 프리셋으로 꾸밀 수 있고, 전체 단축키는 <strong>[? 단축키]</strong>(또는 ?)에 있어요.</span>',
+  btnGotIt:'알겠어요',
+  notesEmpty:'(이 슬라이드는 별도 노트가 없어요)',
+  counterRemain:'남은 {0}장',
+  nextNotePrefix:'다음 노트: ',
+  presenterTitlePrefix:'발표자 ',
+  endCard:'마지막 슬라이드예요',
+  ariaThumbGoto:'슬라이드 {0}번으로 이동',
+  titleThumb:'슬라이드 {0}',titleThumbHasNote:' · 노트 있음',titleNoteDot:'강사 노트 있음',
+  tooSmall:'창이 너무 작아요 — 창을 키우면 모든 기능이 보여요',
+  navHint:'← → 이동 · P 또는 ⌘K 발표자 모드 · D 판서 · M 돋보기 · Z 확대 · ',
+  navHelp:'? 단축키 도움말',
+  presenterBtn:'▶ 발표자 모드',titlePresenterBtn:'발표자 모드 열기 (P 또는 ⌘K)',
+  langBtn:'🌐 English'
+};
+
+/* ▼ DEMO CONTENT LOCALIZATION — delete this block together with the demo slides
+   데모 슬라이드 한국어 번역 — 데모 슬라이드를 교체할 때 이 블록도 함께 지우세요 */
+const DEMO_KO={
+  _title:'발표자 모드 데모 — DAYFOCUS LAB',
+  s1t:'HTML 한 장으로 끝내는<br>발표자 모드',
+  s1s:'설치 없음 · 인터넷 없음 · 파일 하나 — 지금 <b style="color:#fff;">P</b>를 눌러보세요',
+  s2e:'02 · 강사 노트',s2t:'노트는 나만 봐요',
+  s2s:'발표자 창 아래 노트 칸을 보세요.<br>⏰ 시간 큐는 주황, ⚠️ 주의는 빨강, "백업" 줄은 파랑으로 자동 강조돼요.',
+  s3t:'이 장엔 노트가 없어요',
+  s3s:'발표자 창에 "(이 슬라이드는 별도 노트가 없어요)"라고 뜨는 게 정상이에요.',
+  s4e:'04 · 빠른 이동',s4t:'숫자 + Enter = 점프',
+  s4s:'발표자 창에서 <b>1</b>을 누르고 <b>Enter</b> — 표지로 바로 이동해요.<br>Q&amp;A 때 "아까 그 화면이요"를 3초 만에 소환할 수 있어요.',
+  s5t:'B를 눌러보세요',
+  s5s:'강의장 화면만 검게 가려져요 (발표자 창은 그대로).<br>BREAK_SCREEN을 설정하면 로고·문구·QR·BGM이 뜨는 쉬는 시간 화면으로 바뀌어요. 슬라이드를 넘기면 자동 해제!',
+  s6e:'06 · 판서 &amp; 돋보기',s6t:'D를 누르고 그려보세요',
+  s6s:'<b>D</b> 펜 · <b>G</b> 형광펜 · <b>E</b> 지우개 — 발표자 창과 강의장 화면이 실시간으로 함께 그려져요.<br><b>M</b>은 마우스 돋보기(휠로 배율), <b>Z</b>는 드래그한 구역을 화면 가득 확대예요 (다시 누르면 원위치).',
+  s7t:'이제 여러분 차례예요',
+  s7s:'이 파일의 slides 영역을 여러분의 슬라이드로 바꾸고<br>NOTES 배열에 멘트를 채우면, 발표자 모드가 그대로 따라와요.',
+  s7c:'Made by DAYFOCUS LAB · 피드백 ceo@dayfocuslab.com'
+};
+if(LANG==='ko'){
+  document.title=DEMO_KO._title;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(DEMO_KO[k]!==undefined)el.innerHTML=DEMO_KO[k];
+  });
+}
+/* ▲ end of demo content localization */
+
 const DECK_TITLE=document.title;
 
 const inner=document.getElementById('inner');const slides=[...document.querySelectorAll('.slide')];
@@ -486,10 +805,25 @@ const TOTAL=slides.length;
 let i=0;
 
 /* ============================================================
-   발표자 노트 데이터 (index = 슬라이드 순서, 0부터)
-   노트가 없는 슬라이드는 빈 문자열 ``로 두면 돼요.
+   Speaker notes (index = slide order, starting from 0)
+   Slides without notes: just leave an empty string ``.
+   Replace the whole block with a single plain array for your deck:
+   const NOTES = [`note for slide 1`, ``, `note for slide 3`, ...];
+   발표자 노트 데이터 (index = 슬라이드 순서, 0부터) — 노트가 없는
+   슬라이드는 빈 문자열 ``. 여러분의 덱에서는 배열 하나로 충분해요.
    ============================================================ */
-const NOTES = [
+const NOTES_EN = [
+/*01*/ `Welcome to Presenter Mode. This panel holds your "speaker notes" — the audience never sees them.`,
+/*02*/ `⏰ 10:30 cutline — write a time cue like this and it turns orange.
+⚠️ Warning lines are highlighted in red.
+backup: backup_demo.png — lines containing "backup" turn blue.`,
+/*03*/ ``,
+/*04*/ `Slides without notes show "(No notes for this slide)" — check slide 3 to see it.`,
+/*05*/ `Press B to hide the audience screen. Configure BREAK_SCREEN and it becomes a break screen with your logo, message and BGM. Changing slides clears it automatically.`,
+/*06*/ `Press D to turn on the pen. Draw here (in the presenter window) and it appears on the audience screen in real time. G highlighter, E eraser, Esc to exit. For Z area zoom, dragging on the current slide here zooms the audience screen too.`,
+/*07*/ `That's it! Replace the slides section with your own slides and fill in NOTES — you're done.`
+];
+const NOTES_KO = [
 /*01*/ `발표자 모드에 오신 걸 환영해요. 이 칸이 "강사 노트"예요 — 청중에게는 보이지 않아요.`,
 /*02*/ `⏰ 10:30 컷라인 — 이렇게 시간 큐를 적으면 주황색으로 강조돼요.
 ⚠️ 주의 문구는 빨간색으로 강조돼요.
@@ -500,23 +834,25 @@ const NOTES = [
 /*06*/ `D를 누르면 펜이 켜져요. 여기(발표자 창)에서 그려도 강의장 화면에 실시간으로 나타나요. G 형광펜, E 지우개, Esc 종료. Z 구역 확대는 발표자 창의 현재 슬라이드에서 드래그해도 강의장 화면이 확대돼요.`,
 /*07*/ `수고하셨어요! 이제 slides 영역을 여러분의 슬라이드로 바꾸고 NOTES를 채우면 끝이에요.`
 ];
+const NOTES = (LANG==='ko')?NOTES_KO:NOTES_EN;
 
 /* ============================================================
-   [v5] 쉬는 시간(B) 화면 커스터마이즈
-   B를 눌렀을 때 검은 화면 대신 뜨는 안내 화면이에요.
-   웨비나 대기 화면·브레이크 타임 안내·커뮤니티 QR 등에 쓰세요.
-   전부 빈 문자열('')로 두면 기존처럼 순수 검은 화면이 돼요.
-   W(흰 화면)는 항상 순수 흰색으로 유지돼요.
+   [v5] Break (B) screen customization
+   What the audience screen shows instead of plain black when you press B.
+   Use it as a webinar waiting room, break-time notice, community QR, etc.
+   Leave everything as '' (default) for a plain black screen.
+   W (white screen) always stays pure white.
+   B를 눌렀을 때 검은 화면 대신 뜨는 안내 화면 — 전부 비우면 순수 검은 화면.
    ============================================================ */
 const BREAK_SCREEN={
-  title:'',        // 큰 제목 (예: '☕ 잠깐 쉬어가요') — 전부 비우면(기본) 순수 검은 화면
-  sub:'',          // 부제목 (예: '10분 뒤에 다시 시작할게요' · 줄바꿈은 \n)
-  logoText:'',     // 텍스트 로고 (예: 'OO컴퍼니')
-  logoImg:'',      // 이미지 로고 경로 (예: 'logo.png') — 있으면 logoText 대신 표시
-  qrImg:'',        // QR 이미지 경로 (예: 'qr.png') — 커뮤니티·웹사이트 안내용
-  qrLabel:'',      // QR 아래 설명 (예: '오픈채팅 참여하기')
-  showClock:false, // 현재 시각 표시
-  bgm:''           // 쉬는 시간 배경음악 mp3 경로 (예: 'break.mp3') — ♪ 버튼으로 재생/정지
+  title:'',        // heading, e.g. '☕ Take a short break' — leave all empty (default) for plain black
+  sub:'',          // subtitle, e.g. "We'll be back in 10 minutes" (\n for line breaks)
+  logoText:'',     // text logo, e.g. 'ACME Inc.'
+  logoImg:'',      // logo image path, e.g. 'logo.png' — shown instead of logoText when set
+  qrImg:'',        // QR image path, e.g. 'qr.png' — community / website link
+  qrLabel:'',      // caption under the QR, e.g. 'Join our community'
+  showClock:false, // show the current time
+  bgm:''           // break BGM mp3 path, e.g. 'break.mp3' — play/pause with the ♪ button
 };
 
 const isPresenter=location.hash.indexOf('presenter')!==-1;
@@ -537,7 +873,7 @@ function render(){
 let lastNavLocal=0;
 function show(n){
   const c=Math.max(0,Math.min(n,TOTAL-1));
-  if(c===i&&n!==i){edgeToast(n>i?'마지막 슬라이드예요':'첫 슬라이드예요');return;}
+  if(c===i&&n!==i){edgeToast(n>i?t('toastLast'):t('toastFirst'));return;}
   i=c;lastNavLocal=Date.now();render();persist(i);
   if(blackoutMode)setBlackout(blackoutMode); /* [v3-6] 슬라이드를 넘기면 블랙아웃 자동 해제 */
   if(zoomRegion)zoomSetRegion(null); /* [v5.1] 구역 확대도 자동 해제 */
@@ -557,6 +893,7 @@ addEventListener('storage',e=>{
   if(e.key===BLACK_KEY)applyBlackoutFromStore();
   if(e.key===INK_MSG_KEY&&e.newValue&&!BC){try{inkRecv(JSON.parse(e.newValue));}catch(err){}} /* [v5] BC 미지원 브라우저 폴백 */
   if(e.key===BREAK_CFG_KEY)breakCfgChanged(); /* [v5.2] 쉬는화면 설정 동기화 */
+  if(e.key===LANG_KEY&&e.newValue&&e.newValue!==LANG)location.reload(); /* [i18n] language switched in another window */
 });
 /* [개선 9·30] 하트비트: 발표자 창이 2초마다 ping → 청중 창이 pong + 어긋난 슬라이드 자동 재정렬 */
 let lastPong=0,lastPingSeen=0;
@@ -564,8 +901,9 @@ if(BC){BC.onmessage=e=>{
   const d=e&&e.data;if(!d)return;
   if(d.type==='idx')applyRemote(d.idx);
   else if(d.type==='ink')inkRecv(d); /* [v5] 판서 동기화 */
-  else if(d.type==='zoom'){zoomRegion=d.region||null;applyDeckTransform(true);zoomChipSync();if(!isPresenter&&d.region)edgeToast('🔎 확대 중 — 다시 Z 또는 슬라이드를 넘기면 원위치');} /* [v5.1] 구역 확대 동기화 */
+  else if(d.type==='zoom'){zoomRegion=d.region||null;applyDeckTransform(true);zoomChipSync();if(!isPresenter&&d.region)edgeToast(t('toastZoomOn'));} /* [v5.1] 구역 확대 동기화 */
   else if(d.type==='breakcfg')breakCfgChanged(); /* [v5.2] 쉬는화면 설정 동기화 */
+  else if(d.type==='lang'){try{location.reload();}catch(err){}} /* [i18n] */
   else if(d.type==='blackout'){blackoutMode=(d.mode==='black'||d.mode==='white')?d.mode:null;applyBlackout();}
   else if(d.type==='ping'&&!isPresenter){
     lastPingSeen=Date.now();
@@ -595,7 +933,7 @@ function applyBlackout(){
     let el=document.getElementById('blackoutOverlay');
     if(!el){
       el=document.createElement('div');el.id='blackoutOverlay';
-      el.title='클릭하면 화면이 다시 보여요';
+      el.title=t('boClickTitle');
       el.addEventListener('click',()=>setBlackout(blackoutMode));
       document.body.appendChild(el);
     }
@@ -607,10 +945,10 @@ function applyBlackout(){
   const chip=document.getElementById('pBlackChip');
   if(chip){
     chip.style.display=blackoutMode?'inline-block':'none';
-    chip.textContent=blackoutMode==='white'?'⬜ 강의장 화면 가림 (흰색) · W 해제':'⬛ 강의장 화면 가림 · B 해제';
+    chip.textContent=blackoutMode==='white'?t('chipWhite'):t('chipBlack');
   }
   const bb=document.getElementById('pBlackBtn');
-  if(bb)bb.textContent=blackoutMode?'⬛ 가림 해제':'⬛ 가리기'; /* [v3-4] 클릭 버튼 상태 */
+  if(bb)bb.textContent=blackoutMode?t('btnUnhide'):t('btnHide'); /* [v3-4] 클릭 버튼 상태 */
   if(isPresenter)document.body.classList.toggle('pBlackOn',!!blackoutMode); /* [v3-28] 현재 슬라이드 주황 테두리 */
 }
 
@@ -643,13 +981,13 @@ function renderBreakScreen(el){
   const B=breakCfg();
   const w=document.createElement('div');w.className='boWrap';
   let h='';
-  if(B.logoImg)h+='<img class="boLogoImg" src="'+B.logoImg+'" alt="로고">';
+  if(B.logoImg)h+='<img class="boLogoImg" src="'+B.logoImg+'" alt="'+t('altLogo')+'">';
   else if(B.logoText)h+='<div class="boLogoText">'+escHTML(B.logoText)+'</div>';
   if(B.title)h+='<div class="boTitle">'+escHTML(B.title)+'</div>';
   if(B.sub)h+='<div class="boSub">'+escHTML(B.sub).replace(/\n/g,'<br>')+'</div>';
   if(B.showClock)h+='<div class="boClock" id="boClock"></div>';
-  if(B.qrImg)h+='<div class="boQrBox"><img class="boQr" src="'+B.qrImg+'" alt="QR 코드">'+(B.qrLabel?'<div class="boQrLabel">'+escHTML(B.qrLabel)+'</div>':'')+'</div>';
-  if(B.bgm)h+='<button type="button" id="boBgmBtn">♪ BGM 재생</button>';
+  if(B.qrImg)h+='<div class="boQrBox"><img class="boQr" src="'+B.qrImg+'" alt="'+t('altQr')+'">'+(B.qrLabel?'<div class="boQrLabel">'+escHTML(B.qrLabel)+'</div>':'')+'</div>';
+  if(B.bgm)h+='<button type="button" id="boBgmBtn">'+t('bgmPlay')+'</button>';
   w.innerHTML=h;
   el.appendChild(w);
   const bb=w.querySelector('#boBgmBtn');
@@ -667,24 +1005,24 @@ function bgmSync(){
   const on=blackoutMode==='black'&&bgmWant;
   if(on){
     if(!bgmAudio){bgmAudio=new Audio(B.bgm);bgmAudio.loop=true;bgmAudio.volume=0.35;}
-    bgmAudio.play().then(bgmBtnSync).catch(()=>{edgeToast('브라우저가 자동재생을 막았어요 — 화면의 ♪ 버튼을 눌러주세요');bgmBtnSync();});
+    bgmAudio.play().then(bgmBtnSync).catch(()=>{edgeToast(t('toastBgmBlocked'));bgmBtnSync();});
   }else if(bgmAudio&&!bgmAudio.paused)bgmAudio.pause();
   bgmBtnSync();
 }
 function bgmBtnSync(){
   const b=document.getElementById('boBgmBtn');if(!b)return;
-  b.textContent=(bgmAudio&&!bgmAudio.paused)?'⏸ BGM 정지':'♪ BGM 재생';
+  b.textContent=(bgmAudio&&!bgmAudio.paused)?t('bgmStop'):t('bgmPlay');
 }
 /* ═══ [v5.2] ☕ 쉬는화면 설정 모달 (발표자 창) ═══ */
 /* [v5.2] 상황별 프리셋 — 클릭 한 번으로 바로 적용, 문구는 폼에서 자유 수정
    title은 청중에게 보이는 안내문(시그니지)이라 의도적으로 격식체(-입니다) 사용 */
 const BREAK_PRESETS=[
-  {name:'⬛ 검은 화면 (기본)',cfg:{title:'',sub:'',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:false,bgm:''}},
-  {name:'☕ 쉬는 시간',cfg:{title:'☕ 쉬는 시간입니다',sub:'잠시 후 다시 시작할게요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
-  {name:'🍽 점심시간',cfg:{title:'🍽 점심시간입니다',sub:'맛있게 드시고 오세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
-  {name:'💻 실습 시간',cfg:{title:'💻 실습 시간입니다',sub:'막히면 편하게 손 들어주세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
-  {name:'🙋 Q&A',cfg:{title:'🙋 Q&A 시간입니다',sub:'궁금한 것 편하게 물어봐주세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:false,bgm:''}},
-  {name:'🕘 곧 시작',cfg:{title:'🕘 곧 시작합니다',sub:'잠시만 기다려주세요',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}}
+  {name:t('presetBlackName'),cfg:{title:'',sub:'',logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:false,bgm:''}},
+  {name:t('presetBreakName'),cfg:{title:t('presetBreakTitle'),sub:t('presetBreakSub'),logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
+  {name:t('presetLunchName'),cfg:{title:t('presetLunchTitle'),sub:t('presetLunchSub'),logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
+  {name:t('presetLabName'),cfg:{title:t('presetLabTitle'),sub:t('presetLabSub'),logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}},
+  {name:t('presetQnaName'),cfg:{title:t('presetQnaTitle'),sub:t('presetQnaSub'),logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:false,bgm:''}},
+  {name:t('presetSoonName'),cfg:{title:t('presetSoonTitle'),sub:t('presetSoonSub'),logoText:'',logoImg:'',qrImg:'',qrLabel:'',showClock:true,bgm:''}}
 ];
 function bcMarkActivePreset(){ /* [UX] 현재 적용 중인 프리셋 하이라이트 */
   const el=document.getElementById('breakCfgOverlay');if(!el)return;
@@ -694,18 +1032,18 @@ function bcMarkActivePreset(){ /* [UX] 현재 적용 중인 프리셋 하이라�
   el.querySelectorAll('.bcPreset').forEach((btn,k)=>btn.classList.toggle('on',sig(BREAK_PRESETS[k].cfg)===cur));
 }
 function bcApply(o,msg){
-  try{localStorage.setItem(BREAK_CFG_KEY,JSON.stringify(o));}catch(e){edgeToast('저장 공간이 부족해요 — 이미지 크기를 줄여주세요');return false;}
+  try{localStorage.setItem(BREAK_CFG_KEY,JSON.stringify(o));}catch(e){edgeToast(t('toastStorageFull'));return false;}
   if(BC){try{BC.postMessage({type:'breakcfg'});}catch(e){}}
   breakCfgChanged();
-  edgeToast(msg||'저장했어요 — B를 눌러 확인해보세요');
+  edgeToast(msg||t('toastSaved'));
   return true;
 }
 let _bcLogoData,_bcQrData;
 function bcFileRow(id,label){
   return '<div class="bcRow"><label>'+label+'</label><div class="bcInline">'+
     '<input type="file" id="'+id+'" accept="image/*" style="font-size:12.5px;max-width:230px;">'+
-    '<img class="bcThumb" id="'+id+'Thumb" alt="미리보기">'+
-    '<button type="button" class="bcBtn ghost" id="'+id+'Clear" style="padding:6px 10px;font-size:12.5px;">지우기</button>'+
+    '<img class="bcThumb" id="'+id+'Thumb" alt="'+t('altPreview')+'">'+
+    '<button type="button" class="bcBtn ghost" id="'+id+'Clear" style="padding:6px 10px;font-size:12.5px;">'+t('btnClearFile')+'</button>'+
     '</div></div>';
 }
 function bcBindFile(id,setData,curVal){
@@ -713,7 +1051,7 @@ function bcBindFile(id,setData,curVal){
   if(curVal){thumb.src=curVal;thumb.style.display='inline-block';}
   inp.addEventListener('change',()=>{
     const f=inp.files&&inp.files[0];if(!f)return;
-    if(f.size>1500000){edgeToast('이미지가 너무 커요 — 1.5MB 이하로 줄여주세요');inp.value='';return;}
+    if(f.size>1500000){edgeToast(t('toastImgTooBig'));inp.value='';return;}
     const rd=new FileReader();
     rd.onload=()=>{setData(rd.result);thumb.src=rd.result;thumb.style.display='inline-block';};
     rd.readAsDataURL(f);
@@ -727,21 +1065,21 @@ function toggleBreakCfg(force){
     const B=breakCfg();
     _bcLogoData=undefined;_bcQrData=undefined;
     el.innerHTML='<div class="bcCard">'+
-      '<div class="bcTitle">☕ 쉬는 시간(B) 화면 꾸미기</div>'+
-      '<div class="bcHint">B를 눌렀을 때 강의장 화면에 뜨는 내용이에요. 프리셋을 고르면 바로 적용되고, 아래 폼에서 자유롭게 고칠 수 있어요.<br>설정은 이 브라우저에 덱별로 저장돼요 (코드 수정 없음).</div>'+
+      '<div class="bcTitle">'+t('bcModalTitle')+'</div>'+
+      '<div class="bcHint">'+t('bcModalHint')+'</div>'+
       '<div class="bcPresets">'+BREAK_PRESETS.map((pz,k)=>'<button type="button" class="bcPreset" data-preset="'+k+'">'+pz.name+'</button>').join('')+'</div>'+
-      '<div class="bcRow"><label>큰 제목</label><input type="text" id="bcTitle" placeholder="예: ☕ 잠깐 쉬어가요"></div>'+
-      '<div class="bcRow"><label>부제목</label><input type="text" id="bcSub" placeholder="예: 10분 뒤에 다시 시작할게요"></div>'+
-      '<div class="bcRow"><label>로고 텍스트</label><input type="text" id="bcLogoText" placeholder="예: OO컴퍼니"></div>'+
-      bcFileRow('bcLogoImg','로고 이미지 (있으면 텍스트 대신 표시)')+
-      bcFileRow('bcQrImg','QR 이미지 (커뮤니티·웹사이트 안내)')+
-      '<div class="bcRow"><label>QR 아래 설명</label><input type="text" id="bcQrLabel" placeholder="예: 오픈채팅 참여하기"></div>'+
-      '<div class="bcRow"><label class="bcCheck"><input type="checkbox" id="bcClock"> 현재 시각 표시</label></div>'+
-      '<div class="bcRow"><label>BGM 파일 경로 (선택)</label><input type="text" id="bcBgm" placeholder="예: break.mp3 — deck 파일과 같은 폴더에 두세요"></div>'+
+      '<div class="bcRow"><label>'+t('bcLabelTitle')+'</label><input type="text" id="bcTitle" placeholder="'+t('bcPhTitle')+'"></div>'+
+      '<div class="bcRow"><label>'+t('bcLabelSub')+'</label><input type="text" id="bcSub" placeholder="'+t('bcPhSub')+'"></div>'+
+      '<div class="bcRow"><label>'+t('bcLabelLogoText')+'</label><input type="text" id="bcLogoText" placeholder="'+t('bcPhLogoText')+'"></div>'+
+      bcFileRow('bcLogoImg',t('bcLabelLogoImg'))+
+      bcFileRow('bcQrImg',t('bcLabelQrImg'))+
+      '<div class="bcRow"><label>'+t('bcLabelQrLabel')+'</label><input type="text" id="bcQrLabel" placeholder="'+t('bcPhQrLabel')+'"></div>'+
+      '<div class="bcRow"><label class="bcCheck"><input type="checkbox" id="bcClock"> '+t('bcLabelClock')+'</label></div>'+
+      '<div class="bcRow"><label>'+t('bcLabelBgm')+'</label><input type="text" id="bcBgm" placeholder="'+t('bcPhBgm')+'"></div>'+
       '<div class="bcActions">'+
-        '<button type="button" class="bcBtn" id="bcSave">저장</button>'+
-        '<button type="button" class="bcBtn ghost" id="bcReset">기본(검은 화면)으로 초기화</button>'+
-        '<button type="button" class="bcBtn ghost" id="bcClose">닫기</button>'+
+        '<button type="button" class="bcBtn" id="bcSave">'+t('btnSave')+'</button>'+
+        '<button type="button" class="bcBtn ghost" id="bcReset">'+t('btnResetDefault')+'</button>'+
+        '<button type="button" class="bcBtn ghost" id="bcClose">'+t('btnClose')+'</button>'+
       '</div></div>';
     document.body.appendChild(el);
     el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('on');});
@@ -765,7 +1103,7 @@ function toggleBreakCfg(force){
       document.getElementById('bcLogoImgThumb').style.display='none';
       document.getElementById('bcQrImgThumb').style.display='none';
       const k=parseInt(btn.dataset.preset,10);
-      bcApply(Object.assign({},cfg),k===0?'기본(검은 화면)으로 설정했어요':btn.textContent+' 적용됐어요 — B를 눌러 확인해보세요');
+      bcApply(Object.assign({},cfg),k===0?t('toastPresetDefault'):t('toastPresetApplied',btn.textContent));
       bcMarkActivePreset();
     }));
     document.getElementById('bcClose').addEventListener('click',()=>el.classList.remove('on'));
@@ -781,11 +1119,11 @@ function toggleBreakCfg(force){
         showClock:document.getElementById('bcClock').checked,
         bgm:document.getElementById('bcBgm').value.trim()
       };
-      try{localStorage.setItem(BREAK_CFG_KEY,JSON.stringify(o));}catch(e){edgeToast('저장 공간이 부족해요 — 이미지 크기를 줄여주세요');return;}
+      try{localStorage.setItem(BREAK_CFG_KEY,JSON.stringify(o));}catch(e){edgeToast(t('toastStorageFull'));return;}
       if(BC){try{BC.postMessage({type:'breakcfg'});}catch(e){}}
       breakCfgChanged();
       el.classList.remove('on');
-      edgeToast('저장했어요 — B를 눌러 확인해보세요');
+      edgeToast(t('toastSaved'));
     });
     document.getElementById('bcReset').addEventListener('click',()=>{
       try{localStorage.removeItem(BREAK_CFG_KEY);}catch(e){}
@@ -793,7 +1131,7 @@ function toggleBreakCfg(force){
       if(BC){try{BC.postMessage({type:'breakcfg'});}catch(e){}}
       breakCfgChanged();
       el.remove(); /* 폼을 기본값으로 다시 그리기 위해 제거 */
-      edgeToast('기본(검은 화면)으로 되돌렸어요');
+      edgeToast(t('toastResetDone'));
     });
   }
   const on=(force!==undefined)?force:!el.classList.contains('on');
@@ -909,13 +1247,13 @@ function inkAttach(cv){
 function buildInkBar(){
   if(document.getElementById('inkBar'))return;
   const bar=document.createElement('div');bar.id='inkBar';
-  const tools=[['pen','✏️ 펜','D'],['hl','🖍️ 형광펜','G'],['erase','⌫ 지우개','E']];
-  bar.innerHTML=tools.map(t=>'<button type="button" class="inkBtn" data-tool="'+t[0]+'" title="단축키 '+t[2]+'">'+t[1]+'<span class="inkKbd">'+t[2]+'</span></button>').join('')+
+  const tools=[['pen',t('inkPen'),'D'],['hl',t('inkHl'),'G'],['erase',t('inkErase'),'E']];
+  bar.innerHTML=tools.map(tl=>'<button type="button" class="inkBtn" data-tool="'+tl[0]+'" title="'+t('titleShortcut')+' '+tl[2]+'">'+tl[1]+'<span class="inkKbd">'+tl[2]+'</span></button>').join('')+
     '<span class="inkSep"></span>'+
-    INK_COLORS.map(c=>'<button type="button" class="inkSwatch" data-c="'+c+'" style="background:'+c+'" aria-label="펜 색상 '+c+'" title="펜 색상"></button>').join('')+
+    INK_COLORS.map(c=>'<button type="button" class="inkSwatch" data-c="'+c+'" style="background:'+c+'" aria-label="'+t('ariaPenColor')+' '+c+'" title="'+t('ariaPenColor')+'"></button>').join('')+
     '<span class="inkSep"></span>'+
-    '<button type="button" class="inkBtn" id="inkClearBtn" title="이 슬라이드의 판서 모두 지우기">🗑 모두 지우기</button>'+
-    '<button type="button" class="inkBtn" id="inkCloseBtn" title="판서 종료 (Esc)">✕ 종료</button>';
+    '<button type="button" class="inkBtn" id="inkClearBtn" title="'+t('titleInkClearAll')+'">'+t('inkClearAll')+'</button>'+
+    '<button type="button" class="inkBtn" id="inkCloseBtn" title="'+t('titleInkClose')+'">'+t('inkClose')+'</button>';
   document.body.appendChild(bar);
   bar.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>inkSetTool(b.dataset.tool)));
   bar.querySelectorAll('.inkSwatch').forEach(b=>b.addEventListener('click',()=>{
@@ -937,7 +1275,7 @@ function inkSetTool(t){
   document.body.classList.toggle('inkOn',!!inkTool);
   document.body.classList.toggle('inkErase',inkTool==='erase'); /* [UX] 지우개 커서 */
   const ib=document.getElementById('pInkBtn'); /* [UX] 버튼 활성 상태 */
-  if(ib){ib.classList.toggle('on',!!inkTool);ib.textContent=inkTool?'✏️ 판서 중':'✏️ 판서';}
+  if(ib){ib.classList.toggle('on',!!inkTool);ib.textContent=inkTool?t('inkBtnOn'):t('inkBtnOff');}
   inkBarSync();
 }
 
@@ -957,14 +1295,14 @@ function zoomSetRegion(rg,noSend){
   zoomRegion=rg;
   applyDeckTransform(true);
   zoomChipSync();
-  if(!isPresenter&&rg)edgeToast('🔎 확대 중 — 다시 Z 또는 슬라이드를 넘기면 원위치'); /* [UX] */
+  if(!isPresenter&&rg)edgeToast(t('toastZoomOn')); /* [UX] */
   if(!noSend&&BC){try{BC.postMessage({type:'zoom',region:rg});}catch(e){}}
 }
 function zoomSelModeSet(on){
   zoomSelMode=on;zoomDrag=null;
   document.body.classList.toggle('zoomSelMode',on);
   if(on&&inkTool)inkSetTool(null);
-  if(on)edgeToast('🔎 확대할 구역을 드래그로 선택하세요 · 클릭 = 2배 · Z 취소');
+  if(on)edgeToast(t('toastZoomSelect'));
   inkRedraw();
 }
 function zoomToggle(){
@@ -1030,7 +1368,7 @@ function magChipShow(){
   window._magChipT=setTimeout(()=>{magChip.style.display='none';},1200);
 }
 function magToggle(){
-  if(isPresenter){edgeToast('🔍 돋보기는 강의장 화면을 클릭한 뒤 M — 발표자 창에서는 Z(구역 확대)를 쓰세요');return;}
+  if(isPresenter){edgeToast(t('toastMagPresenter'));return;}
   magOn=!magOn;
   if(magOn){
     if(!magEl)magBuild();
@@ -1038,7 +1376,7 @@ function magToggle(){
     magEl.style.display='block';
     if(_magLast)magPlace(_magLast[0],_magLast[1]);
     magChipShow();
-    edgeToast('🔍 돋보기 켜짐 — 휠로 배율 조절 · M 으로 끄기');
+    edgeToast(t('toastMagOn'));
   }else{
     if(magEl)magEl.style.display='none';
     if(magChip)magChip.style.display='none';
@@ -1075,7 +1413,7 @@ function updateJumpToast(){
   if(jumpBuf){
     const n=parseInt(jumpBuf,10);
     const bad=!(n>=1&&n<=TOTAL);
-    el.textContent=bad?('슬라이드 '+jumpBuf+' — 없는 번호예요 (1~'+TOTAL+')'):('슬라이드 '+jumpBuf+' — Enter로 이동 · Esc 취소');
+    el.textContent=bad?t('jumpBad',jumpBuf,TOTAL):t('jumpOk',jumpBuf);
     el.classList.toggle('bad',bad); /* [v3-21] 범위 밖 즉시 표시 */
     el.classList.add('on');
   }
@@ -1090,7 +1428,7 @@ function jumpDigit(d){
 function jumpCommit(){
   const n=parseInt(jumpBuf,10);jumpBuf='';updateJumpToast();clearTimeout(window._jumpT);
   if(n>=1&&n<=TOTAL)show(n-1);
-  else if(n)edgeToast('1~'+TOTAL+' 사이 번호를 입력해주세요');
+  else if(n)edgeToast(t('jumpRange',TOTAL));
 }
 
 /* [개선 7] ? 또는 H — 단축키 도움말 오버레이 */
@@ -1101,26 +1439,26 @@ function toggleHelp(force){
     el=document.createElement('div');el.id='helpOverlay';
     const sec=t=>'<tr><td colspan="2" class="pHelpSec">'+t+'</td></tr>';
     const row=(k,v)=>'<tr><td class="pKey">'+k+'</td><td>'+v+'</td></tr>';
-    el.innerHTML='<div class="pHelpCard"><button type="button" class="pHelpClose" aria-label="도움말 닫기">✕</button><div class="pHelpTitle">단축키 도움말</div><table>'+
-      sec('진행')+
-      row('← → · Space · Enter · 리모컨','슬라이드 넘기기 (PgUp/PgDn 클리커 호환)')+
-      row('숫자 + Enter','해당 번호 슬라이드로 바로 이동')+
-      row('Home / End','처음 / 마지막 슬라이드')+
-      sec('화면')+
-      row('B / W','강의장 화면 가리기 (검정/흰색) · 한 번 더 누르거나 슬라이드 넘기면 해제 — B는 발표자 창 [☕ 쉬는화면] 버튼으로 로고·안내문·QR·BGM 화면으로 꾸밀 수 있어요 (기본은 검은 화면)')+
-      row('F 또는 F5','전체화면 켜기/끄기')+
-      sec('판서 · 돋보기')+
-      row('D / G / E','펜 / 형광펜 / 지우개 — 발표자 창·강의장 화면 어디서 그려도 실시간 동기화 · Esc 종료')+
-      row('M','마우스 돋보기 (강의장 화면) · 휠로 배율 조절')+
-      row('Z','구역 확대 — 드래그한 영역을 화면에 꽉 채움 · 클릭=2배 · 다시 Z 또는 슬라이드 넘기면 원위치')+
-      row('⌘Fn F1(맥) · Win+P(윈도우)','화면 미러링 ↔ 확장 전환 (시연↔발표 · OS 시스템 단축키)')+
-      sec('발표자 창')+
-      row('P · ⌘K(맥) · Ctrl+K(윈도우)','발표자 창 열기')+
-      row('V','보기 전환 (다음 슬라이드 ↔ 필름스트립)')+
-      row('T / R','타이머 시작·일시정지 / 리셋(두 번 누름)')+
-      row('타이머 숫자 클릭','시작·일시정지 · 카운터 클릭 = 남은 장수 표시')+
-      row('? 또는 H','이 도움말 열고 닫기')+
-      '</table><div class="pHelpHint">Esc 또는 아무 곳이나 클릭하면 닫혀요 · 개선 아이디어는 <a href="mailto:ceo@dayfocuslab.com?subject=%5B%EB%B0%9C%ED%91%9C%EC%9E%90%20%EB%AA%A8%EB%93%9C%20%ED%94%BC%EB%93%9C%EB%B0%B1%5D" style="color:#8B9DEF;">ceo@dayfocuslab.com</a></div></div>';
+    el.innerHTML='<div class="pHelpCard"><button type="button" class="pHelpClose" aria-label="'+t('ariaCloseHelp')+'">✕</button><div class="pHelpTitle">'+t('helpTitle')+'</div><table>'+
+      sec(t('secNav'))+
+      row(t('helpArrowsKey'),t('helpArrows'))+
+      row(t('helpJumpKey'),t('helpJump'))+
+      row('Home / End',t('helpHomeEnd'))+
+      sec(t('secScreen'))+
+      row('B / W',t('helpBW'))+
+      row(t('helpFsKey'),t('helpFs'))+
+      sec(t('secInk'))+
+      row('D / G / E',t('helpDGE'))+
+      row('M',t('helpM'))+
+      row('Z',t('helpZ'))+
+      row(t('helpMirrorKey'),t('helpMirror'))+
+      sec(t('secPresenter'))+
+      row(t('helpPKey'),t('helpP'))+
+      row('V',t('helpV'))+
+      row('T / R',t('helpTR'))+
+      row(t('helpTimerClickKey'),t('helpTimerClick'))+
+      row(t('helpQmKey'),t('helpQm'))+
+      '</table><div class="pHelpHint">'+t('helpHint')+'</div></div>';
     el.addEventListener('click',()=>el.classList.remove('on'));
     document.body.appendChild(el);
   }
@@ -1134,8 +1472,8 @@ function showPopupWarning(){
   let el=document.getElementById('popupWarn');
   if(!el){
     el=document.createElement('div');el.id='popupWarn';
-    el.innerHTML='팝업이 차단된 것 같아요 — 브라우저 주소창의 팝업 차단 아이콘을 눌러 허용해주세요.<br>'+
-      '<button type="button" id="popupRetry">허용했어요 — 다시 열기</button>';
+    el.innerHTML=t('popupBlocked')+'<br>'+
+      '<button type="button" id="popupRetry">'+t('popupRetry')+'</button>';
     document.body.appendChild(el);
     el.querySelector('#popupRetry').addEventListener('click',()=>{el.style.display='none';openPresenter();});
   }
@@ -1216,7 +1554,7 @@ function noteHTML(note){
     const e=escHTML(line);
     if(line.indexOf('⏰')!==-1)return '<span class="pCueTime">'+e+'</span>';
     if(line.indexOf('⚠️')!==-1)return '<span class="pCueWarn">'+e+'</span>';
-    if(line.indexOf('백업')!==-1)return '<span class="pCueBackup">'+e+'</span>';
+    if(line.indexOf('백업')!==-1||/\bbackup\b/i.test(line))return '<span class="pCueBackup">'+e+'</span>';
     return e;
   }).join('\n');
 }
@@ -1227,27 +1565,27 @@ function renderPresenter(){
   const nextStage=document.getElementById('pNextStage');
   if(i+1>=TOTAL){
     /* [개선 20] 마지막 슬라이드: 빈 검정 박스 대신 안내 카드 */
-    nextStage.innerHTML='<div class="pEndCard"><span style="font-size:26px;">🏁</span>마지막 슬라이드예요</div>';
+    nextStage.innerHTML='<div class="pEndCard"><span style="font-size:26px;">🏁</span>'+t('endCard')+'</div>';
     updateStage(nextStage.parentElement,nextStage);
   }else cloneSlideInto(nextStage,i+1);
   const note=NOTES[i]||'';
   const notesEl=document.getElementById('pNotes');
   if(note)notesEl.innerHTML=noteHTML(note);
-  else notesEl.textContent='(이 슬라이드는 별도 노트가 없어요)';
+  else notesEl.textContent=t('notesEmpty');
   notesEl.classList.toggle('pEmpty',!note);
-  document.getElementById('pCounter').textContent=window._counterRemain?('남은 '+(TOTAL-1-i)+'장'):(String(i+1).padStart(2,'0')+' / '+TOTAL); /* [v3-10] */
+  document.getElementById('pCounter').textContent=window._counterRemain?t('counterRemain',TOTAL-1-i):(String(i+1).padStart(2,'0')+' / '+TOTAL); /* [v3-10] */
   /* [v3-16] 다음 슬라이드 노트 미리보기 */
   const nn=document.getElementById('pNextNote');
   if(nn){
     const nxt=(i+1<TOTAL)?(NOTES[i+1]||''):'';
-    if(nxt){nn.style.display='block';nn.textContent='다음 노트: '+nxt.split('\n')[0].slice(0,140);}
+    if(nxt){nn.style.display='block';nn.textContent=t('nextNotePrefix')+nxt.split('\n')[0].slice(0,140);}
     else nn.style.display='none';
   }
   /* [개선 21] 진행률 바 */
   const fill=document.getElementById('pProgressFill');
   if(fill)fill.style.width=((i+1)/TOTAL*100).toFixed(2)+'%';
   /* [개선 28] 창 제목에 진행 상황 — 탭/독에서 바로 보임 */
-  document.title='발표자 '+(i+1)+'/'+TOTAL+' — '+DECK_TITLE;
+  document.title=t('presenterTitlePrefix')+(i+1)+'/'+TOTAL+' — '+DECK_TITLE;
   /* [개선 27] 처음/끝에서 이전·다음 버튼 비활성 표시 */
   const prevB=document.getElementById('pPrev'),nextB=document.getElementById('pNext');
   if(prevB)prevB.disabled=(i===0);
@@ -1294,8 +1632,8 @@ function buildFilmstrip(){
     const btn=document.createElement('button');
     btn.type='button';
     btn.className='pThumb';
-    btn.setAttribute('aria-label','슬라이드 '+(idx+1)+'번으로 이동');
-    btn.title='슬라이드 '+(idx+1)+(NOTES[idx]?' · 노트 있음':''); /* [v3-18] hover 툴팁 */
+    btn.setAttribute('aria-label',t('ariaThumbGoto',idx+1));
+    btn.title=t('titleThumb',idx+1)+(NOTES[idx]?t('titleThumbHasNote'):''); /* [v3-18] hover 툴팁 */
     const stage=document.createElement('div');
     stage.className='pThumbStage';
     const clone=slides[idx].cloneNode(true);
@@ -1312,7 +1650,7 @@ function buildFilmstrip(){
     if(NOTES[idx]){
       const dot=document.createElement('span');
       dot.className='pThumbNoteDot';
-      dot.title='강사 노트 있음';
+      dot.title=t('titleNoteDot');
       dot.textContent='✎';
       btn.appendChild(dot);
     }
@@ -1366,10 +1704,10 @@ function toggleViewMode(){
   const btn=document.getElementById('pViewToggle');
   if(curH<rootH*0.4){
     applyTopHeight(Math.round(rootH*0.62));
-    if(btn)btn.textContent='▸ 필름스트립 크게 보기';
+    if(btn)btn.textContent=t('btnViewFilm');
   }else{
     applyTopHeight(220);
-    if(btn)btn.textContent='▸ 다음 슬라이드 크게 보기';
+    if(btn)btn.textContent=t('btnViewNext');
   }
 }
 /* ── 상하 드래그 리사이저: 마우스/터치로 pTop 높이를 직접 조정 ── */
@@ -1503,13 +1841,13 @@ function updateTimerUI(){
   disp.classList.toggle('running',timerRunning);
   disp.classList.toggle('overrun',timerTarget>0&&timerMs>timerTarget*60000); /* [v3-13] 초과 시 펄스 */
   const btn=document.getElementById('pTimerToggle');
-  if(btn){btn.textContent=timerRunning?'⏸ 일시정지':'▶ 시작';btn.classList.toggle('on',timerRunning);}
+  if(btn){btn.textContent=timerRunning?t('btnTimerPause'):t('btnTimerStart');btn.classList.toggle('on',timerRunning);}
   const rem=document.getElementById('pTimerRemain');
   if(rem){
     if(timerTarget>0){
       const left=timerTarget*60000-timerMs;
       rem.style.display='inline-block';
-      rem.textContent=(left<0?'초과 ':'남은 ')+fmtTime(left);
+      rem.textContent=(left<0?t('remainOver'):t('remainLeft'))+fmtTime(left);
       rem.classList.toggle('over',left<0);
       rem.classList.toggle('soon',left>=0&&left<5*60000);
     }else rem.style.display='none';
@@ -1521,8 +1859,8 @@ function tickTimer(){
   if(timerTarget>0){
     const left=timerTarget*60000-timerMs;
     if(_prevLeft!==null){
-      if(left<=5*60000&&_prevLeft>5*60000)edgeToast('⏳ 목표까지 5분 남았어요'); /* [v3-12] */
-      if(left<=0&&_prevLeft>0)edgeToast('⏰ 목표 시간에 도달했어요'); /* [v3-11] */
+      if(left<=5*60000&&_prevLeft>5*60000)edgeToast(t('toast5min')); /* [v3-12] */
+      if(left<=0&&_prevLeft>0)edgeToast(t('toastTargetHit')); /* [v3-11] */
     }
     _prevLeft=left;
   }
@@ -1537,18 +1875,18 @@ function resetTimerPress(){
   const btn=document.getElementById('pTimerReset');
   if(!resetArmed){
     resetArmed=true;
-    if(btn){btn.textContent='한 번 더 → 리셋';btn.classList.add('armed');}
-    resetArmT=setTimeout(()=>{resetArmed=false;if(btn){btn.textContent='리셋';btn.classList.remove('armed');}},2200);
+    if(btn){btn.textContent=t('btnResetConfirm');btn.classList.add('armed');}
+    resetArmT=setTimeout(()=>{resetArmed=false;if(btn){btn.textContent=t('btnReset');btn.classList.remove('armed');}},2200);
   }else{
     clearTimeout(resetArmT);resetArmed=false;
-    if(btn){btn.textContent='리셋';btn.classList.remove('armed');}
+    if(btn){btn.textContent=t('btnReset');btn.classList.remove('armed');}
     pauseTimer();timerMs=0;_prevLeft=null;updateTimerUI();saveTimer();
   }
 }
 function initTimer(){
   document.getElementById('pTimerToggle').onclick=toggleTimer;
   document.getElementById('pTimerDisplay').onclick=toggleTimer; /* [v3-14] 큰 클릭 타겟 */
-  document.getElementById('pTimerDisplay').title='클릭: 시작/일시정지 (T)';
+  document.getElementById('pTimerDisplay').title=t('timerClickTitle');
   document.getElementById('pTimerReset').onclick=resetTimerPress;
   /* [개선 17] 목표 시간(분) 설정 → 남은 시간 칩 표시 */
   const tBtn=document.getElementById('pTimerTarget');
@@ -1585,7 +1923,7 @@ function initClock(){
     el.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+(showSec?':'+String(d.getSeconds()).padStart(2,'0'):'');
   }
   el.style.cursor='pointer';
-  el.title='현재 시각 · 클릭하면 초까지 보여요';
+  el.title=t('clockTitle');
   el.onclick=()=>{showSec=!showSec;try{localStorage.setItem(CLOCK_SEC_KEY,showSec?'1':'');}catch(e){}upd();}; /* [v3-15] */
   upd();setInterval(upd,1000);
 }
@@ -1597,7 +1935,7 @@ function applyTheme(){
   try{dark=localStorage.getItem(THEME_KEY)==='dark';}catch(e){}
   document.body.classList.toggle('pLight',!dark);
   const b=document.getElementById('pThemeToggle');
-  if(b)b.textContent=dark?'☀️ 밝은 배경':'🌙 어두운 배경';
+  if(b)b.textContent=dark?t('btnThemeLight'):t('btnThemeDark');
 }
 function toggleTheme(){
   try{localStorage.setItem(THEME_KEY,document.body.classList.contains('pLight')?'dark':'');}catch(e){}
@@ -1610,12 +1948,12 @@ function applyNoteFold(){
   try{f=localStorage.getItem(FOLD_KEY)==='1';}catch(e){}
   const n=document.getElementById('pNotes');const b=document.getElementById('pNoteFold');
   if(n)n.classList.toggle('folded',f);
-  if(b){b.textContent=f?'펼치기 ⌃':'접기 ⌄';b.title=f?'노트 펼치기':'노트 접기 (공간 확보)';}
+  if(b){b.textContent=f?t('btnUnfold'):t('btnFold');b.title=f?t('titleUnfold'):t('titleFold');}
 }
 /* [v3-30] 발표자 창이 너무 작을 때 안내 */
 function checkPresenterSize(){
   let el=document.getElementById('pTooSmall');
-  if(!el){el=document.createElement('div');el.id='pTooSmall';el.textContent='창이 너무 작아요 — 창을 키우면 모든 기능이 보여요';document.body.appendChild(el);}
+  if(!el){el=document.createElement('div');el.id='pTooSmall';el.textContent=t('tooSmall');document.body.appendChild(el);}
   el.style.display=(innerWidth<640||innerHeight<480)?'block':'none';
 }
 /* [개선 9] 강의장 화면 연결 상태 칩 (하트비트 기반) */
@@ -1627,8 +1965,8 @@ function initConnChip(){
   setInterval(()=>{
     const ok=Date.now()-lastPong<5000;
     chip.classList.toggle('ok',ok);
-    chip.textContent=ok?'● 강의장 화면 연결됨':'○ 강의장 화면 응답 없음';
-    chip.title=ok?'강의장 화면과 실시간 동기화 중이에요':'강의장 화면이 닫혔거나 응답이 없어요 — 슬라이드 창이 열려 있는지 확인해주세요';
+    chip.textContent=ok?t('connOk'):t('connNo');
+    chip.title=ok?t('connOkTitle'):t('connNoTitle');
   },1000);
 }
 function initPresenter(){
@@ -1638,66 +1976,67 @@ function initPresenter(){
   root.innerHTML=
     '<div id="pProgress"><div id="pProgressFill"></div></div>'+
     '<div class="pTop" id="pTop">'+
-      '<div class="pCurrentWrap"><div class="pTag">현재 슬라이드 <span class="pTagHint">클릭=다음 · 왼쪽 끝=이전</span></div><div class="pStageOuter pClickNav" id="pCurClick" title="클릭: 다음 슬라이드 (왼쪽 끝: 이전)"><div class="pStage" id="pCurrentStage"></div></div></div>'+
-      '<div class="pHSplitter" id="pHSplitter" title="드래그해서 폭 조정"><span></span><span></span><span></span></div>'+
-      '<div class="pNextWrap" id="pNextWrap"><div class="pTag">다음 슬라이드</div><div class="pStageOuter"><div class="pStage pStageSmall" id="pNextStage"></div></div></div>'+
+      '<div class="pCurrentWrap"><div class="pTag">'+t('pTagCurrent')+' <span class="pTagHint">'+t('pTagCurrentHint')+'</span></div><div class="pStageOuter pClickNav" id="pCurClick" title="'+t('titleCurClick')+'"><div class="pStage" id="pCurrentStage"></div></div></div>'+
+      '<div class="pHSplitter" id="pHSplitter" title="'+t('titleHSplit')+'"><span></span><span></span><span></span></div>'+
+      '<div class="pNextWrap" id="pNextWrap"><div class="pTag">'+t('pTagNext')+'</div><div class="pStageOuter"><div class="pStage pStageSmall" id="pNextStage"></div></div></div>'+
     '</div>'+
-    '<div class="pSplitter" id="pSplitter" title="드래그해서 영역 크기 조정"><span></span><span></span><span></span></div>'+
+    '<div class="pSplitter" id="pSplitter" title="'+t('titleVSplit')+'"><span></span><span></span><span></span></div>'+
     '<div class="pFilmstripWrap">'+
       '<div class="pFilmstripHeader">'+
         '<div class="pFilmstripHeaderLeft">'+
-          '<span class="pTag pTagKo" style="margin-bottom:0;">전체 흐름 · 클릭해서 이동</span>'+
+          '<span class="pTag pTagKo" style="margin-bottom:0;">'+t('pTagFilmstrip')+'</span>'+
           '<div class="pSizeCtrl">'+
-            '<span class="pSizeLabel">썸네일 크기</span>'+
+            '<span class="pSizeLabel">'+t('labelThumbSize')+'</span>'+
             '<span class="pSizeIcon">−</span>'+
-            '<input type="range" id="pThumbSize" min="120" max="640" step="4" value="'+getThumbSize()+'" aria-label="썸네일 크기 조절">'+
+            '<input type="range" id="pThumbSize" min="120" max="640" step="4" value="'+getThumbSize()+'" aria-label="'+t('ariaThumbSize')+'">'+
             '<span class="pSizeIcon">＋</span>'+
           '</div>'+
         '</div>'+
         '<div class="pFilmstripHeaderRight">'+
-          '<button type="button" id="pLocBtn" class="pToggleBtn" title="필름스트립을 현재 슬라이드 위치로 스크롤">◎ 현재 위치</button>'+
-          '<button type="button" id="pThemeToggle" class="pToggleBtn" title="발표자 창 배경 밝게/어둡게 전환"></button>'+
-          '<button type="button" id="pViewToggle" class="pToggleBtn" title="보기 전환 (V)">▸ 다음 슬라이드 크게 보기</button>'+
+          '<button type="button" id="pLocBtn" class="pToggleBtn" title="'+t('titleLocate')+'">'+t('btnLocate')+'</button>'+
+          '<button type="button" id="pThemeToggle" class="pToggleBtn" title="'+t('titleTheme')+'"></button>'+
+          '<button type="button" id="pLangBtn" class="pToggleBtn" title="Language / 언어">'+t('langBtn')+'</button>'+
+          '<button type="button" id="pViewToggle" class="pToggleBtn" title="'+t('titleView')+'">'+t('btnViewNext')+'</button>'+
         '</div>'+
       '</div>'+
       '<div class="pFilmstrip" id="pFilmstrip"></div>'+
     '</div>'+
     '<div class="pBottom">'+
       '<div class="pNotesWrap"><div class="pNotes" id="pNotes"></div>'+
-        '<div class="pNextNote" id="pNextNote" style="display:none;" title="다음 슬라이드의 노트 첫 줄"></div>'+
+        '<div class="pNextNote" id="pNextNote" style="display:none;" title="'+t('titleNextNote')+'"></div>'+
         '<div class="pNoteSize">'+
-          '<button type="button" id="pNoteFold" title="노트 접기 (공간 확보)">접기 ⌄</button>'+
-          '<button type="button" id="pNoteMinus" title="노트 글씨 작게" aria-label="노트 글씨 작게">A−</button>'+
-          '<button type="button" id="pNotePlus" title="노트 글씨 크게" aria-label="노트 글씨 크게">A＋</button>'+
+          '<button type="button" id="pNoteFold" title="'+t('titleFold')+'">'+t('btnFold')+'</button>'+
+          '<button type="button" id="pNoteMinus" title="'+t('titleNoteMinus')+'" aria-label="'+t('titleNoteMinus')+'">A−</button>'+
+          '<button type="button" id="pNotePlus" title="'+t('titleNotePlus')+'" aria-label="'+t('titleNotePlus')+'">A＋</button>'+
         '</div></div>'+
       '<div class="pControls">'+
-        '<div class="pNav"><button id="pPrev" title="이전 슬라이드 (←)">← 이전</button><button id="pNext" title="다음 슬라이드 (→ 또는 Space)">다음 →</button></div>'+
-        '<div class="pCounter" id="pCounter" title="클릭하면 남은 장수로 바뀌어요">01 / '+TOTAL+'</div>'+
-        '<span class="pDwell" id="pDwell" title="이 슬라이드에 머문 시간">00:00</span>'+
+        '<div class="pNav"><button id="pPrev" title="'+t('titlePrev')+'">'+t('btnPrev')+'</button><button id="pNext" title="'+t('titleNext')+'">'+t('btnNext')+'</button></div>'+
+        '<div class="pCounter" id="pCounter" title="'+t('titleCounter')+'">01 / '+TOTAL+'</div>'+
+        '<span class="pDwell" id="pDwell" title="'+t('titleDwell')+'">00:00</span>'+
         '<span class="pCtrlSep"></span>'+
-        '<span class="pConnChip" id="pConnChip" role="status">○ 확인 중…</span>'+
+        '<span class="pConnChip" id="pConnChip" role="status">'+t('connChecking')+'</span>'+
         '<span class="pBlackChip" id="pBlackChip" style="display:none;"></span>'+
-        '<span class="pBlackChip" id="pZoomChip" style="display:none;background:#8FC6FF;cursor:pointer;" title="클릭하면 확대 해제 (Z)">🔎 구역 확대 중 · Z 해제</span>'+
-        '<button type="button" id="pBlackBtn" class="pCtlBtn" title="강의장 화면 가리기/해제 (B)">⬛ 가리기</button>'+
-        '<button type="button" id="pInkBtn" class="pCtlBtn" title="판서 펜 켜기/끄기 (D) — 현재 슬라이드 위에 그리면 강의장 화면에도 실시간으로 보여요">✏️ 판서</button>'+
-        '<button type="button" id="pBreakCfgBtn" class="pCtlBtn" title="쉬는 시간(B) 화면 꾸미기 — 로고·문구·QR·시계·BGM (기본은 검은 화면)">☕ 쉬는화면</button>'+
-        '<button type="button" id="pHelpBtn" class="pCtlBtn" title="단축키 도움말 (? 또는 H)">? 단축키</button>'+
+        '<span class="pBlackChip" id="pZoomChip" style="display:none;background:#8FC6FF;cursor:pointer;" title="'+t('titleZoomChip')+'">'+t('zoomChip')+'</span>'+
+        '<button type="button" id="pBlackBtn" class="pCtlBtn" title="'+t('titleBlackBtn')+'">'+t('btnHide')+'</button>'+
+        '<button type="button" id="pInkBtn" class="pCtlBtn" title="'+t('titleInkBtn')+'">'+t('inkBtnOff')+'</button>'+
+        '<button type="button" id="pBreakCfgBtn" class="pCtlBtn" title="'+t('titleBreakCfg')+'">'+t('btnBreakCfg')+'</button>'+
+        '<button type="button" id="pHelpBtn" class="pCtlBtn" title="'+t('titleHelp')+'">'+t('btnHelp')+'</button>'+
         '<span class="pCtrlSep"></span>'+
         '<div class="pTimer">'+
-          '<span class="pClock" id="pClock" title="현재 시각"></span>'+
-          '<span class="pTimerDisplay" id="pTimerDisplay" title="경과 시간">00:00</span>'+
+          '<span class="pClock" id="pClock" title="'+t('titleClock')+'"></span>'+
+          '<span class="pTimerDisplay" id="pTimerDisplay" title="'+t('titleTimerDisplay')+'">00:00</span>'+
           '<span class="pTimerRemain" id="pTimerRemain" style="display:none;"></span>'+
-          '<button id="pTimerToggle" title="타이머 시작/일시정지 (T)">▶ 시작</button>'+
-          '<button id="pTimerReset" title="두 번 누르면 리셋 (R)">리셋</button>'+
-          '<button id="pTimerTarget" title="목표 시간(분)을 정하면 남은 시간을 보여줘요">목표</button>'+
-          '<input id="pTargetInput" type="number" min="1" max="600" placeholder="분" style="display:none;" aria-label="목표 시간(분)">'+
+          '<button id="pTimerToggle" title="'+t('titleTimerToggle')+'">'+t('btnTimerStart')+'</button>'+
+          '<button id="pTimerReset" title="'+t('titleReset')+'">'+t('btnReset')+'</button>'+
+          '<button id="pTimerTarget" title="'+t('titleTarget')+'">'+t('btnTarget')+'</button>'+
+          '<input id="pTargetInput" type="number" min="1" max="600" placeholder="'+t('phMin')+'" style="display:none;" aria-label="'+t('ariaTarget')+'">'+
         '</div>'+
       '</div>'+
     '</div>';
   document.body.appendChild(root);
   /* [개선 23] 현재 슬라이드 클릭 네비게이션 — 클릭=다음, 왼쪽 28%=이전 */
   const nextOuter=document.querySelector('.pNextWrap .pStageOuter'); /* [UX] 다음 슬라이드 클릭 = 이동 */
-  if(nextOuter){nextOuter.style.cursor='pointer';nextOuter.title='클릭: 다음 슬라이드로 이동';nextOuter.addEventListener('click',()=>show(i+1));}
+  if(nextOuter){nextOuter.style.cursor='pointer';nextOuter.title=t('titleNextGo');nextOuter.addEventListener('click',()=>show(i+1));}
   const curClick=document.getElementById('pCurClick');
   curClick.addEventListener('click',e=>{
     const r=curClick.getBoundingClientRect();
@@ -1710,8 +2049,8 @@ function initPresenter(){
   try{
     if(!localStorage.getItem('dfl-presenter-onboard-'+DECK_ID)){
       const ob=document.createElement('div');ob.id='pOnboard';
-      ob.innerHTML='<span><strong>발표자 창이 처음이세요?</strong> ← →로 넘기고 <strong>D</strong> 판서 · <strong>Z</strong> 구역 확대 · <strong>B</strong> 쉬는화면을 눌러보세요. 쉬는화면은 하단 <strong>[☕ 쉬는화면]</strong> 버튼에서 프리셋으로 꾸밀 수 있고, 전체 단축키는 <strong>[? 단축키]</strong>(또는 ?)에 있어요.</span>'+
-        '<button type="button" id="pOnboardOk">알겠어요</button>';
+      ob.innerHTML=t('onboard')+
+        '<button type="button" id="pOnboardOk">'+t('btnGotIt')+'</button>';
       root.insertBefore(ob,document.getElementById('pTop'));
       document.getElementById('pOnboardOk').onclick=()=>{
         ob.remove();
@@ -1734,6 +2073,7 @@ function initPresenter(){
   document.getElementById('pNext').onclick=()=>show(i+1);
   document.getElementById('pViewToggle').onclick=toggleViewMode;
   document.getElementById('pThemeToggle').onclick=toggleTheme; /* [v3-3] */
+  document.getElementById('pLangBtn').onclick=()=>setLang(LANG==='ko'?'en':'ko'); /* [i18n] */
   document.getElementById('pLocBtn').onclick=()=>scrollToCurrentThumb(true); /* [v3-19] */
   document.getElementById('pHelpBtn').onclick=()=>toggleHelp(); /* [v3-1] 단축키를 화면에서 바로 */
   document.getElementById('pBlackBtn').onclick=()=>setBlackout(blackoutMode||'black'); /* [v3-4] */
@@ -1856,8 +2196,14 @@ if(isPresenter){
   inner.appendChild(inkCv);
   inkAttach(inkCv);
   addEventListener('resize',fit);fit();show(0);render();
-  const nhb=document.getElementById('navHelpBtn'); /* [v3-2] 하단 힌트에서 클릭으로 도움말 */
-  if(nhb)nhb.addEventListener('click',()=>toggleHelp());
+  /* [i18n] bottom hint bar + presenter button */
+  const navHintEl=document.getElementById('navHint');
+  if(navHintEl)navHintEl.textContent=t('navHint');
+  const nhb=document.getElementById('navHelpBtn'); /* [v3-2] click the hint bar to open help */
+  if(nhb){nhb.textContent=t('navHelp');nhb.title=t('helpTitle');nhb.addEventListener('click',()=>toggleHelp());}
+  const nlb=document.getElementById('navLangBtn');
+  if(nlb){nlb.textContent=t('langBtn');nlb.addEventListener('click',()=>setLang(LANG==='ko'?'en':'ko'));}
+  if(presenterBtnEl){presenterBtnEl.textContent=t('presenterBtn');presenterBtnEl.title=t('titlePresenterBtn');}
   /* [개선 24·25] 4초 아무 조작 없으면 하단 힌트·버튼 페이드 + 커서 숨김 (프로젝터 화면 청결) */
   let _idleT=null;
   function uiWake(){
